@@ -88,17 +88,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Find the corresponding GPT model in the database
       const gptModels = await storage.getGptModels();
       const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
-      
-      console.log("Debug - productId:", productId);
-      console.log("Debug - product:", product);
-      console.log("Debug - gptModels:", gptModels.map(m => ({ id: m.id, name: m.name })));
-      
       const gptModel = gptModels.find(model => model.name === product?.name);
       
-      console.log("Debug - Found gptModel:", gptModel);
-      
       if (!gptModel) {
-        console.log("Debug - No matching model found for:", product?.name);
         return res.status(400).json({ message: `GPT model not found for product: ${product?.name}` });
       }
 
@@ -274,14 +266,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const gptModels = await storage.getGptModels();
 
       // Get available products
-      const availableProducts = Object.entries(GPT_PRODUCTS).map(([id, product]) => ({
-        id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        icon: product.icon,
-        purchased: gptAccess.some(access => access.modelId === id),
-      }));
+      const availableProducts = Object.entries(GPT_PRODUCTS).map(([id, product]) => {
+        // Find the corresponding database model
+        const dbModel = gptModels.find(model => model.name === product.name);
+        const purchased = dbModel ? gptAccess.some(access => access.modelId === dbModel.id) : false;
+        
+        return {
+          id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          icon: product.icon,
+          purchased,
+        };
+      });
 
       res.json({
         user: {
