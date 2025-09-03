@@ -82,8 +82,8 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
             description: "Thank you for your purchase! Access granted.",
           });
           
-          // Invalidate dashboard cache to refresh data
-          queryClient.invalidateQueries({ queryKey: ['/api/dashboard'] });
+          // Force refetch dashboard data immediately
+          await queryClient.refetchQueries({ queryKey: ['/api/dashboard'] });
           
           // Small delay to ensure toast shows, then redirect
           setTimeout(() => {
