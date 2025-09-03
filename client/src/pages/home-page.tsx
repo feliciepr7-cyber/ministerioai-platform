@@ -17,7 +17,7 @@ const GPT_PRODUCTS = [
       "Estudios bíblicos profundos",
       "Basado en pasajes bíblicos"
     ],
-    icon: "fas fa-book-open"
+    image: "/attached_assets/generated_images/Sermon_generator_illustration_6bc72bc1.png"
   },
   {
     id: "manual-ceremonias",
@@ -30,7 +30,7 @@ const GPT_PRODUCTS = [
       "Servicios especiales",
       "Excelencia ministerial"
     ],
-    icon: "fas fa-hands-praying",
+    image: "/attached_assets/generated_images/Church_ceremony_manual_3852f443.png",
     popular: true
   },
   {
@@ -44,7 +44,7 @@ const GPT_PRODUCTS = [
       "Aplicación práctica",
       "Predicación expositiva"
     ],
-    icon: "fas fa-cross"
+    image: "/attached_assets/generated_images/Expository_messages_illustration_24a14fb8.png"
   }
 ];
 
@@ -167,36 +167,48 @@ export default function HomePage() {
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
-                  <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
-                    <i className="fas fa-shield-alt text-primary-foreground text-xl"></i>
+                  <div className="w-12 h-12 rounded-lg mb-4 overflow-hidden">
+                    <img 
+                      src="/attached_assets/generated_images/Secure_payment_shield_icon_ba166b10.png" 
+                      alt="Pagos Seguros" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">Secure Payments</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Pagos Seguros</h3>
                   <p className="text-muted-foreground">
-                    Enterprise-grade security with Stripe integration. Your payment data is protected with industry-leading encryption.
+                    Seguridad de nivel empresarial con integración Stripe. Tus datos de pago están protegidos con encriptación líder en la industria.
                   </p>
                 </CardContent>
               </Card>
               
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
-                  <div className="w-12 h-12 bg-chart-2 rounded-lg flex items-center justify-center mb-4">
-                    <i className="fas fa-bolt text-white text-xl"></i>
+                  <div className="w-12 h-12 rounded-lg mb-4 overflow-hidden">
+                    <img 
+                      src="/attached_assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png" 
+                      alt="Acceso Instantáneo" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">Instant Access</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Acceso Instantáneo</h3>
                   <p className="text-muted-foreground">
-                    Get immediate access to premium GPT models upon successful payment. No waiting, no delays.
+                    Obtén acceso inmediato a las herramientas de IA tras el pago exitoso. Sin esperas, sin demoras.
                   </p>
                 </CardContent>
               </Card>
               
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
-                  <div className="w-12 h-12 bg-chart-3 rounded-lg flex items-center justify-center mb-4">
-                    <i className="fas fa-users text-white text-xl"></i>
+                  <div className="w-12 h-12 rounded-lg mb-4 overflow-hidden">
+                    <img 
+                      src="/attached_assets/generated_images/24/7_support_headset_icon_efb44ef5.png" 
+                      alt="Soporte 24/7" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">24/7 Support</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Soporte 24/7</h3>
                   <p className="text-muted-foreground">
-                    Our dedicated support team is available around the clock to assist with any questions or issues.
+                    Nuestro equipo de soporte dedicado está disponible las 24 horas para ayudarte con cualquier pregunta o problema.
                   </p>
                 </CardContent>
               </Card>
@@ -228,8 +240,12 @@ export default function HomePage() {
                   
                   <CardContent className="pt-6">
                     <div className="text-center mb-6">
-                      <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <i className={`${product.icon} text-primary-foreground text-2xl`}></i>
+                      <div className="w-16 h-16 rounded-lg mx-auto mb-4 overflow-hidden">
+                        <img 
+                          src={product.image} 
+                          alt={product.name} 
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                       <h3 className="text-xl font-semibold text-foreground mb-2">{product.name}</h3>
                       <div className="mb-4">
