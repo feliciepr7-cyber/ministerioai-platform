@@ -149,7 +149,7 @@ export default function HomePage() {
               Accede a herramientas especializadas de AI diseñadas específicamente para pastores, ministros y líderes de iglesia. 
               Potencia tu ministerio con tecnología avanzada.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Button 
                 onClick={scrollToPricing}
                 size="lg"
@@ -157,13 +157,6 @@ export default function HomePage() {
                 data-testid="button-view-pricing"
               >
                 View Pricing
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                data-testid="button-try-demo"
-              >
-                Try Demo
               </Button>
             </div>
           </div>
