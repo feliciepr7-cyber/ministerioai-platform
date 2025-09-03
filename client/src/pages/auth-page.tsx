@@ -259,7 +259,7 @@ export default function AuthPage() {
           <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-8">
             <img 
               src={aiLogo} 
-              alt="Ministerio IA Logo" 
+              alt="Ministerio AI Logo" 
               className="w-16 h-16 rounded-lg"
             />
           </div>

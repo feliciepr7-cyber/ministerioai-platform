@@ -120,10 +120,10 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-2">
               <img 
                 src={aiLogo} 
-                alt="Ministerio IA Logo" 
+                alt="Ministerio AI Logo" 
                 className="w-8 h-8 rounded-lg"
               />
-              <span className="text-xl font-bold text-foreground">Ministerio IA</span>
+              <span className="text-xl font-bold text-foreground">Ministerio AI</span>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-muted-foreground">

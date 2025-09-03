@@ -91,10 +91,10 @@ export default function HomePage() {
               <div className="flex items-center space-x-2">
                 <img 
                   src={aiLogo} 
-                  alt="Ministerio IA Logo" 
+                  alt="Ministerio AI Logo" 
                   className="w-8 h-8 rounded-lg"
                 />
-                <span className="text-xl font-bold text-foreground">Ministerio IA</span>
+                <span className="text-xl font-bold text-foreground">Ministerio AI</span>
               </div>
             </div>
             
@@ -300,13 +300,13 @@ export default function HomePage() {
               <div className="flex items-center space-x-2 mb-4">
                 <img 
                   src={aiLogo} 
-                  alt="Ministerio IA Logo" 
+                  alt="Ministerio AI Logo" 
                   className="w-8 h-8 rounded-lg"
                 />
-                <span className="text-xl font-bold text-foreground">Ministerio IA</span>
+                <span className="text-xl font-bold text-foreground">Ministerio AI</span>
               </div>
               <p className="text-muted-foreground text-sm">
-                Herramientas de IA especializadas para el ministerio cristiano con acceso seguro y permanente.
+                Herramientas de AI especializadas para el ministerio cristiano con acceso seguro y permanente.
               </p>
             </div>
             
