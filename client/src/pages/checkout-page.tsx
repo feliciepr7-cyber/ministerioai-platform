@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { Badge } from "@/components/ui/badge";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import aiLogo from "@assets/AI_1756923008802.png";
 import { Loader2 } from "lucide-react";
@@ -81,6 +81,9 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
             title: "Payment Successful",
             description: "Thank you for your purchase! Access granted.",
           });
+          
+          // Invalidate dashboard cache to refresh data
+          queryClient.invalidateQueries({ queryKey: ['/api/dashboard'] });
           
           // Small delay to ensure toast shows, then redirect
           setTimeout(() => {
