@@ -59,11 +59,9 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
     setIsProcessing(true);
 
     try {
-      const { error } = await stripe.confirmPayment({
+      const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
-        confirmParams: {
-          return_url: `${window.location.origin}/dashboard`,
-        },
+        redirect: "if_required",
       });
 
       if (error) {
@@ -72,12 +70,15 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
           description: error.message,
           variant: "destructive",
         });
-      } else {
+      } else if (paymentIntent && paymentIntent.status === "succeeded") {
         toast({
           title: "Payment Successful",
-          description: "Thank you for your subscription!",
+          description: "Thank you for your purchase!",
         });
-        setLocation("/dashboard");
+        // Small delay to ensure toast shows, then redirect
+        setTimeout(() => {
+          setLocation("/dashboard");
+        }, 1000);
       }
     } catch (error: any) {
       toast({
