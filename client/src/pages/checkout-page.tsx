@@ -73,25 +73,30 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
         // Confirm payment on the server side
         try {
+          console.log("Confirming payment with server...");
           await apiRequest("POST", "/api/confirm-payment", { 
             paymentIntentId: paymentIntent.id 
           });
+          console.log("Payment confirmed successfully");
           
           toast({
             title: "Payment Successful",
             description: "Thank you for your purchase! Access granted.",
           });
           
-          // Remove cache and force immediate refetch
-          queryClient.removeQueries({ queryKey: ['/api/dashboard'] });
+          // Store purchase info for immediate UI update
+          console.log("Storing purchase info for immediate update...");
+          localStorage.setItem('recentPurchases', JSON.stringify([planId]));
           
-          // Wait a moment to ensure server has processed the payment
-          await new Promise(resolve => setTimeout(resolve, 500));
+          // Clear cache and redirect
+          console.log("Clearing dashboard cache...");
+          queryClient.clear();
           
-          // Small delay to ensure toast shows, then redirect
+          // Redirect with purchase parameter
           setTimeout(() => {
-            setLocation("/dashboard");
-          }, 1000);
+            console.log("Redirecting to dashboard...");
+            setLocation(`/dashboard?purchased=${planId}`);
+          }, 1500);
         } catch (error: any) {
           toast({
             title: "Payment Processing Error",
