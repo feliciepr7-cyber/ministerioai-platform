@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import aiLogo from "@assets/AI_1756923008802.png";
 
 interface DashboardData {
   user: {
@@ -118,7 +119,7 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <img 
-                src="/attached_assets/AI_1756923008802.png" 
+                src={aiLogo} 
                 alt="Ministerio IA Logo" 
                 className="w-8 h-8 rounded-lg"
               />

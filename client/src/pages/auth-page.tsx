@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
+import aiLogo from "@assets/AI_1756923008802.png";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -257,7 +258,7 @@ export default function AuthPage() {
         <div className="max-w-md text-center">
           <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-8">
             <img 
-              src="/attached_assets/AI_1756923008802.png" 
+              src={aiLogo} 
               alt="Ministerio IA Logo" 
               className="w-16 h-16 rounded-lg"
             />

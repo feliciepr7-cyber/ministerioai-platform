@@ -9,6 +9,7 @@ import { FloatingInput } from "@/components/ui/floating-input";
 import { Badge } from "@/components/ui/badge";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import aiLogo from "@assets/AI_1756923008802.png";
 import { Loader2 } from "lucide-react";
 
 if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
@@ -293,7 +294,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <img 
-                src="/attached_assets/AI_1756923008802.png" 
+                src={aiLogo} 
                 alt="Ministerio IA Logo" 
                 className="w-8 h-8 rounded-lg"
               />

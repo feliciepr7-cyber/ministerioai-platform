@@ -5,6 +5,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+// Import images
+import aiLogo from "@assets/AI_1756923008802.png";
+import sermonImage from "@assets/generated_images/Sermon_generator_illustration_6bc72bc1.png";
+import ceremonyImage from "@assets/generated_images/Church_ceremony_manual_3852f443.png";
+import expositoryImage from "@assets/generated_images/Expository_messages_illustration_24a14fb8.png";
+
 const GPT_PRODUCTS = [
   {
     id: "generador-sermones",
@@ -17,7 +23,7 @@ const GPT_PRODUCTS = [
       "Estudios bíblicos profundos",
       "Basado en pasajes bíblicos"
     ],
-    image: "/attached_assets/generated_images/Sermon_generator_illustration_6bc72bc1.png"
+    image: sermonImage
   },
   {
     id: "manual-ceremonias",
@@ -30,7 +36,7 @@ const GPT_PRODUCTS = [
       "Servicios especiales",
       "Excelencia ministerial"
     ],
-    image: "/attached_assets/generated_images/Church_ceremony_manual_3852f443.png",
+    image: ceremonyImage,
     popular: true
   },
   {
@@ -44,7 +50,7 @@ const GPT_PRODUCTS = [
       "Aplicación práctica",
       "Predicación expositiva"
     ],
-    image: "/attached_assets/generated_images/Expository_messages_illustration_24a14fb8.png"
+    image: expositoryImage
   }
 ];
 
@@ -81,7 +87,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <img 
-                  src="/attached_assets/AI_1756923008802.png" 
+                  src={aiLogo} 
                   alt="Ministerio IA Logo" 
                   className="w-8 h-8 rounded-lg"
                 />
@@ -290,7 +296,7 @@ export default function HomePage() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img 
-                  src="/attached_assets/AI_1756923008802.png" 
+                  src={aiLogo} 
                   alt="Ministerio IA Logo" 
                   className="w-8 h-8 rounded-lg"
                 />
