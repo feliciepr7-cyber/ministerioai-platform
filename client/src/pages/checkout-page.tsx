@@ -194,7 +194,7 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
                     Processing...
                   </>
                 ) : (
-                  `Pay $${plan.price}/month`
+                  `Pagar $${product.price} USD`
                 )}
               </Button>
             </div>
@@ -216,8 +216,8 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  const planId = params.plan || "pro";
-  const plan = PRICING_PLANS[planId as keyof typeof PRICING_PLANS];
+  const productId = params.plan || "manual-ceremonias";
+  const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
 
   useEffect(() => {
     if (!user) {
@@ -225,27 +225,27 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       return;
     }
 
-    if (!plan) {
+    if (!product) {
       toast({
-        title: "Invalid Plan",
-        description: "The selected plan is not available.",
+        title: "Producto Inválido",
+        description: "El producto seleccionado no está disponible.",
         variant: "destructive",
       });
       setLocation("/");
       return;
     }
 
-    // Create subscription
-    const createSubscription = async () => {
+    // Create payment intent
+    const createPaymentIntent = async () => {
       try {
-        const res = await apiRequest("POST", "/api/create-subscription", {
-          planName: planId,
+        const res = await apiRequest("POST", "/api/create-payment-intent", {
+          productId: productId,
         });
         const data = await res.json();
         setClientSecret(data.clientSecret);
       } catch (error: any) {
         toast({
-          title: "Setup Failed",
+          title: "Error de Configuración",
           description: error.message,
           variant: "destructive",
         });
@@ -255,8 +255,8 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       }
     };
 
-    createSubscription();
-  }, [user, planId, plan, setLocation, toast]);
+    createPaymentIntent();
+  }, [user, productId, product, setLocation, toast]);
 
   if (!user) {
     return null;
@@ -337,7 +337,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
         </div>
 
         <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm planId={planId} />
+          <CheckoutForm planId={productId} />
         </Elements>
       </div>
     </div>

@@ -424,7 +424,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {dashboardData.subscription ? (
+                {totalPurchased > 0 ? (
                   <>
                     <div className="bg-muted/30 border border-border rounded-lg p-4">
                       <div className="flex items-center justify-between">
