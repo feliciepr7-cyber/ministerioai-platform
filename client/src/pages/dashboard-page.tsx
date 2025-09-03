@@ -48,39 +48,10 @@ export default function DashboardPage() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   
-  // Local state to track recent purchases for immediate UI updates
-  const [recentPurchases, setRecentPurchases] = useState<string[]>([]);
-  
-  // Check for purchase confirmation in URL or localStorage
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const purchasedProduct = urlParams.get('purchased');
-    
-    if (purchasedProduct) {
-      console.log("Found recent purchase in URL:", purchasedProduct);
-      setRecentPurchases(prev => [...prev, purchasedProduct]);
-      // Clean URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-    
-    // Also check localStorage for recent purchases
-    const stored = localStorage.getItem('recentPurchases');
-    if (stored) {
-      const storedPurchases = JSON.parse(stored);
-      console.log("Found recent purchases in storage:", storedPurchases);
-      setRecentPurchases(prev => [...prev, ...storedPurchases]);
-      // Clear after use
-      localStorage.removeItem('recentPurchases');
-    }
-  }, []);
 
   const { data: dashboardData, isLoading } = useQuery<DashboardData>({
     queryKey: ["/api/dashboard"],
     enabled: !!user,
-    staleTime: 0, // Always refetch dashboard data
-    gcTime: 0, // Don't cache at all (v5 syntax)
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
   });
 
   const accessGptMutation = useMutation({
@@ -268,9 +239,6 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 {dashboardData.availableProducts.map((product) => {
                   const productAccess = dashboardData.purchasedGpts.find(access => access.modelId === product.id);
-                  // Check if this product was recently purchased (for immediate UI update)
-                  const isPurchased = product.purchased || recentPurchases.includes(product.id);
-                  console.log(`Product ${product.id}: serverPurchased=${product.purchased}, recentPurchases=${recentPurchases.includes(product.id)}, finalState=${isPurchased}`);
                   return (
                     <div 
                       key={product.id} 
@@ -296,14 +264,14 @@ export default function DashboardPage() {
                               Usado {productAccess.queriesUsed || 0} veces
                             </p>
                           )}
-                          {!isPurchased && (
+                          {!product.purchased && (
                             <p className="text-xs text-chart-4 font-medium">
                               ${product.price} USD - Pago único
                             </p>
                           )}
                         </div>
                       </div>
-                      {isPurchased ? (
+                      {product.purchased ? (
                         <Button
                           onClick={() => handleAccessGPT(product.id)}
                           disabled={accessGptMutation.isPending}

@@ -88,7 +88,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Find the corresponding GPT model in the database
       const gptModels = await storage.getGptModels();
       const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
+      
+      console.log("Payment confirmation debug:");
+      console.log("- Product ID from metadata:", productId);
+      console.log("- Product from GPT_PRODUCTS:", product);
+      console.log("- Available GPT models:", gptModels.map(m => ({ id: m.id, name: m.name })));
+      
       const gptModel = gptModels.find(model => model.name === product?.name);
+      console.log("- Matched GPT model:", gptModel);
       
       if (!gptModel) {
         return res.status(400).json({ message: `GPT model not found for product: ${product?.name}` });

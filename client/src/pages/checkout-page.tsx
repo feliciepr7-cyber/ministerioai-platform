@@ -84,18 +84,14 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
             description: "Thank you for your purchase! Access granted.",
           });
           
-          // Store purchase info for immediate UI update
-          console.log("Storing purchase info for immediate update...");
-          localStorage.setItem('recentPurchases', JSON.stringify([planId]));
+          toast({
+            title: "Redirecting...",
+            description: "Taking you to dashboard with updated access.",
+          });
           
-          // Clear cache and redirect
-          console.log("Clearing dashboard cache...");
-          queryClient.clear();
-          
-          // Redirect with purchase parameter
+          // Simple approach: redirect and force a complete page refresh
           setTimeout(() => {
-            console.log("Redirecting to dashboard...");
-            setLocation(`/dashboard?purchased=${planId}`);
+            window.location.href = '/dashboard';
           }, 1500);
         } catch (error: any) {
           toast({
