@@ -72,9 +72,11 @@ export default function AuthPage() {
       });
       // In development, show the token for testing
       if (data.resetToken) {
+        console.log("Setting reset token:", data.resetToken);
         setResetToken(data.resetToken);
         setShowResetPassword(true);
         setShowForgotPassword(false);
+        console.log("State should change to showResetPassword = true");
       }
     },
     onError: (error: Error) => {
