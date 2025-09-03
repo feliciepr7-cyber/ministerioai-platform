@@ -71,14 +71,28 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
           variant: "destructive",
         });
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        toast({
-          title: "Payment Successful",
-          description: "Thank you for your purchase!",
-        });
-        // Small delay to ensure toast shows, then redirect
-        setTimeout(() => {
-          setLocation("/dashboard");
-        }, 1000);
+        // Confirm payment on the server side
+        try {
+          await apiRequest("POST", "/api/confirm-payment", { 
+            paymentIntentId: paymentIntent.id 
+          });
+          
+          toast({
+            title: "Payment Successful",
+            description: "Thank you for your purchase! Access granted.",
+          });
+          
+          // Small delay to ensure toast shows, then redirect
+          setTimeout(() => {
+            setLocation("/dashboard");
+          }, 1000);
+        } catch (error: any) {
+          toast({
+            title: "Payment Processing Error",
+            description: "Payment succeeded but there was an issue granting access. Please contact support.",
+            variant: "destructive",
+          });
+        }
       }
     } catch (error: any) {
       toast({

@@ -56,6 +56,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Confirm payment and grant access
+  app.post("/api/confirm-payment", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    const { paymentIntentId } = req.body;
+    const user = req.user!;
+
+    try {
+      // Retrieve payment intent from Stripe to verify it
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      
+      if (paymentIntent.status !== "succeeded") {
+        return res.status(400).json({ message: "Payment not successful" });
+      }
+
+      const { userId, productId, productName } = paymentIntent.metadata;
+      
+      if (userId !== user.id) {
+        return res.status(403).json({ message: "Payment does not belong to this user" });
+      }
+
+      // Check if payment already recorded
+      const existingPayment = await storage.getPaymentByStripeId(paymentIntent.id);
+      if (existingPayment) {
+        return res.status(400).json({ message: "Payment already processed" });
+      }
+
+      // Create payment record
+      await storage.createPayment({
+        userId: userId,
+        subscriptionId: null,
+        stripePaymentId: paymentIntent.id,
+        amount: (paymentIntent.amount / 100).toString(),
+        currency: paymentIntent.currency,
+        status: "succeeded",
+        description: `One-time purchase: ${productName}`,
+      });
+
+      // Grant access to the GPT
+      const accessToken = randomUUID();
+      await storage.createGptAccess({
+        userId: userId,
+        modelId: productId!,
+        accessToken: accessToken,
+        queriesUsed: 0,
+      });
+
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Payment confirmation error:", error);
+      res.status(500).json({ message: "Error confirming payment: " + error.message });
+    }
+  });
+
   // Create payment intent for one-time purchase
   app.post("/api/create-payment-intent", async (req, res) => {
     if (!req.isAuthenticated()) {

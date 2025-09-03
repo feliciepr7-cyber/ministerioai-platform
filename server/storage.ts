@@ -146,6 +146,11 @@ export class DatabaseStorage implements IStorage {
     return payment;
   }
 
+  async getPaymentByStripeId(stripePaymentId: string): Promise<Payment | undefined> {
+    const [payment] = await db.select().from(payments).where(eq(payments.stripePaymentId, stripePaymentId));
+    return payment || undefined;
+  }
+
   async getGptModels(): Promise<GptModel[]> {
     return await db.select().from(gptModels).where(eq(gptModels.isActive, true));
   }
