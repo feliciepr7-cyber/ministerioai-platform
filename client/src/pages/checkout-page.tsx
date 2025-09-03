@@ -292,10 +292,12 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <i className="fas fa-robot text-primary-foreground"></i>
-              </div>
-              <span className="text-xl font-bold text-foreground">GPT Access</span>
+              <img 
+                src="/attached_assets/AI_1756923008802.png" 
+                alt="Ministerio IA Logo" 
+                className="w-8 h-8 rounded-lg"
+              />
+              <span className="text-xl font-bold text-foreground">Ministerio IA</span>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-muted-foreground">Welcome, {user.name}</span>

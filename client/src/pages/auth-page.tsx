@@ -256,7 +256,11 @@ export default function AuthPage() {
       <div className="flex-1 bg-gradient-to-br from-primary to-chart-2 flex items-center justify-center p-8 text-white">
         <div className="max-w-md text-center">
           <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-8">
-            <i className="fas fa-robot text-4xl"></i>
+            <img 
+              src="/attached_assets/AI_1756923008802.png" 
+              alt="Ministerio IA Logo" 
+              className="w-16 h-16 rounded-lg"
+            />
           </div>
           <h3 className="text-3xl font-bold mb-4">Access Premium GPT Models</h3>
           <p className="text-lg opacity-90 mb-8">
