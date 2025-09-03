@@ -142,11 +142,11 @@ export default function HomePage() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
               Herramientas Ministeriales 
               <span className="bg-gradient-to-r from-primary to-chart-2 bg-clip-text text-transparent ml-3">
-                con IA
+                AI
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Accede a herramientas especializadas de IA diseñadas específicamente para pastores, ministros y líderes de iglesia. 
+              Accede a herramientas especializadas de AI diseñadas específicamente para pastores, ministros y líderes de iglesia. 
               Potencia tu ministerio con tecnología avanzada.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -229,7 +229,7 @@ export default function HomePage() {
         <section className="py-20 px-4 sm:px-6 lg:px-8" id="pricing">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">Herramientas Ministeriales</h2>
+              <h2 className="text-3xl font-bold text-foreground mb-4">Herramientas Ministeriales AI</h2>
               <p className="text-lg text-muted-foreground">Compra una vez, úsala para siempre. Solo $20 USD cada herramienta</p>
             </div>
             
