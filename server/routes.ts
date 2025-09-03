@@ -85,6 +85,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Payment already processed" });
       }
 
+      // Find the corresponding GPT model in the database
+      const gptModels = await storage.getGptModels();
+      const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
+      const gptModel = gptModels.find(model => model.name === product?.name);
+      
+      if (!gptModel) {
+        return res.status(400).json({ message: "GPT model not found" });
+      }
+
       // Create payment record
       await storage.createPayment({
         userId: userId,
@@ -96,11 +105,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         description: `One-time purchase: ${productName}`,
       });
 
-      // Grant access to the GPT
+      // Grant access to the GPT using the correct model ID from database
       const accessToken = randomUUID();
       await storage.createGptAccess({
         userId: userId,
-        modelId: productId!,
+        modelId: gptModel.id, // Use the database ID, not the product key
         accessToken: accessToken,
         queriesUsed: 0,
       });
