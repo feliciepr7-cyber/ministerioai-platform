@@ -89,13 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const gptModels = await storage.getGptModels();
       const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
       
-      console.log("Payment confirmation debug:");
-      console.log("- Product ID from metadata:", productId);
-      console.log("- Product from GPT_PRODUCTS:", product);
-      console.log("- Available GPT models:", gptModels.map(m => ({ id: m.id, name: m.name })));
-      
       const gptModel = gptModels.find(model => model.name === product?.name);
-      console.log("- Matched GPT model:", gptModel);
       
       if (!gptModel) {
         return res.status(400).json({ message: `GPT model not found for product: ${product?.name}` });
@@ -144,9 +138,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Check if user already purchased this GPT
-      const existingAccess = await storage.getGptAccess(user.id, productId);
-      if (existingAccess) {
-        return res.status(400).json({ message: "You already have access to this GPT" });
+      const gptModels = await storage.getGptModels();
+      const gptModel = gptModels.find(model => model.name === product.name);
+      
+      if (gptModel) {
+        const existingAccess = await storage.getGptAccess(user.id, gptModel.id);
+        if (existingAccess) {
+          return res.status(400).json({ message: "You already have access to this GPT" });
+        }
       }
 
       let customer;
