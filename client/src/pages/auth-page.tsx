@@ -117,10 +117,22 @@ export default function AuthPage() {
     }
   }, [user, setLocation]);
 
-  // Check for reset token in URL
+  // Check for reset token in URL (both query params and hash)
   useEffect(() => {
+    // Check URL search params first
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    let token = urlParams.get('token');
+    
+    // If no token in search params, check hash fragment
+    if (!token && window.location.hash) {
+      const hash = window.location.hash.substring(1); // Remove the #
+      if (hash.startsWith('reset=')) {
+        token = hash.substring(6); // Remove 'reset='
+      } else if (hash.length > 20) { // Assume it's a token if it's long enough
+        token = hash;
+      }
+    }
+    
     if (token) {
       setResetToken(token);
       setShowResetPassword(true);
@@ -128,6 +140,9 @@ export default function AuthPage() {
       setIsLogin(false);
       // Pre-fill the token in the form
       resetPasswordForm.setValue('token', token);
+      
+      // Clean up the URL
+      window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
     }
   }, [resetPasswordForm]);
 
