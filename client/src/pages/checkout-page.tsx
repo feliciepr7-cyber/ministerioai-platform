@@ -82,8 +82,11 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
             description: "Thank you for your purchase! Access granted.",
           });
           
-          // Force refetch dashboard data immediately
-          await queryClient.refetchQueries({ queryKey: ['/api/dashboard'] });
+          // Remove cache and force immediate refetch
+          queryClient.removeQueries({ queryKey: ['/api/dashboard'] });
+          
+          // Wait a moment to ensure server has processed the payment
+          await new Promise(resolve => setTimeout(resolve, 500));
           
           // Small delay to ensure toast shows, then redirect
           setTimeout(() => {

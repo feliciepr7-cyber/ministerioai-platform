@@ -50,6 +50,7 @@ export default function DashboardPage() {
   const { data: dashboardData, isLoading } = useQuery<DashboardData>({
     queryKey: ["/api/dashboard"],
     enabled: !!user,
+    staleTime: 0, // Always refetch dashboard data
   });
 
   const accessGptMutation = useMutation({
