@@ -10,6 +10,9 @@ import aiLogo from "@assets/AI_1756923008802.png";
 import sermonImage from "@assets/generated_images/Sermon_generator_illustration_6bc72bc1.png";
 import ceremonyImage from "@assets/generated_images/Church_ceremony_manual_3852f443.png";
 import expositoryImage from "@assets/generated_images/Expository_messages_illustration_24a14fb8.png";
+import securePaymentIcon from "@assets/generated_images/Secure_payment_shield_icon_ba166b10.png";
+import instantAccessIcon from "@assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png";
+import supportIcon from "@assets/generated_images/24/7_support_headset_icon_efb44ef5.png";
 
 const GPT_PRODUCTS = [
   {
@@ -175,7 +178,7 @@ export default function HomePage() {
                 <CardContent className="pt-6">
                   <div className="w-12 h-12 rounded-lg mb-4 overflow-hidden">
                     <img 
-                      src="/attached_assets/generated_images/Secure_payment_shield_icon_ba166b10.png" 
+                      src={securePaymentIcon} 
                       alt="Pagos Seguros" 
                       className="w-full h-full object-cover"
                     />
@@ -191,7 +194,7 @@ export default function HomePage() {
                 <CardContent className="pt-6">
                   <div className="w-12 h-12 rounded-lg mb-4 overflow-hidden">
                     <img 
-                      src="/attached_assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png" 
+                      src={instantAccessIcon} 
                       alt="Acceso Instantáneo" 
                       className="w-full h-full object-cover"
                     />
@@ -207,7 +210,7 @@ export default function HomePage() {
                 <CardContent className="pt-6">
                   <div className="w-12 h-12 rounded-lg mb-4 overflow-hidden">
                     <img 
-                      src="/attached_assets/generated_images/24/7_support_headset_icon_efb44ef5.png" 
+                      src={supportIcon} 
                       alt="Soporte 24/7" 
                       className="w-full h-full object-cover"
                     />
