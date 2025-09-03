@@ -229,8 +229,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "GPT not found" });
       }
 
-      // Check if user has purchased this GPT
-      const existingAccess = await storage.getGptAccess(user.id, productId);
+      // Find the corresponding GPT model in the database
+      const gptModels = await storage.getGptModels();
+      const gptModel = gptModels.find(model => model.name === product.name);
+      
+      if (!gptModel) {
+        return res.status(404).json({ message: "GPT model not found" });
+      }
+
+      // Check if user has purchased this GPT using the database model ID
+      const existingAccess = await storage.getGptAccess(user.id, gptModel.id);
       if (!existingAccess) {
         return res.status(403).json({ message: "Purchase required to access this GPT" });
       }
