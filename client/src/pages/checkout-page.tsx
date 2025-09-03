@@ -17,10 +17,22 @@ if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-const PRICING_PLANS = {
-  basic: { name: "Basic", price: 9, features: ["100 GPT queries/month", "3 Custom GPT models", "Email support"] },
-  pro: { name: "Pro", price: 29, features: ["1,000 GPT queries/month", "10 Custom GPT models", "Priority support", "API access"] },
-  enterprise: { name: "Enterprise", price: 99, features: ["Unlimited queries", "All GPT models", "24/7 phone support", "Custom integrations"] },
+const GPT_PRODUCTS = {
+  "generador-sermones": {
+    name: "Generador de Sermones",
+    price: 20,
+    features: ["Acceso de por vida al Custom GPT", "Bosquejos de sermones detallados", "Estudios bíblicos profundos", "Basado en pasajes bíblicos"]
+  },
+  "manual-ceremonias": {
+    name: "Manual de Ceremonias del Ministro",
+    price: 20,
+    features: ["Acceso de por vida al Custom GPT", "Guías para ceremonias", "Servicios especiales", "Excelencia ministerial"]
+  },
+  "mensajes-expositivos": {
+    name: "Mensajes Expositivos",
+    price: 20,
+    features: ["Acceso de por vida al Custom GPT", "Explicación clara de la Escritura", "Aplicación práctica", "Predicación expositiva"]
+  },
 };
 
 interface CheckoutFormProps {
@@ -34,7 +46,7 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
   const [, setLocation] = useLocation();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const plan = PRICING_PLANS[planId as keyof typeof PRICING_PLANS];
+  const product = GPT_PRODUCTS[planId as keyof typeof GPT_PRODUCTS];
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -85,8 +97,8 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
             <h2 className="text-2xl font-bold text-foreground mb-2">Complete Your Purchase</h2>
             <div className="bg-muted rounded-lg p-4 mb-4">
               <div className="flex justify-between items-center">
-                <span className="font-semibold text-foreground">{plan.name} Plan</span>
-                <span className="text-2xl font-bold text-foreground">${plan.price}/month</span>
+                <span className="font-semibold text-foreground">{product.name}</span>
+                <span className="text-2xl font-bold text-foreground">${product.price} USD</span>
               </div>
             </div>
           </div>
@@ -250,12 +262,12 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     return null;
   }
 
-  if (!plan) {
+  if (!product) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="max-w-md">
           <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">Invalid plan selected.</p>
+            <p className="text-center text-muted-foreground">Producto inválido seleccionado.</p>
           </CardContent>
         </Card>
       </div>
@@ -294,8 +306,8 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
       <div className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Subscribe to {plan.name}</h1>
-          <p className="text-muted-foreground">Complete your subscription to access premium GPT models</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Comprar {product.name}</h1>
+          <p className="text-muted-foreground">Completa tu compra para acceder de por vida a esta herramienta</p>
         </div>
 
         {/* Plan Details */}
@@ -303,15 +315,15 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           <Card className="border-primary/20">
             <CardContent className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-foreground">{plan.name} Plan</h3>
-                <Badge variant="secondary">Selected</Badge>
+                <h3 className="text-xl font-semibold text-foreground">{product.name}</h3>
+                <Badge variant="secondary">Seleccionado</Badge>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-foreground">${plan.price}</span>
-                <span className="text-muted-foreground">/month</span>
+                <span className="text-3xl font-bold text-foreground">${product.price}</span>
+                <span className="text-muted-foreground"> USD - Pago único</span>
               </div>
               <ul className="space-y-2">
-                {plan.features.map((feature, index) => (
+                {product.features.map((feature: string, index: number) => (
                   <li key={index} className="flex items-center text-sm text-muted-foreground">
                     <i className="fas fa-check text-chart-2 mr-3"></i>
                     {feature}

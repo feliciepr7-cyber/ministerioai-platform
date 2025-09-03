@@ -5,42 +5,46 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-const PRICING_PLANS = [
+const GPT_PRODUCTS = [
   {
-    id: "basic",
-    name: "Basic",
-    price: 9,
-    description: "Perfect for individuals getting started",
+    id: "generador-sermones",
+    name: "Generador de Sermones",
+    price: 20,
+    description: "Prepara un bosquejo de sermón o Estudio Bíblico profundo y detallado",
     features: [
-      "100 GPT queries/month",
-      "3 Custom GPT models",
-      "Email support"
-    ]
+      "Acceso de por vida al Custom GPT",
+      "Bosquejos de sermones detallados",
+      "Estudios bíblicos profundos",
+      "Basado en pasajes bíblicos"
+    ],
+    icon: "fas fa-book-open"
   },
   {
-    id: "pro",
-    name: "Pro",
-    price: 29,
-    description: "Ideal for professionals and small teams",
+    id: "manual-ceremonias",
+    name: "Manual de Ceremonias del Ministro",
+    price: 20,
+    description: "Guía práctica para pastores y líderes de iglesia",
     features: [
-      "1,000 GPT queries/month",
-      "10 Custom GPT models",
-      "Priority support",
-      "API access"
+      "Acceso de por vida al Custom GPT",
+      "Guías para ceremonias",
+      "Servicios especiales",
+      "Excelencia ministerial"
     ],
+    icon: "fas fa-hands-praying",
     popular: true
   },
   {
-    id: "enterprise",
-    name: "Enterprise",
-    price: 99,
-    description: "For organizations with advanced needs",
+    id: "mensajes-expositivos",
+    name: "Mensajes Expositivos",
+    price: 20,
+    description: "Predicación bíblica clara y fiel al texto original",
     features: [
-      "Unlimited queries",
-      "All GPT models",
-      "24/7 phone support",
-      "Custom integrations"
-    ]
+      "Acceso de por vida al Custom GPT",
+      "Explicación clara de la Escritura",
+      "Aplicación práctica",
+      "Predicación expositiva"
+    ],
+    icon: "fas fa-cross"
   }
 ];
 
@@ -60,9 +64,9 @@ export default function HomePage() {
     }
   };
 
-  const handleSelectPlan = (planId: string) => {
+  const handleSelectProduct = (productId: string) => {
     if (user) {
-      setLocation(`/checkout/${planId}`);
+      setLocation(`/checkout/${productId}`);
     } else {
       setLocation("/auth");
     }
@@ -79,7 +83,7 @@ export default function HomePage() {
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <i className="fas fa-robot text-primary-foreground"></i>
                 </div>
-                <span className="text-xl font-bold text-foreground">GPT Access</span>
+                <span className="text-xl font-bold text-foreground">Ministerio IA</span>
               </div>
             </div>
             
@@ -125,14 +129,14 @@ export default function HomePage() {
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Access Premium 
+              Herramientas Ministeriales 
               <span className="bg-gradient-to-r from-primary to-chart-2 bg-clip-text text-transparent ml-3">
-                Custom GPTs
+                con IA
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Unlock powerful AI capabilities with our curated collection of specialized GPT models. 
-              Secure, professional, and ready to transform your workflow.
+              Accede a herramientas especializadas de IA diseñadas específicamente para pastores, ministros y líderes de iglesia. 
+              Potencia tu ministerio con tecnología avanzada.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
@@ -198,40 +202,43 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Pricing Section */}
+        {/* Products Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8" id="pricing">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">Choose Your Plan</h2>
-              <p className="text-lg text-muted-foreground">Select the perfect plan for your AI needs</p>
+              <h2 className="text-3xl font-bold text-foreground mb-4">Herramientas Ministeriales</h2>
+              <p className="text-lg text-muted-foreground">Compra una vez, úsala para siempre. Solo $20 USD cada herramienta</p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
-              {PRICING_PLANS.map((plan) => (
+              {GPT_PRODUCTS.map((product) => (
                 <Card 
-                  key={plan.id}
+                  key={product.id}
                   className={`relative hover:shadow-lg transition-shadow ${
-                    plan.popular ? 'pricing-glow border-2 border-primary transform scale-105' : ''
+                    product.popular ? 'pricing-glow border-2 border-primary transform scale-105' : ''
                   }`}
                 >
-                  {plan.popular && (
+                  {product.popular && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <Badge className="bg-primary text-primary-foreground">Most Popular</Badge>
+                      <Badge className="bg-primary text-primary-foreground">Más Popular</Badge>
                     </div>
                   )}
                   
                   <CardContent className="pt-6">
                     <div className="text-center mb-6">
-                      <h3 className="text-xl font-semibold text-foreground mb-2">{plan.name}</h3>
-                      <div className="mb-4">
-                        <span className="text-3xl font-bold text-foreground">${plan.price}</span>
-                        <span className="text-muted-foreground">/month</span>
+                      <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i className={`${product.icon} text-primary-foreground text-2xl`}></i>
                       </div>
-                      <p className="text-muted-foreground">{plan.description}</p>
+                      <h3 className="text-xl font-semibold text-foreground mb-2">{product.name}</h3>
+                      <div className="mb-4">
+                        <span className="text-3xl font-bold text-foreground">${product.price}</span>
+                        <span className="text-muted-foreground"> USD</span>
+                      </div>
+                      <p className="text-muted-foreground">{product.description}</p>
                     </div>
                     
                     <ul className="space-y-3 mb-8">
-                      {plan.features.map((feature, index) => (
+                      {product.features.map((feature, index) => (
                         <li key={index} className="flex items-center text-muted-foreground">
                           <i className="fas fa-check text-chart-2 mr-3"></i>
                           {feature}
@@ -240,15 +247,15 @@ export default function HomePage() {
                     </ul>
                     
                     <Button 
-                      onClick={() => handleSelectPlan(plan.id)}
+                      onClick={() => handleSelectProduct(product.id)}
                       className={`w-full ${
-                        plan.popular 
+                        product.popular 
                           ? 'bg-primary text-primary-foreground hover:bg-primary/90' 
                           : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                       }`}
-                      data-testid={`button-select-${plan.id}`}
+                      data-testid={`button-select-${product.id}`}
                     >
-                      {plan.popular ? 'Start Pro Trial' : 'Get Started'}
+                      Comprar Ahora
                     </Button>
                   </CardContent>
                 </Card>
@@ -265,12 +272,12 @@ export default function HomePage() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <i className="fas fa-robot text-primary-foreground"></i>
+                  <i className="fas fa-cross text-primary-foreground"></i>
                 </div>
-                <span className="text-xl font-bold text-foreground">GPT Access</span>
+                <span className="text-xl font-bold text-foreground">Ministerio IA</span>
               </div>
               <p className="text-muted-foreground text-sm">
-                Secure access to premium Custom GPT models with professional-grade payment protection.
+                Herramientas de IA especializadas para el ministerio cristiano con acceso seguro y permanente.
               </p>
             </div>
             

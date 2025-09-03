@@ -14,25 +14,28 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-08-27.basil",
 });
 
-// Pricing configuration
-const PRICING_PLANS = {
-  basic: {
-    name: "Basic",
-    price: 9,
-    stripePriceId: process.env.STRIPE_BASIC_PRICE_ID || "price_basic_default",
-    queryLimit: 100,
+// Pricing configuration for one-time purchases
+const GPT_PRODUCTS = {
+  "generador-sermones": {
+    name: "Generador de Sermones",
+    description: "Prepara un bosquejo de sermón o Estudio Bíblico profundo y detallado a partir de un pasaje bíblico, tema, cita bíblica o palabra clave proporcionado.",
+    price: 20,
+    gptUrl: "https://chatgpt.com/g/g-68b0d8f025d081918f17cdc67fe2241b-generador-de-sermones",
+    icon: "fas fa-book-open",
   },
-  pro: {
-    name: "Pro",
-    price: 29,
-    stripePriceId: process.env.STRIPE_PRO_PRICE_ID || "price_pro_default",
-    queryLimit: 1000,
+  "manual-ceremonias": {
+    name: "Manual de Ceremonias del Ministro",
+    description: "El Manual de Ceremonias del Ministro es una guía práctica y completa diseñada para pastores, ministros y líderes de iglesia que desean conducir con excelencia, reverencia y claridad las diversas celebraciones y servicios especiales de la vida cristiana.",
+    price: 20,
+    gptUrl: "https://chatgpt.com/g/g-68b46646ba548191afc0e0d7ca151cfd-manual-de-ceremonias-del-ministro",
+    icon: "fas fa-hands-praying",
   },
-  enterprise: {
-    name: "Enterprise",
-    price: 99,
-    stripePriceId: process.env.STRIPE_ENTERPRISE_PRICE_ID || "price_enterprise_default",
-    queryLimit: -1, // Unlimited
+  "mensajes-expositivos": {
+    name: "Mensajes Expositivos",
+    description: "Los mensajes expositivos son un estilo de predicación y enseñanza bíblica que se centra en explicar de manera clara y fiel el sentido original de un pasaje de la Escritura, aplicándolo directamente a la vida del oyente.",
+    price: 20,
+    gptUrl: "https://chatgpt.com/g/g-68b3bd5d57088191940ce1e37623c6d5-mensajes-expositivos",
+    icon: "fas fa-cross",
   },
 };
 
@@ -53,25 +56,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create subscription
-  app.post("/api/create-subscription", async (req, res) => {
+  // Create payment intent for one-time purchase
+  app.post("/api/create-payment-intent", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "Authentication required" });
     }
 
-    const { planName } = req.body;
+    const { productId } = req.body;
     const user = req.user!;
 
     try {
-      const plan = PRICING_PLANS[planName as keyof typeof PRICING_PLANS];
-      if (!plan) {
-        return res.status(400).json({ message: "Invalid plan" });
+      const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
+      if (!product) {
+        return res.status(400).json({ message: "Invalid product" });
       }
 
-      // Check if user already has an active subscription
-      const existingSubscription = await storage.getSubscriptionByUserId(user.id);
-      if (existingSubscription && existingSubscription.status === "active") {
-        return res.status(400).json({ message: "User already has an active subscription" });
+      // Check if user already purchased this GPT
+      const existingAccess = await storage.getGptAccess(user.id, productId);
+      if (existingAccess) {
+        return res.status(400).json({ message: "You already have access to this GPT" });
       }
 
       let customer;
@@ -88,41 +91,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const subscription = await stripe.subscriptions.create({
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(product.price * 100), // Convert to cents
+        currency: "usd",
         customer: customer.id,
-        items: [{ price: plan.stripePriceId }],
-        payment_behavior: "default_incomplete",
-        payment_settings: {
-          save_default_payment_method: "on_subscription",
+        metadata: {
+          userId: user.id,
+          productId: productId,
+          productName: product.name,
         },
-        expand: ["latest_invoice.payment_intent"],
+        automatic_payment_methods: {
+          enabled: true,
+        },
       });
-
-      // Store subscription in database
-      await storage.createSubscription({
-        userId: user.id,
-        stripeSubscriptionId: subscription.id,
-        stripePriceId: plan.stripePriceId,
-        status: subscription.status,
-        planName: plan.name,
-        amount: plan.price.toString(),
-        currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
-        currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
-      });
-
-      // Update user with subscription info
-      await storage.updateUserStripeInfo(user.id, customer.id, subscription.id);
-
-      const latestInvoice = subscription.latest_invoice as Stripe.Invoice;
-      const paymentIntent = (latestInvoice as any).payment_intent as Stripe.PaymentIntent;
 
       res.json({
-        subscriptionId: subscription.id,
         clientSecret: paymentIntent.client_secret,
       });
     } catch (error: any) {
-      console.error("Subscription creation error:", error);
-      res.status(500).json({ message: "Error creating subscription: " + error.message });
+      console.error("Payment intent creation error:", error);
+      res.status(500).json({ message: "Error creating payment intent: " + error.message });
     }
   });
 
@@ -146,17 +134,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     try {
       switch (event.type) {
-        case "invoice.payment_succeeded":
-          await handlePaymentSucceeded(event.data.object as Stripe.Invoice);
+        case "payment_intent.succeeded":
+          await handlePaymentSucceeded(event.data.object as Stripe.PaymentIntent);
           break;
-        case "invoice.payment_failed":
-          await handlePaymentFailed(event.data.object as Stripe.Invoice);
-          break;
-        case "customer.subscription.updated":
-          await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
-          break;
-        case "customer.subscription.deleted":
-          await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
+        case "payment_intent.payment_failed":
+          await handlePaymentFailed(event.data.object as Stripe.PaymentIntent);
           break;
       }
 
@@ -167,77 +149,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Validate GPT access
-  app.post("/api/validate-access", async (req, res) => {
+  // Validate GPT access and redirect to Custom GPT
+  app.post("/api/access-gpt", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "Authentication required" });
     }
 
-    const { modelId } = req.body;
+    const { productId } = req.body;
     const user = req.user!;
 
     try {
-      const model = await storage.getGptModelById(modelId);
-      if (!model) {
-        return res.status(404).json({ message: "GPT model not found" });
+      const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
+      if (!product) {
+        return res.status(404).json({ message: "GPT not found" });
       }
 
-      const subscription = await storage.getSubscriptionByUserId(user.id);
-      if (!subscription || subscription.status !== "active") {
-        return res.status(403).json({ message: "Active subscription required" });
+      // Check if user has purchased this GPT
+      const existingAccess = await storage.getGptAccess(user.id, productId);
+      if (!existingAccess) {
+        return res.status(403).json({ message: "Purchase required to access this GPT" });
       }
 
-      // Check plan access
-      const userPlan = subscription.planName.toLowerCase();
-      const requiredPlan = model.requiredPlan.toLowerCase();
-
-      const planHierarchy = ["basic", "pro", "enterprise"];
-      const userPlanIndex = planHierarchy.indexOf(userPlan);
-      const requiredPlanIndex = planHierarchy.indexOf(requiredPlan);
-
-      if (userPlanIndex < requiredPlanIndex) {
-        return res.status(403).json({ message: "Plan upgrade required" });
-      }
-
-      // Check query limits
-      const plan = Object.values(PRICING_PLANS).find(p => p.name.toLowerCase() === userPlan);
-      if (plan && plan.queryLimit > 0 && (user.queriesUsed || 0) >= plan.queryLimit) {
-        return res.status(429).json({ message: "Query limit exceeded" });
-      }
-
-      // Generate access token
-      const accessToken = randomUUID();
-      
-      // Create or update access record
-      const existingAccess = await storage.getGptAccess(user.id, modelId);
-      if (existingAccess) {
-        await storage.updateGptAccess(existingAccess.id, {
-          accessToken,
-          lastAccessed: new Date(),
-          queriesUsed: (existingAccess.queriesUsed || 0) + 1,
-        });
-      } else {
-        await storage.createGptAccess({
-          userId: user.id,
-          modelId,
-          accessToken,
-          queriesUsed: 1,
-        });
-      }
-
-      // Update user query count
-      await storage.updateUser(user.id, {
-        queriesUsed: (user.queriesUsed || 0) + 1,
+      // Update last accessed time
+      await storage.updateGptAccess(existingAccess.id, {
+        lastAccessed: new Date(),
+        queriesUsed: (existingAccess.queriesUsed || 0) + 1,
       });
 
       res.json({
-        accessToken,
-        model,
-        queriesRemaining: plan && plan.queryLimit > 0 ? plan.queryLimit - (user.queriesUsed || 0) - 1 : -1,
+        gptUrl: product.gptUrl,
+        productName: product.name,
+        totalUsage: (existingAccess.queriesUsed || 0) + 1,
       });
     } catch (error: any) {
-      console.error("Access validation error:", error);
-      res.status(500).json({ message: "Error validating access: " + error.message });
+      console.error("GPT access error:", error);
+      res.status(500).json({ message: "Error accessing GPT: " + error.message });
     }
   });
 
@@ -250,33 +196,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const user = req.user!;
 
     try {
-      const subscription = await storage.getSubscriptionByUserId(user.id);
       const payments = await storage.getPaymentsByUserId(user.id);
       const gptAccess = await storage.getGptAccessByUserId(user.id);
       const gptModels = await storage.getGptModels();
 
-      const plan = subscription
-        ? Object.values(PRICING_PLANS).find(p => p.name.toLowerCase() === subscription.planName.toLowerCase())
-        : null;
+      // Get available products
+      const availableProducts = Object.entries(GPT_PRODUCTS).map(([id, product]) => ({
+        id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        icon: product.icon,
+        purchased: gptAccess.some(access => access.modelId === id),
+      }));
 
       res.json({
         user: {
           name: user.name,
           email: user.email,
-          queriesUsed: user.queriesUsed,
-          queryLimit: plan?.queryLimit || 0,
         },
-        subscription: subscription ? {
-          id: subscription.id,
-          planName: subscription.planName,
-          status: subscription.status,
-          amount: subscription.amount,
-          currentPeriodStart: subscription.currentPeriodStart,
-          currentPeriodEnd: subscription.currentPeriodEnd,
-        } : null,
         payments: payments.slice(0, 10), // Last 10 payments
-        gptModels,
-        gptAccess,
+        availableProducts,
+        purchasedGpts: gptAccess,
       });
     } catch (error: any) {
       console.error("Dashboard data error:", error);
@@ -294,22 +235,22 @@ async function initializeGptModels() {
     if (existingModels.length === 0) {
       const defaultModels = [
         {
-          name: "Code Assistant GPT",
-          description: "Advanced coding help and debugging",
-          icon: "fas fa-code",
-          requiredPlan: "basic",
+          name: "Generador de Sermones",
+          description: "Prepara un bosquejo de sermón o Estudio Bíblico profundo y detallado a partir de un pasaje bíblico, tema, cita bíblica o palabra clave proporcionado.",
+          icon: "fas fa-book-open",
+          requiredPlan: "purchase",
         },
         {
-          name: "Writing Assistant GPT",
-          description: "Professional content creation",
-          icon: "fas fa-pen",
-          requiredPlan: "basic",
+          name: "Manual de Ceremonias del Ministro",
+          description: "El Manual de Ceremonias del Ministro es una guía práctica y completa diseñada para pastores, ministros y líderes de iglesia que desean conducir con excelencia, reverencia y claridad las diversas celebraciones y servicios especiales de la vida cristiana.",
+          icon: "fas fa-hands-praying",
+          requiredPlan: "purchase",
         },
         {
-          name: "Data Analysis GPT",
-          description: "Advanced data insights and visualization",
-          icon: "fas fa-chart-line",
-          requiredPlan: "pro",
+          name: "Mensajes Expositivos",
+          description: "Los mensajes expositivos son un estilo de predicación y enseñanza bíblica que se centra en explicar de manera clara y fiel el sentido original de un pasaje de la Escritura, aplicándolo directamente a la vida del oyente.",
+          icon: "fas fa-cross",
+          requiredPlan: "purchase",
         },
       ];
 
@@ -322,52 +263,47 @@ async function initializeGptModels() {
   }
 }
 
-async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
-  const subscription = await storage.getSubscriptionByStripeId((invoice as any).subscription as string);
-  if (!subscription) return;
+async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
+  const { userId, productId, productName } = paymentIntent.metadata;
+  const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
+  
+  if (!userId || !productId || !product) {
+    console.error("Missing metadata in payment intent:", paymentIntent.metadata);
+    return;
+  }
 
+  // Create payment record
   await storage.createPayment({
-    userId: subscription.userId,
-    subscriptionId: subscription.id,
-    stripePaymentId: (invoice as any).payment_intent as string,
-    amount: (invoice.amount_paid / 100).toString(),
-    currency: invoice.currency,
+    userId: userId,
+    subscriptionId: null,
+    stripePaymentId: paymentIntent.id,
+    amount: (paymentIntent.amount / 100).toString(),
+    currency: paymentIntent.currency,
     status: "succeeded",
-    description: `Payment for ${subscription.planName} plan`,
+    description: `One-time purchase: ${productName}`,
   });
 
-  await storage.updateSubscription(subscription.id, { status: "active" });
+  // Grant access to the GPT
+  await storage.createGptAccess({
+    userId: userId,
+    modelId: productId,
+    accessToken: randomUUID(),
+    queriesUsed: 0,
+  });
 }
 
-async function handlePaymentFailed(invoice: Stripe.Invoice) {
-  const subscription = await storage.getSubscriptionByStripeId((invoice as any).subscription as string);
-  if (!subscription) return;
+async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
+  const { userId, productName } = paymentIntent.metadata;
+  
+  if (!userId) return;
 
   await storage.createPayment({
-    userId: subscription.userId,
-    subscriptionId: subscription.id,
-    stripePaymentId: (invoice as any).payment_intent as string,
-    amount: (invoice.amount_due / 100).toString(),
-    currency: invoice.currency,
+    userId: userId,
+    subscriptionId: null,
+    stripePaymentId: paymentIntent.id,
+    amount: (paymentIntent.amount / 100).toString(),
+    currency: paymentIntent.currency,
     status: "failed",
-    description: `Failed payment for ${subscription.planName} plan`,
+    description: `Failed purchase: ${productName || 'GPT Access'}`,
   });
-}
-
-async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  const dbSubscription = await storage.getSubscriptionByStripeId(subscription.id);
-  if (!dbSubscription) return;
-
-  await storage.updateSubscription(dbSubscription.id, {
-    status: subscription.status,
-    currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
-    currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
-  });
-}
-
-async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-  const dbSubscription = await storage.getSubscriptionByStripeId(subscription.id);
-  if (!dbSubscription) return;
-
-  await storage.updateSubscription(dbSubscription.id, { status: "canceled" });
 }

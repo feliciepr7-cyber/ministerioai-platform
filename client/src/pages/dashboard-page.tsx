@@ -14,17 +14,7 @@ interface DashboardData {
   user: {
     name: string;
     email: string;
-    queriesUsed: number;
-    queryLimit: number;
   };
-  subscription: {
-    id: string;
-    planName: string;
-    status: string;
-    amount: string;
-    currentPeriodStart: string;
-    currentPeriodEnd: string;
-  } | null;
   payments: Array<{
     id: string;
     amount: string;
@@ -32,14 +22,15 @@ interface DashboardData {
     description: string;
     createdAt: string;
   }>;
-  gptModels: Array<{
+  availableProducts: Array<{
     id: string;
     name: string;
     description: string;
+    price: number;
     icon: string;
-    requiredPlan: string;
+    purchased: boolean;
   }>;
-  gptAccess: Array<{
+  purchasedGpts: Array<{
     modelId: string;
     queriesUsed: number;
     lastAccessed: string;
@@ -55,20 +46,24 @@ export default function DashboardPage() {
     enabled: !!user,
   });
 
-  const validateAccessMutation = useMutation({
-    mutationFn: async (modelId: string) => {
-      const res = await apiRequest("POST", "/api/validate-access", { modelId });
+  const accessGptMutation = useMutation({
+    mutationFn: async (productId: string) => {
+      const res = await apiRequest("POST", "/api/access-gpt", { productId });
       return await res.json();
     },
     onSuccess: (data) => {
+      // Open Custom GPT in new tab
+      window.open(data.gptUrl, '_blank');
       toast({
-        title: "Access Granted",
-        description: `You can now use ${data.model.name}. Token: ${data.accessToken.slice(0, 8)}...`,
+        title: "Acceso Concedido",
+        description: `Abriendo ${data.productName}. Uso total: ${data.totalUsage}`,
       });
+      // Refresh dashboard data
+      queryClient.invalidateQueries({ queryKey: ['/api/dashboard'] });
     },
     onError: (error: Error) => {
       toast({
-        title: "Access Denied",
+        title: "Acceso Denegado",
         description: error.message,
         variant: "destructive",
       });
@@ -79,8 +74,12 @@ export default function DashboardPage() {
     logoutMutation.mutate();
   };
 
-  const handleAccessGPT = (modelId: string) => {
-    validateAccessMutation.mutate(modelId);
+  const handleAccessGPT = (productId: string) => {
+    accessGptMutation.mutate(productId);
+  };
+
+  const handlePurchaseGPT = (productId: string) => {
+    window.location.href = `/checkout/${productId}`;
   };
 
   if (isLoading) {
@@ -106,9 +105,10 @@ export default function DashboardPage() {
     );
   }
 
-  const usagePercentage = dashboardData.user.queryLimit > 0 
-    ? (dashboardData.user.queriesUsed / dashboardData.user.queryLimit) * 100 
-    : 0;
+  const totalPurchased = dashboardData.availableProducts.filter(p => p.purchased).length;
+  const totalSpent = dashboardData.payments
+    .filter(p => p.status === 'succeeded')
+    .reduce((sum, p) => sum + parseFloat(p.amount), 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -152,22 +152,21 @@ export default function DashboardPage() {
             <CardContent className="p-6">
               <div className="flex items-center space-x-3 mb-3">
                 <div className="w-10 h-10 bg-chart-2 rounded-lg flex items-center justify-center">
-                  <i className="fas fa-check text-white"></i>
+                  <i className="fas fa-shopping-cart text-white"></i>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">
-                    {dashboardData.subscription ? "Active Subscription" : "No Subscription"}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {dashboardData.subscription?.planName || "No active plan"}
-                  </p>
+                  <h3 className="font-semibold text-foreground">Herramientas Compradas</h3>
+                  <p className="text-sm text-muted-foreground">Total de GPTs</p>
                 </div>
               </div>
-              {dashboardData.subscription && (
-                <p className="text-sm text-muted-foreground">
-                  Next billing: {new Date(dashboardData.subscription.currentPeriodEnd).toLocaleDateString()}
-                </p>
-              )}
+              <div className="flex items-end space-x-2">
+                <span className="text-2xl font-bold text-foreground">
+                  {totalPurchased}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  / {dashboardData.availableProducts.length}
+                </span>
+              </div>
             </CardContent>
           </Card>
 
@@ -178,16 +177,16 @@ export default function DashboardPage() {
                   <i className="fas fa-robot text-white"></i>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">GPT Queries</h3>
-                  <p className="text-sm text-muted-foreground">This month</p>
+                  <h3 className="font-semibold text-foreground">Usos Totales</h3>
+                  <p className="text-sm text-muted-foreground">Todas las herramientas</p>
                 </div>
               </div>
               <div className="flex items-end space-x-2">
                 <span className="text-2xl font-bold text-foreground">
-                  {dashboardData.user.queriesUsed}
+                  {dashboardData.purchasedGpts.reduce((sum, gpt) => sum + (gpt.queriesUsed || 0), 0)}
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  / {dashboardData.user.queryLimit > 0 ? dashboardData.user.queryLimit : "∞"}
+                  consultas
                 </span>
               </div>
             </CardContent>
@@ -197,71 +196,86 @@ export default function DashboardPage() {
             <CardContent className="p-6">
               <div className="flex items-center space-x-3 mb-3">
                 <div className="w-10 h-10 bg-chart-4 rounded-lg flex items-center justify-center">
-                  <i className="fas fa-credit-card text-white"></i>
+                  <i className="fas fa-dollar-sign text-white"></i>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Payment Status</h3>
-                  <p className="text-sm text-muted-foreground">Current month</p>
+                  <h3 className="font-semibold text-foreground">Total Invertido</h3>
+                  <p className="text-sm text-muted-foreground">En herramientas</p>
                 </div>
               </div>
-              <Badge 
-                className={`${
-                  dashboardData.subscription?.status === "active" 
-                    ? "bg-chart-2 text-white" 
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {dashboardData.subscription?.status === "active" ? "Paid" : "Inactive"}
-              </Badge>
+              <div className="flex items-end space-x-2">
+                <span className="text-2xl font-bold text-foreground">
+                  ${totalSpent.toFixed(0)}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  USD
+                </span>
+              </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-2 gap-6 mb-8">
-          {/* Available GPT Models */}
+          {/* Available GPT Products */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <i className="fas fa-brain text-primary mr-3"></i>
-                Available GPT Models
+                Herramientas Ministeriales
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {dashboardData.gptModels.map((model) => {
-                  const modelAccess = dashboardData.gptAccess.find(access => access.modelId === model.id);
+                {dashboardData.availableProducts.map((product) => {
+                  const productAccess = dashboardData.purchasedGpts.find(access => access.modelId === product.id);
                   return (
                     <div 
-                      key={model.id} 
+                      key={product.id} 
                       className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border"
                     >
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                          <i className={`${model.icon} text-primary-foreground text-sm`}></i>
+                          <i className={`${product.icon} text-primary-foreground text-sm`}></i>
                         </div>
-                        <div>
-                          <p className="font-medium text-foreground">{model.name}</p>
-                          <p className="text-sm text-muted-foreground">{model.description}</p>
-                          {modelAccess && (
+                        <div className="flex-1">
+                          <p className="font-medium text-foreground">{product.name}</p>
+                          <p className="text-sm text-muted-foreground">{product.description}</p>
+                          {productAccess && (
                             <p className="text-xs text-chart-2">
-                              Used {modelAccess.queriesUsed} times
+                              Usado {productAccess.queriesUsed || 0} veces
+                            </p>
+                          )}
+                          {!product.purchased && (
+                            <p className="text-xs text-chart-4 font-medium">
+                              ${product.price} USD - Pago único
                             </p>
                           )}
                         </div>
                       </div>
-                      <Button
-                        onClick={() => handleAccessGPT(model.id)}
-                        disabled={validateAccessMutation.isPending || !dashboardData.subscription}
-                        size="sm"
-                        data-testid={`button-access-${model.id}`}
-                      >
-                        {validateAccessMutation.isPending ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          "Access"
-                        )}
-                      </Button>
+                      {product.purchased ? (
+                        <Button
+                          onClick={() => handleAccessGPT(product.id)}
+                          disabled={accessGptMutation.isPending}
+                          size="sm"
+                          data-testid={`button-access-${product.id}`}
+                        >
+                          {accessGptMutation.isPending ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            "Usar"
+                          )}
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => handlePurchaseGPT(product.id)}
+                          variant="outline"
+                          size="sm"
+                          data-testid={`button-purchase-${product.id}`}
+                        >
+                          Comprar
+                        </Button>
+                      )}
                     </div>
                   );
                 })}
@@ -274,33 +288,33 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <i className="fas fa-chart-bar text-primary mr-3"></i>
-                Usage Analytics
+                Actividad Reciente
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm font-medium text-foreground">Monthly Usage</span>
-                    <span className="text-sm text-muted-foreground">{usagePercentage.toFixed(1)}%</span>
+                    <span className="text-sm font-medium text-foreground">Herramientas Activas</span>
+                    <span className="text-sm text-muted-foreground">{totalPurchased}/{dashboardData.availableProducts.length}</span>
                   </div>
-                  <Progress value={usagePercentage} className="mb-1" />
+                  <Progress value={(totalPurchased / dashboardData.availableProducts.length) * 100} className="mb-1" />
                   <p className="text-xs text-muted-foreground">
-                    {dashboardData.user.queriesUsed} of {dashboardData.user.queryLimit > 0 ? dashboardData.user.queryLimit : "unlimited"} queries used
+                    {totalPurchased} de {dashboardData.availableProducts.length} herramientas adquiridas
                   </p>
                 </div>
 
                 <Separator />
 
                 <div>
-                  <h4 className="font-medium text-foreground mb-3">Recent Activity</h4>
-                  {dashboardData.gptAccess.length > 0 ? (
+                  <h4 className="font-medium text-foreground mb-3">Actividad Reciente</h4>
+                  {dashboardData.purchasedGpts.length > 0 ? (
                     <div className="space-y-2">
-                      {dashboardData.gptAccess.slice(0, 5).map((access, index) => {
-                        const model = dashboardData.gptModels.find(m => m.id === access.modelId);
+                      {dashboardData.purchasedGpts.slice(0, 5).map((access, index) => {
+                        const product = dashboardData.availableProducts.find(p => p.id === access.modelId);
                         return (
                           <div key={index} className="flex justify-between items-center text-sm">
-                            <span className="text-foreground">{model?.name || "Unknown Model"}</span>
+                            <span className="text-foreground">{product?.name || "Herramienta Desconocida"}</span>
                             <span className="text-muted-foreground">
                               {new Date(access.lastAccessed).toLocaleDateString()}
                             </span>
@@ -309,7 +323,7 @@ export default function DashboardPage() {
                       })}
                     </div>
                   ) : (
-                    <p className="text-sm text-muted-foreground">No recent activity</p>
+                    <p className="text-sm text-muted-foreground">No hay actividad reciente</p>
                   )}
                 </div>
               </div>
@@ -448,9 +462,9 @@ export default function DashboardPage() {
                   </>
                 ) : (
                   <div className="text-center py-8">
-                    <p className="text-muted-foreground mb-4">No active subscription</p>
-                    <Button data-testid="button-subscribe">
-                      Subscribe Now
+                    <p className="text-muted-foreground mb-4">No hay herramientas compradas aún</p>
+                    <Button onClick={() => window.location.href = '/'} data-testid="button-browse-products">
+                      Ver Herramientas
                     </Button>
                   </div>
                 )}
