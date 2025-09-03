@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +42,7 @@ interface DashboardData {
 export default function DashboardPage() {
   const { user, logoutMutation } = useAuth();
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   const { data: dashboardData, isLoading } = useQuery<DashboardData>({
     queryKey: ["/api/dashboard"],
@@ -80,7 +82,7 @@ export default function DashboardPage() {
   };
 
   const handlePurchaseGPT = (productId: string) => {
-    window.location.href = `/checkout/${productId}`;
+    setLocation(`/checkout/${productId}`);
   };
 
   if (isLoading) {
