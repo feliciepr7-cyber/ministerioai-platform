@@ -56,6 +56,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin endpoint to grant free access to users
+  app.post("/api/admin/grant-access", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    // Simple admin check - only allow your email to use this endpoint
+    if (req.user!.email !== "feliciepr7@gmail.com") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    const { email, productId } = req.body;
+
+    if (!email || !productId) {
+      return res.status(400).json({ message: "Email and productId are required" });
+    }
+
+    try {
+      const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
+      if (!product) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+
+      // Check if user exists, if not create them
+      let user = await storage.getUserByEmail(email);
+      if (!user) {
+        // Create user with minimal info
+        user = await storage.createUser({
+          email: email,
+          username: email.split('@')[0], // Use part before @ as username
+          name: email.split('@')[0], // Use part before @ as name
+          password: randomUUID(), // Random password since they won't use it for login
+        });
+      }
+
+      // Find the corresponding GPT model in the database
+      const gptModels = await storage.getGptModels();
+      const gptModel = gptModels.find(model => model.name === product.name);
+      
+      if (!gptModel) {
+        return res.status(404).json({ message: "GPT model not found" });
+      }
+
+      // Check if access already exists
+      const existingAccess = await storage.getGptAccess(user.id, gptModel.id);
+      if (existingAccess) {
+        return res.status(400).json({ message: "User already has access to this GPT" });
+      }
+
+      // Grant access
+      const accessToken = randomUUID();
+      await storage.createGptAccess({
+        userId: user.id,
+        modelId: gptModel.id,
+        accessToken: accessToken,
+        queriesUsed: 0,
+      });
+
+      // Create a record of this admin grant (optional)
+      await storage.createPayment({
+        userId: user.id,
+        subscriptionId: null,
+        stripePaymentId: `admin-grant-${randomUUID()}`,
+        amount: "0.00",
+        currency: "usd",
+        status: "succeeded",
+        description: `Admin grant: ${product.name} for ${email}`,
+      });
+
+      res.json({ 
+        success: true, 
+        message: `Access granted to ${email} for ${product.name}`,
+        user: {
+          email: user.email,
+          name: user.name
+        }
+      });
+    } catch (error: any) {
+      console.error("Admin grant access error:", error);
+      res.status(500).json({ message: "Error granting access: " + error.message });
+    }
+  });
+
   // Confirm payment and grant access
   app.post("/api/confirm-payment", async (req, res) => {
     if (!req.isAuthenticated()) {
