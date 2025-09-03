@@ -11,6 +11,9 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import aiLogo from "@assets/AI_1756923008802.png";
+import sermonGeneratorImage from "@assets/generated_images/Sermon_generator_illustration_6bc72bc1.png";
+import ceremoniasManualImage from "@assets/generated_images/Church_ceremony_manual_3852f443.png";
+import mensajesExpositivosImage from "@assets/generated_images/Expository_messages_illustration_24a14fb8.png";
 
 interface DashboardData {
   user: {
@@ -240,8 +243,16 @@ export default function DashboardPage() {
                       className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border"
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                          <i className={`${product.icon} text-primary-foreground text-sm`}></i>
+                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                          {product.id === 'generador-sermones' && (
+                            <img src={sermonGeneratorImage} alt="Generador de Sermones" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'manual-ceremonias' && (
+                            <img src={ceremoniasManualImage} alt="Manual de Ceremonias del Ministro" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'mensajes-expositivos' && (
+                            <img src={mensajesExpositivosImage} alt="Mensajes Expositivos" className="w-full h-full object-cover" />
+                          )}
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-foreground">{product.name}</p>
