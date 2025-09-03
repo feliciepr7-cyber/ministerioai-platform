@@ -1,0 +1,84 @@
+openapi: 3.1.0
+info:
+  title: Authflow Gateway API
+  description: API endpoint for verifying access to a specific paywall using a customer email and paywall key.
+  version: 1.0.0
+servers:
+  - url: https://gateway.authflow.ai
+paths:
+  /v1/gateway/paywall/verify:
+    post:
+      operationId: checkActivePaywall
+      summary: Verifies customer access to a specified paywall.
+      description: >
+        This endpoint checks if a user identified by their email address has access to a given paywall. Requires the
+        `X-AUTHFLOW-KEY` header for authentication.
+      tags:
+        - GatewayAuth
+      security:
+        - authflowApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GatewayAuthRequest"
+      responses:
+        "200":
+          description: User has access to the requested paywall.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "400":
+          description: Bad request due to missing/invalid parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "401":
+          description: Unauthorized request (e.g. missing or invalid API key).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Unexpected error occurred during the verification process.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+components:
+  securitySchemes:
+    authflowApiKey:
+      type: apiKey
+      in: header
+      name: X-AUTHFLOW-KEY
+  schemas:
+    GatewayAuthRequest:
+      type: object
+      required:
+        - email
+        - paywallKey
+      properties:
+        email:
+          type: string
+          format: email
+          description: Customer's email address for lookup or creation.
+        paywallKey:
+          type: string
+          enum:
+            - PibWzhQjQ6BJBKFPfsQRYb1Hd8FFqrJ0EwmLDWuGuALrT1kMBbG+jhA4fbV6YYQoaaP7/jxq/1vygEL0wVGulA==
+          description: Unique key identifying the paywall configuration.

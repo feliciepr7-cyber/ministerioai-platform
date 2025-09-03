@@ -266,6 +266,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GPT Authentication verification endpoint for Custom GPTs
+  app.post("/api/verify-gpt-access", async (req, res) => {
+    const { email, productId } = req.body;
+    
+    if (!email || !productId) {
+      return res.status(400).json({ 
+        message: "Email and productId are required" 
+      });
+    }
+
+    try {
+      // Find user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(403).json({ 
+          message: "User not found or access not granted" 
+        });
+      }
+
+      // Validate product exists
+      const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
+      if (!product) {
+        return res.status(400).json({ 
+          message: "Invalid product ID" 
+        });
+      }
+
+      // Find the corresponding GPT model in the database
+      const gptModels = await storage.getGptModels();
+      const gptModel = gptModels.find(model => model.name === product.name);
+      
+      if (!gptModel) {
+        return res.status(404).json({ 
+          message: "GPT model not found" 
+        });
+      }
+
+      // Check if user has purchased this GPT
+      const existingAccess = await storage.getGptAccess(user.id, gptModel.id);
+      if (!existingAccess) {
+        return res.status(403).json({ 
+          message: "Purchase required to access this GPT. Please visit your dashboard to purchase access." 
+        });
+      }
+
+      // Update usage tracking
+      await storage.updateGptAccess(existingAccess.id, {
+        lastAccessed: new Date(),
+        queriesUsed: (existingAccess.queriesUsed || 0) + 1,
+      });
+
+      res.status(200).json({
+        message: "Access granted",
+        user: {
+          email: user.email,
+          name: user.name
+        },
+        product: {
+          name: product.name,
+          id: productId
+        },
+        usage: {
+          totalQueries: (existingAccess.queriesUsed || 0) + 1
+        }
+      });
+
+    } catch (error: any) {
+      console.error("GPT verification error:", error);
+      res.status(500).json({ 
+        message: "Internal server error during verification" 
+      });
+    }
+  });
+
   // Get user dashboard data
   app.get("/api/dashboard", async (req, res) => {
     if (!req.isAuthenticated()) {
