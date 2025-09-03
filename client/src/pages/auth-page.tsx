@@ -75,6 +75,10 @@ export default function AuthPage() {
         setResetToken(data.resetToken);
         setShowResetPassword(true);
         setShowForgotPassword(false);
+        // Pre-fill the token in the reset form
+        setTimeout(() => {
+          resetPasswordForm.setValue('token', data.resetToken);
+        }, 100);
       }
     },
     onError: (error: Error) => {
