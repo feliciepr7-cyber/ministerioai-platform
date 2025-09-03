@@ -90,4 +90,65 @@ export function setupAuth(app: Express) {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     res.json(req.user);
   });
+
+  // Password reset request
+  app.post("/api/forgot-password", async (req, res) => {
+    const { email } = req.body;
+
+    try {
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        // Don't reveal if email exists for security
+        return res.status(200).json({ message: "If this email exists, you will receive a password reset link." });
+      }
+
+      // Generate reset token
+      const resetToken = randomBytes(32).toString("hex");
+      const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
+
+      // Save reset token to database
+      await storage.updateUser(user.id, {
+        resetToken,
+        resetTokenExpiry,
+      });
+
+      // In a real app, you would send an email here
+      // For now, we'll just return success with the token (for development/testing)
+      console.log(`Password reset token for ${email}: ${resetToken}`);
+      
+      res.status(200).json({ 
+        message: "If this email exists, you will receive a password reset link.",
+        // ONLY for development - remove in production
+        resetToken: process.env.NODE_ENV === "development" ? resetToken : undefined
+      });
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      res.status(500).json({ message: "An error occurred. Please try again." });
+    }
+  });
+
+  // Password reset with token
+  app.post("/api/reset-password", async (req, res) => {
+    const { token, newPassword } = req.body;
+
+    try {
+      const user = await storage.getUserByResetToken(token);
+      if (!user || !user.resetTokenExpiry || new Date() > user.resetTokenExpiry) {
+        return res.status(400).json({ message: "Invalid or expired reset token" });
+      }
+
+      // Hash new password and clear reset token
+      const hashedPassword = await hashPassword(newPassword);
+      await storage.updateUser(user.id, {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpiry: null,
+      });
+
+      res.status(200).json({ message: "Password successfully reset" });
+    } catch (error) {
+      console.error("Reset password error:", error);
+      res.status(500).json({ message: "An error occurred. Please try again." });
+    }
+  });
 }

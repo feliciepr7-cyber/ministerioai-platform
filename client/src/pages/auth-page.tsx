@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import aiLogo from "@assets/AI_1756923008802.png";
 
 const loginSchema = z.object({
@@ -31,10 +34,81 @@ const registerSchema = z.object({
 type LoginForm = z.infer<typeof loginSchema>;
 type RegisterForm = z.infer<typeof registerSchema>;
 
+const forgotPasswordSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Reset token is required"),
+  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string(),
+}).refine(data => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;
+type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
+
 export default function AuthPage() {
   const [, setLocation] = useLocation();
   const [isLogin, setIsLogin] = useState(true);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [resetToken, setResetToken] = useState("");
   const { user, loginMutation, registerMutation } = useAuth();
+  const { toast } = useToast();
+
+  // Password reset mutations
+  const forgotPasswordMutation = useMutation({
+    mutationFn: async (data: ForgotPasswordForm) => {
+      const res = await apiRequest("POST", "/api/forgot-password", data);
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Reset Link Sent",
+        description: data.message,
+      });
+      // In development, show the token for testing
+      if (data.resetToken) {
+        setResetToken(data.resetToken);
+        setShowResetPassword(true);
+        setShowForgotPassword(false);
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const resetPasswordMutation = useMutation({
+    mutationFn: async (data: ResetPasswordForm) => {
+      const res = await apiRequest("POST", "/api/reset-password", data);
+      return await res.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Password Reset Successful",
+        description: "Your password has been reset. You can now log in with your new password.",
+      });
+      setShowResetPassword(false);
+      setShowForgotPassword(false);
+      setIsLogin(true);
+      resetPasswordForm.reset();
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Reset Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -42,6 +116,20 @@ export default function AuthPage() {
       setLocation("/dashboard");
     }
   }, [user, setLocation]);
+
+  // Check for reset token in URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (token) {
+      setResetToken(token);
+      setShowResetPassword(true);
+      setShowForgotPassword(false);
+      setIsLogin(false);
+      // Pre-fill the token in the form
+      resetPasswordForm.setValue('token', token);
+    }
+  }, [resetPasswordForm]);
 
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -60,6 +148,22 @@ export default function AuthPage() {
       password: "",
       confirmPassword: "",
       acceptTerms: false,
+    },
+  });
+
+  const forgotPasswordForm = useForm<ForgotPasswordForm>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const resetPasswordForm = useForm<ResetPasswordForm>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      token: "",
+      newPassword: "",
+      confirmPassword: "",
     },
   });
 
@@ -89,6 +193,25 @@ export default function AuthPage() {
     }
   };
 
+  const onForgotPassword = async (data: ForgotPasswordForm) => {
+    try {
+      await forgotPasswordMutation.mutateAsync(data);
+    } catch (error) {
+      // Error handling is done in the mutation
+    }
+  };
+
+  const onResetPassword = async (data: ResetPasswordForm) => {
+    try {
+      await resetPasswordMutation.mutateAsync({
+        ...data,
+        token: resetToken || data.token,
+      });
+    } catch (error) {
+      // Error handling is done in the mutation
+    }
+  };
+
   if (user) return null; // Prevent flash while redirecting
 
   return (
@@ -97,7 +220,102 @@ export default function AuthPage() {
       <div className="flex-1 flex items-center justify-center p-8">
         <Card className="w-full max-w-md">
           <CardContent className="p-6">
-            {isLogin ? (
+            {showForgotPassword ? (
+              <div>
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Reset Password</h2>
+                  <p className="text-muted-foreground">Enter your email to receive a password reset link</p>
+                </div>
+                
+                <form onSubmit={forgotPasswordForm.handleSubmit(onForgotPassword)} className="space-y-4" data-testid="form-forgot-password">
+                  <FloatingInput
+                    label="Email Address"
+                    type="email"
+                    {...forgotPasswordForm.register("email")}
+                    error={forgotPasswordForm.formState.errors.email?.message}
+                    data-testid="input-forgot-password-email"
+                  />
+                  
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={forgotPasswordMutation.isPending}
+                    data-testid="button-forgot-password-submit"
+                  >
+                    {forgotPasswordMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Sending Reset Link...
+                      </>
+                    ) : (
+                      "Send Reset Link"
+                    )}
+                  </Button>
+                </form>
+                
+                <p className="text-center mt-6 text-muted-foreground">
+                  Remember your password?{" "}
+                  <button 
+                    onClick={() => setShowForgotPassword(false)}
+                    className="text-primary hover:underline font-medium"
+                    data-testid="button-back-to-login"
+                  >
+                    Back to Sign In
+                  </button>
+                </p>
+              </div>
+            ) : showResetPassword ? (
+              <div>
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Set New Password</h2>
+                  <p className="text-muted-foreground">Enter your new password below</p>
+                </div>
+                
+                <form onSubmit={resetPasswordForm.handleSubmit(onResetPassword)} className="space-y-4" data-testid="form-reset-password">
+                  {!resetToken && (
+                    <FloatingInput
+                      label="Reset Token"
+                      type="text"
+                      {...resetPasswordForm.register("token")}
+                      error={resetPasswordForm.formState.errors.token?.message}
+                      data-testid="input-reset-token"
+                    />
+                  )}
+                  
+                  <FloatingInput
+                    label="New Password"
+                    type="password"
+                    {...resetPasswordForm.register("newPassword")}
+                    error={resetPasswordForm.formState.errors.newPassword?.message}
+                    data-testid="input-new-password"
+                  />
+                  
+                  <FloatingInput
+                    label="Confirm New Password"
+                    type="password"
+                    {...resetPasswordForm.register("confirmPassword")}
+                    error={resetPasswordForm.formState.errors.confirmPassword?.message}
+                    data-testid="input-confirm-new-password"
+                  />
+                  
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={resetPasswordMutation.isPending}
+                    data-testid="button-reset-password-submit"
+                  >
+                    {resetPasswordMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Resetting Password...
+                      </>
+                    ) : (
+                      "Reset Password"
+                    )}
+                  </Button>
+                </form>
+              </div>
+            ) : isLogin ? (
               <div>
                 <div className="text-center mb-6">
                   <h2 className="text-2xl font-bold text-foreground mb-2">Welcome Back</h2>
@@ -126,7 +344,13 @@ export default function AuthPage() {
                       <Checkbox />
                       <span className="text-sm text-muted-foreground">Remember me</span>
                     </label>
-                    <a href="#" className="text-sm text-primary hover:underline">Forgot password?</a>
+                    <button 
+                      type="button"
+                      onClick={() => setShowForgotPassword(true)}
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Forgot password?
+                    </button>
                   </div>
                   
                   <Button 

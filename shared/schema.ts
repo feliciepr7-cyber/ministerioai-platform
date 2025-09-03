@@ -16,6 +16,8 @@ export const users = pgTable("users", {
   currentPlan: text("current_plan").default("none"),
   queriesUsed: integer("queries_used").default(0),
   queryLimit: integer("query_limit").default(0),
+  resetToken: text("reset_token"),
+  resetTokenExpiry: timestamp("reset_token_expiry"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
