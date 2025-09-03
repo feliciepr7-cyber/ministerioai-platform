@@ -207,7 +207,8 @@ export default function AuthPage() {
                   
                   <div className="flex items-start space-x-2">
                     <Checkbox 
-                      {...registerForm.register("acceptTerms")}
+                      checked={registerForm.watch("acceptTerms")}
+                      onCheckedChange={(checked) => registerForm.setValue("acceptTerms", checked === true)}
                       data-testid="checkbox-accept-terms"
                     />
                     <span className="text-sm text-muted-foreground">
