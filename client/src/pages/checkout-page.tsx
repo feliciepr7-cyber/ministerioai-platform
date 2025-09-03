@@ -1,0 +1,331 @@
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useAuth } from "@/hooks/use-auth";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FloatingInput } from "@/components/ui/floating-input";
+import { Badge } from "@/components/ui/badge";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+
+if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+  throw new Error("Missing required environment variable: VITE_STRIPE_PUBLIC_KEY");
+}
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
+const PRICING_PLANS = {
+  basic: { name: "Basic", price: 9, features: ["100 GPT queries/month", "3 Custom GPT models", "Email support"] },
+  pro: { name: "Pro", price: 29, features: ["1,000 GPT queries/month", "10 Custom GPT models", "Priority support", "API access"] },
+  enterprise: { name: "Enterprise", price: 99, features: ["Unlimited queries", "All GPT models", "24/7 phone support", "Custom integrations"] },
+};
+
+interface CheckoutFormProps {
+  planId: string;
+}
+
+function CheckoutForm({ planId }: CheckoutFormProps) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const { toast } = useToast();
+  const [, setLocation] = useLocation();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const plan = PRICING_PLANS[planId as keyof typeof PRICING_PLANS];
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/dashboard`,
+        },
+      });
+
+      if (error) {
+        toast({
+          title: "Payment Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Payment Successful",
+          description: "Thank you for your subscription!",
+        });
+        setLocation("/dashboard");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Payment Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <div className="max-w-lg mx-auto">
+      <Card>
+        <CardContent className="p-6">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-foreground mb-2">Complete Your Purchase</h2>
+            <div className="bg-muted rounded-lg p-4 mb-4">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-foreground">{plan.name} Plan</span>
+                <span className="text-2xl font-bold text-foreground">${plan.price}/month</span>
+              </div>
+            </div>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-4">
+              <FloatingInput
+                label="Email Address"
+                type="email"
+                required
+                defaultValue=""
+                data-testid="input-billing-email"
+              />
+
+              <div className="border border-border rounded-lg p-4 bg-background">
+                <label className="text-sm font-medium text-foreground block mb-3">
+                  Card Information
+                </label>
+                <PaymentElement />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FloatingInput
+                  label="First Name"
+                  type="text"
+                  required
+                  data-testid="input-billing-first-name"
+                />
+                
+                <FloatingInput
+                  label="Last Name"
+                  type="text"
+                  required
+                  data-testid="input-billing-last-name"
+                />
+              </div>
+              
+              <FloatingInput
+                label="Address"
+                type="text"
+                required
+                data-testid="input-billing-address"
+              />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <FloatingInput
+                  label="City"
+                  type="text"
+                  required
+                  data-testid="input-billing-city"
+                />
+                
+                <FloatingInput
+                  label="ZIP Code"
+                  type="text"
+                  required
+                  data-testid="input-billing-zip"
+                />
+              </div>
+
+              <div className="bg-muted/30 border border-border rounded-lg p-4">
+                <div className="flex items-center space-x-3">
+                  <i className="fas fa-lock text-chart-2"></i>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Secure Payment</p>
+                    <p className="text-xs text-muted-foreground">
+                      Your payment information is encrypted and secure
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="flex-1"
+                onClick={() => setLocation("/")}
+                data-testid="button-cancel-payment"
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit" 
+                className="flex-1"
+                disabled={!stripe || !elements || isProcessing}
+                data-testid="button-complete-payment"
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  `Pay $${plan.price}/month`
+                )}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+interface CheckoutPageProps {
+  params: { plan?: string };
+}
+
+export default function CheckoutPage({ params }: CheckoutPageProps) {
+  const { user } = useAuth();
+  const [, setLocation] = useLocation();
+  const [clientSecret, setClientSecret] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  const planId = params.plan || "pro";
+  const plan = PRICING_PLANS[planId as keyof typeof PRICING_PLANS];
+
+  useEffect(() => {
+    if (!user) {
+      setLocation("/auth");
+      return;
+    }
+
+    if (!plan) {
+      toast({
+        title: "Invalid Plan",
+        description: "The selected plan is not available.",
+        variant: "destructive",
+      });
+      setLocation("/");
+      return;
+    }
+
+    // Create subscription
+    const createSubscription = async () => {
+      try {
+        const res = await apiRequest("POST", "/api/create-subscription", {
+          planName: planId,
+        });
+        const data = await res.json();
+        setClientSecret(data.clientSecret);
+      } catch (error: any) {
+        toast({
+          title: "Setup Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        setLocation("/dashboard");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    createSubscription();
+  }, [user, planId, plan, setLocation, toast]);
+
+  if (!user) {
+    return null;
+  }
+
+  if (!plan) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="max-w-md">
+          <CardContent className="pt-6">
+            <p className="text-center text-muted-foreground">Invalid plan selected.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isLoading || !clientSecret) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Setting up your payment...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="bg-card border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <i className="fas fa-robot text-primary-foreground"></i>
+              </div>
+              <span className="text-xl font-bold text-foreground">GPT Access</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-muted-foreground">Welcome, {user.name}</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Subscribe to {plan.name}</h1>
+          <p className="text-muted-foreground">Complete your subscription to access premium GPT models</p>
+        </div>
+
+        {/* Plan Details */}
+        <div className="max-w-md mx-auto mb-8">
+          <Card className="border-primary/20">
+            <CardContent className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold text-foreground">{plan.name} Plan</h3>
+                <Badge variant="secondary">Selected</Badge>
+              </div>
+              <div className="text-center mb-4">
+                <span className="text-3xl font-bold text-foreground">${plan.price}</span>
+                <span className="text-muted-foreground">/month</span>
+              </div>
+              <ul className="space-y-2">
+                {plan.features.map((feature, index) => (
+                  <li key={index} className="flex items-center text-sm text-muted-foreground">
+                    <i className="fas fa-check text-chart-2 mr-3"></i>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Elements stripe={stripePromise} options={{ clientSecret }}>
+          <CheckoutForm planId={planId} />
+        </Elements>
+      </div>
+    </div>
+  );
+}
