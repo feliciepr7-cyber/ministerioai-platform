@@ -8,9 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Shield } from "lucide-react";
 import aiLogo from "@assets/AI_1756923008802.png";
 import sermonGeneratorImage from "@assets/generated_images/Sermon_generator_illustration_6bc72bc1.png";
 import ceremoniasManualImage from "@assets/generated_images/Church_ceremony_manual_3852f443.png";
@@ -47,6 +48,11 @@ export default function DashboardPage() {
   const { user, logoutMutation } = useAuth();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminProductId, setAdminProductId] = useState("");
+  
+  // Check if current user is admin
+  const isAdmin = user?.email === "feliciepr7@gmail.com";
   
 
   const { data: dashboardData, isLoading } = useQuery<DashboardData>({
@@ -72,6 +78,30 @@ export default function DashboardPage() {
     onError: (error: Error) => {
       toast({
         title: "Acceso Denegado",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const grantAccessMutation = useMutation({
+    mutationFn: async ({ email, productId }: { email: string; productId: string }) => {
+      const res = await apiRequest("POST", "/api/admin/grant-access", { email, productId });
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Acceso Concedido",
+        description: data.message,
+      });
+      setAdminEmail("");
+      setAdminProductId("");
+      // Refresh dashboard data
+      queryClient.invalidateQueries({ queryKey: ['/api/dashboard'] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error al conceder acceso",
         description: error.message,
         variant: "destructive",
       });
@@ -490,6 +520,79 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Admin Section - Only visible to admin */}
+        {isAdmin && (
+          <Card className="border-orange-200 bg-orange-50 dark:bg-orange-900/20">
+            <CardHeader>
+              <CardTitle className="flex items-center text-orange-800 dark:text-orange-200">
+                <Shield className="mr-3" />
+                Admin Panel
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-orange-800 dark:text-orange-200 mb-2">
+                    Email del Usuario
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="usuario@ejemplo.com"
+                    value={adminEmail}
+                    onChange={(e) => setAdminEmail(e.target.value)}
+                    className="bg-white dark:bg-gray-800"
+                    data-testid="input-admin-email"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-orange-800 dark:text-orange-200 mb-2">
+                    Producto a Conceder
+                  </label>
+                  <select
+                    value={adminProductId}
+                    onChange={(e) => setAdminProductId(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white dark:bg-gray-800"
+                    data-testid="select-admin-product"
+                  >
+                    <option value="">Selecciona un GPT...</option>
+                    <option value="generador-sermones">Generador de Sermones</option>
+                    <option value="manual-ceremonias">Manual de Ceremonias del Ministro</option>
+                    <option value="mensajes-expositivos">Mensajes Expositivos</option>
+                  </select>
+                </div>
+
+                <Button
+                  onClick={() => {
+                    if (adminEmail && adminProductId) {
+                      grantAccessMutation.mutate({ email: adminEmail, productId: adminProductId });
+                    }
+                  }}
+                  disabled={!adminEmail || !adminProductId || grantAccessMutation.isPending}
+                  className="w-full bg-orange-600 hover:bg-orange-700"
+                  data-testid="button-grant-access"
+                >
+                  {grantAccessMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Concediendo Acceso...
+                    </>
+                  ) : (
+                    "Conceder Acceso Gratuito"
+                  )}
+                </Button>
+
+                <div className="bg-orange-100 dark:bg-orange-900/40 border border-orange-200 dark:border-orange-800 rounded-lg p-3">
+                  <p className="text-sm text-orange-800 dark:text-orange-200">
+                    <strong>Instrucciones:</strong> Ingresa el email del usuario y selecciona el GPT al que quieres conceder acceso gratuito. 
+                    El usuario podrá usar el GPT inmediatamente sin necesidad de pago.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
