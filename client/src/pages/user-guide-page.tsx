@@ -347,7 +347,7 @@ export default function UserGuidePage() {
                   Centro de Soporte
                 </Button>
               </a>
-              <a href="https://frankiefelicie.net/contact/" target="_blank" rel="noopener noreferrer">
+              <a href="mailto:support@frankiefelicie.net">
                 <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   Contactar Soporte
                 </Button>
