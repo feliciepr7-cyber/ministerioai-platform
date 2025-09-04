@@ -7,11 +7,19 @@ import { ArrowLeft, CheckCircle, AlertCircle, Clock, Megaphone, Zap, Plus } from
 import aiLogo from "@assets/AI_1756923008802.png";
 
 export default function StatusPage() {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState(() => new Date());
 
-  // Update the current time when the component mounts
+  // Update the current time every time the page is accessed
   useEffect(() => {
+    // Set the time immediately when component mounts
     setCurrentTime(new Date());
+    
+    // Optional: Update every minute to keep it fresh
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval);
   }, []);
 
   // Current status - you can update these as needed
