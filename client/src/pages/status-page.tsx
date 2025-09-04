@@ -110,7 +110,7 @@ export default function StatusPage() {
               Todos nuestros servicios están funcionando correctamente
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              Última actualización: {getCurrentTime().toLocaleDateString('es-ES')} a las {getCurrentTime().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+              Última actualización: {new Date().toLocaleDateString('es-ES')} a las {new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </CardContent>
         </Card>
