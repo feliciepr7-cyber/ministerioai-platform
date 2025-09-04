@@ -120,7 +120,7 @@ export default function PrivacyPolicyPage() {
               <div className="bg-muted/30 border border-border rounded-lg p-4">
                 <p>Si tienes preguntas sobre esta política de privacidad o el manejo de tus datos, contáctanos:</p>
                 <ul className="mt-2 space-y-1">
-                  <li><strong>Email:</strong> feliciepr7@gmail.com</li>
+                  <li><strong>Email:</strong> support@frankiefelicie.net</li>
                   <li><strong>Sitio web:</strong> https://authflow.frankiefelicie.net/</li>
                 </ul>
                 <p className="mt-3 text-sm text-muted-foreground">
