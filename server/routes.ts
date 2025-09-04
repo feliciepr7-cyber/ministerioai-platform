@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
+import rateLimit from "express-rate-limit";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { insertSubscriptionSchema, insertPaymentSchema } from "@shared/schema";
@@ -45,6 +46,48 @@ const GPT_PRODUCTS = {
     icon: "fas fa-book",
   },
 };
+
+// Rate limiting configurations
+const gptVerificationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: (req, res) => {
+    // More generous limit for authenticated requests
+    const userAgent = req.get('User-Agent') || '';
+    
+    // Detect if request is from ChatGPT/OpenAI
+    if (userAgent.includes('ChatGPT') || userAgent.includes('OpenAI')) {
+      return 50; // 50 requests per 15 minutes for ChatGPT
+    }
+    
+    return 20; // 20 requests per 15 minutes for other clients
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => {
+    // Rate limit by IP + email combination for better tracking
+    const email = req.body?.email || 'anonymous';
+    return `${req.ip}-${email}`;
+  },
+  message: {
+    error: "Rate limit exceeded",
+    message: "Demasiadas solicitudes de verificación. Por favor espera 15 minutos antes de intentar nuevamente.",
+    retryAfter: "15 minutes"
+  },
+  skip: (req) => {
+    // Skip rate limiting for admin users during development
+    return req.body?.email === "feliciepr7@gmail.com";
+  }
+});
+
+// General API rate limiter
+const generalApiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // 100 requests per 15 minutes
+  message: {
+    error: "Rate limit exceeded",
+    message: "Demasiadas solicitudes. Por favor espera unos minutos antes de intentar nuevamente."
+  }
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication routes
@@ -145,6 +188,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Error granting access: " + error.message });
     }
   });
+
+  // Apply general rate limiting to most API endpoints
+  app.use('/api', generalApiLimiter);
 
   // Confirm payment and grant access
   app.post("/api/confirm-payment", async (req, res) => {
@@ -357,7 +403,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // GPT Authentication verification endpoint for Custom GPTs
-  app.post("/api/verify-gpt-access", async (req, res) => {
+  // GPT Access verification with special rate limiting
+  app.post("/api/verify-gpt-access", gptVerificationLimiter, async (req, res) => {
     const { email, productId } = req.body;
     
     if (!email || !productId) {
