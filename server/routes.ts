@@ -63,11 +63,6 @@ const gptVerificationLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => {
-    // Rate limit by IP + email combination for better tracking
-    const email = req.body?.email || 'anonymous';
-    return `${req.ip || req.socket.remoteAddress}-${email}`;
-  },
   message: {
     error: "Rate limit exceeded",
     message: "Demasiadas solicitudes de verificación. Por favor espera 15 minutos antes de intentar nuevamente.",
