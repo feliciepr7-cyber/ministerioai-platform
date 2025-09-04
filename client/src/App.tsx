@@ -13,6 +13,7 @@ import CheckoutPage from "@/pages/checkout-page";
 import VerifyPage from "@/pages/verify-page";
 import FeaturesPage from "@/pages/features-page";
 import UserGuidePage from "@/pages/user-guide-page";
+import StatusPage from "@/pages/status-page";
 import PrivacyPolicyPage from "@/pages/privacy-policy-page";
 import TermsOfServicePage from "@/pages/terms-of-service-page";
 import NotFound from "@/pages/not-found";
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/checkout/:plan?" component={CheckoutPage} />
       <Route path="/features" component={FeaturesPage} />
       <Route path="/user-guide" component={UserGuidePage} />
+      <Route path="/status" component={StatusPage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
       <Route path="/terms-of-service" component={TermsOfServicePage} />
       <ProtectedRoute path="/dashboard" component={DashboardPage} />

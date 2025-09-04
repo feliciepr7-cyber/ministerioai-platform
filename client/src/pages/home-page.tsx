@@ -397,7 +397,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-sm">
                 <li><a href="https://frankiefelicie.net/support-client/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">Support Center</a></li>
                 <li><a href="https://frankiefelicie.net/contact/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">Contact Us</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Status Page</a></li>
+                <li><Link href="/status" className="text-muted-foreground hover:text-foreground transition-colors">Status Page</Link></li>
               </ul>
             </div>
             
