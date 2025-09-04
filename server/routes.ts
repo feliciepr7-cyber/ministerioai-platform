@@ -66,7 +66,7 @@ const gptVerificationLimiter = rateLimit({
   keyGenerator: (req) => {
     // Rate limit by IP + email combination for better tracking
     const email = req.body?.email || 'anonymous';
-    return `${req.ip}-${email}`;
+    return `${req.ip || req.socket.remoteAddress}-${email}`;
   },
   message: {
     error: "Rate limit exceeded",
