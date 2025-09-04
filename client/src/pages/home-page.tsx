@@ -406,7 +406,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-sm">
                 <li><Link href="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link></li>
                 <li><Link href="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Security</a></li>
+                <li><Link href="/security" className="text-muted-foreground hover:text-foreground transition-colors">Security</Link></li>
               </ul>
             </div>
           </div>
