@@ -386,7 +386,7 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold text-foreground mb-3">Product</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Features</a></li>
+                <li><Link href="/features" className="text-muted-foreground hover:text-foreground transition-colors">Features</Link></li>
                 <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a></li>
                 <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">API Docs</a></li>
               </ul>
