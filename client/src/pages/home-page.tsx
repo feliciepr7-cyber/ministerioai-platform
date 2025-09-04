@@ -324,8 +324,8 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold text-foreground mb-3">Legal</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Terms of Service</a></li>
+                <li><Link href="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link></li>
                 <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Security</a></li>
               </ul>
             </div>
