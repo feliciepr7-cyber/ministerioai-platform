@@ -393,7 +393,7 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold text-foreground mb-3">Support</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Help Center</a></li>
+                <li><a href="https://frankiefelicie.net/support-client/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">Support Center</a></li>
                 <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Contact Us</a></li>
                 <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Status Page</a></li>
               </ul>
