@@ -6,8 +6,10 @@ import { ArrowLeft, CheckCircle, AlertCircle, Clock, Megaphone, Zap, Plus } from
 import aiLogo from "@assets/AI_1756923008802.png";
 
 export default function StatusPage() {
-  // Get current time each time the component renders
-  const getCurrentTime = () => new Date();
+  // Force a fresh timestamp on every render
+  const now = new Date();
+  const currentDate = now.toLocaleDateString('es-ES');
+  const currentTime = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
   // Current status - you can update these as needed
   const systemStatus = [
@@ -110,7 +112,7 @@ export default function StatusPage() {
               Todos nuestros servicios están funcionando correctamente
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              Última actualización: {new Date().toLocaleDateString('es-ES')} a las {new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+              Última actualización: {currentDate} a las {currentTime}
             </p>
           </CardContent>
         </Card>
