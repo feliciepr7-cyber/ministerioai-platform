@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-3xl text-center">Política de Privacidad</CardTitle>
-            <p className="text-center text-muted-foreground">Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
+            <p className="text-center text-muted-foreground">Última actualización: {new Date().toLocaleDateString('en-US')}</p>
           </CardHeader>
           <CardContent className="space-y-6">
             <section>
