@@ -42,7 +42,7 @@ const GPT_PRODUCTS = {
     name: "Comentario Exegético",
     description: "Análisis profundo y académico de textos bíblicos con rigor teológico",
     price: 20,
-    gptUrl: "https://chatgpt.com/g/g-TU-ID-UNICO-AQUI-comentario-exegetico",
+    gptUrl: "https://chatgpt.com/g/g-68b99cbbad508191954ffe0d3cbf3cc9-comentario-exegetico",
     icon: "fas fa-book",
   },
 };
