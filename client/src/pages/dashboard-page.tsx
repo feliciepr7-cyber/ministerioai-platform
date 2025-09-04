@@ -160,10 +160,10 @@ export default function DashboardPage() {
                 alt="Ministerio AI Logo" 
                 className="w-8 h-8 rounded-lg"
               />
-              <span className="text-xl font-bold text-foreground">Ministerio AI</span>
+              <span className="text-lg sm:text-xl font-bold text-foreground">Ministerio AI</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-muted-foreground">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <span className="text-sm text-muted-foreground hidden sm:block">
                 Welcome, {dashboardData.user.name}
               </span>
               <Button 
@@ -171,6 +171,7 @@ export default function DashboardPage() {
                 onClick={handleLogout}
                 disabled={logoutMutation.isPending}
                 data-testid="button-logout"
+                size="sm"
               >
                 {logoutMutation.isPending ? "Signing out..." : "Sign Out"}
               </Button>
@@ -179,15 +180,15 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Dashboard Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Dashboard</h1>
           <p className="text-muted-foreground">Manage your GPT access and billing</p>
         </div>
 
         {/* Status Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center space-x-3 mb-3">

@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Menu, X } from "lucide-react";
 
 // Import images
 import aiLogo from "@assets/AI_1756923008802.png";
@@ -60,6 +61,7 @@ const GPT_PRODUCTS = [
 export default function HomePage() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const scrollToPricing = () => {
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
@@ -94,10 +96,11 @@ export default function HomePage() {
                   alt="Ministerio AI Logo" 
                   className="w-8 h-8 rounded-lg"
                 />
-                <span className="text-xl font-bold text-foreground">Ministerio AI</span>
+                <span className="text-lg sm:text-xl font-bold text-foreground">Ministerio AI</span>
               </div>
             </div>
             
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
               <button 
                 onClick={scrollToPricing} 
@@ -110,10 +113,11 @@ export default function HomePage() {
               <a href="#support" className="text-muted-foreground hover:text-foreground transition-colors">Support</a>
             </nav>
 
-            <div className="flex items-center space-x-4">
+            {/* Desktop Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-4">
               {user ? (
                 <>
-                  <span className="text-sm text-muted-foreground">Welcome, {user.name}</span>
+                  <span className="text-sm text-muted-foreground hidden lg:block">Welcome, {user.name}</span>
                   <Link href="/dashboard">
                     <Button data-testid="button-dashboard">Dashboard</Button>
                   </Link>
@@ -131,29 +135,103 @@ export default function HomePage() {
                 </>
               )}
             </div>
+
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground"
+              data-testid="button-mobile-menu"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t border-border">
+              <div className="px-2 pt-2 pb-3 space-y-1">
+                <button 
+                  onClick={() => {
+                    scrollToPricing();
+                    setIsMobileMenuOpen(false);
+                  }} 
+                  className="block w-full text-left px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
+                  data-testid="mobile-nav-pricing"
+                >
+                  Pricing
+                </button>
+                <a 
+                  href="#features" 
+                  className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Features
+                </a>
+                <a 
+                  href="#support" 
+                  className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Support
+                </a>
+                <div className="border-t border-border my-2"></div>
+                {user ? (
+                  <>
+                    <span className="block px-3 py-2 text-sm text-muted-foreground">Welcome, {user.name}</span>
+                    <Link href="/dashboard">
+                      <Button className="w-full mt-2" data-testid="mobile-button-dashboard">
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/auth">
+                      <button 
+                        className="block w-full text-left px-3 py-2 text-muted-foreground hover:text-foreground transition-colors" 
+                        data-testid="mobile-button-signin"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Sign In
+                      </button>
+                    </Link>
+                    <Button 
+                      onClick={() => {
+                        handleGetStarted();
+                        setIsMobileMenuOpen(false);
+                      }} 
+                      className="w-full mt-2" 
+                      data-testid="mobile-button-get-started"
+                    >
+                      Get Started
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
       <main>
         {/* Hero Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Herramientas Ministeriales 
-              <span className="bg-gradient-to-r from-primary to-chart-2 bg-clip-text text-transparent ml-3">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6 leading-tight">
+              Herramientas Ministeriales{" "}
+              <span className="bg-gradient-to-r from-primary to-chart-2 bg-clip-text text-transparent block sm:inline">
                 AI
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
               Accede a herramientas especializadas de AI diseñadas específicamente para pastores, ministros y líderes de iglesia. 
               Potencia tu ministerio con tecnología avanzada.
             </p>
-            <div className="flex justify-center">
+            <div className="flex justify-center px-4">
               <Button 
                 onClick={scrollToPricing}
                 size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto"
                 data-testid="button-view-pricing"
               >
                 View Pricing
@@ -163,10 +241,10 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/30" id="features">
+        <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-muted/30" id="features">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-foreground mb-12">Why Choose Our Platform?</h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-foreground mb-8 sm:mb-12">Why Choose Our Platform?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
                   <div className="w-12 h-12 rounded-lg mb-4 overflow-hidden">
@@ -219,19 +297,19 @@ export default function HomePage() {
         </section>
 
         {/* Products Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8" id="pricing">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8" id="pricing">
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">Herramientas Ministeriales AI</h2>
-              <p className="text-lg text-muted-foreground">Compra una vez, úsala para siempre. Solo $20 USD cada herramienta</p>
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Herramientas Ministeriales AI</h2>
+              <p className="text-base sm:text-lg text-muted-foreground px-2">Compra una vez, úsala para siempre. Solo $20 USD cada herramienta</p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {GPT_PRODUCTS.map((product) => (
                 <Card 
                   key={product.id}
                   className={`relative hover:shadow-lg transition-shadow ${
-                    product.popular ? 'pricing-glow border-2 border-primary transform scale-105' : ''
+                    product.popular ? 'pricing-glow border-2 border-primary md:transform md:scale-105' : ''
                   }`}
                 >
                   {product.popular && (
@@ -286,17 +364,17 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-card border-t border-border py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-card border-t border-border py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <div className="col-span-1 sm:col-span-2 md:col-span-1">
               <div className="flex items-center space-x-2 mb-4">
                 <img 
                   src={aiLogo} 
                   alt="Ministerio AI Logo" 
                   className="w-8 h-8 rounded-lg"
                 />
-                <span className="text-xl font-bold text-foreground">Ministerio AI</span>
+                <span className="text-lg sm:text-xl font-bold text-foreground">Ministerio AI</span>
               </div>
               <p className="text-muted-foreground text-sm">
                 Herramientas de AI especializadas para el ministerio cristiano con acceso seguro y permanente.

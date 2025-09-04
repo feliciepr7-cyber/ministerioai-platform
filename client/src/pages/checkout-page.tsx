@@ -143,7 +143,7 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
                 <PaymentElement />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FloatingInput
                   label="First Name"
                   type="text"
@@ -166,7 +166,7 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
                 data-testid="input-billing-address"
               />
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FloatingInput
                   label="City"
                   type="text"
