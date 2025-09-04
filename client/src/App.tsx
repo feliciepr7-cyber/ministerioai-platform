@@ -12,6 +12,7 @@ import DashboardPage from "@/pages/dashboard-page";
 import CheckoutPage from "@/pages/checkout-page";
 import VerifyPage from "@/pages/verify-page";
 import FeaturesPage from "@/pages/features-page";
+import UserGuidePage from "@/pages/user-guide-page";
 import PrivacyPolicyPage from "@/pages/privacy-policy-page";
 import TermsOfServicePage from "@/pages/terms-of-service-page";
 import NotFound from "@/pages/not-found";
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/verify" component={VerifyPage} />
       <Route path="/checkout/:plan?" component={CheckoutPage} />
       <Route path="/features" component={FeaturesPage} />
+      <Route path="/user-guide" component={UserGuidePage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
       <Route path="/terms-of-service" component={TermsOfServicePage} />
       <ProtectedRoute path="/dashboard" component={DashboardPage} />
