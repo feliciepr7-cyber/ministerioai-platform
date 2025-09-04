@@ -109,7 +109,7 @@ export default function HomePage() {
               >
                 Pricing
               </button>
-              <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
+              <Link href="/features" className="text-muted-foreground hover:text-foreground transition-colors">Features</Link>
               <a href="https://frankiefelicie.net/support-client/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">Support</a>
             </nav>
 
@@ -160,13 +160,13 @@ export default function HomePage() {
                 >
                   Pricing
                 </button>
-                <a 
-                  href="#features" 
+                <Link 
+                  href="/features" 
                   className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Features
-                </a>
+                </Link>
                 <a 
                   href="https://frankiefelicie.net/support-client/" 
                   target="_blank" 
