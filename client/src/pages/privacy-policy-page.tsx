@@ -121,7 +121,7 @@ export default function PrivacyPolicyPage() {
                 <p>Si tienes preguntas sobre esta política de privacidad o el manejo de tus datos, contáctanos:</p>
                 <ul className="mt-2 space-y-1">
                   <li><strong>Email:</strong> feliciepr7@gmail.com</li>
-                  <li><strong>Sitio web:</strong> {window.location.origin}</li>
+                  <li><strong>Sitio web:</strong> https://ministerio-ai.frankiefelicie.net</li>
                 </ul>
                 <p className="mt-3 text-sm text-muted-foreground">
                   Nos comprometemos a responder a tus consultas de privacidad dentro de 30 días.
