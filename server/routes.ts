@@ -501,6 +501,12 @@ async function initializeGptModels() {
           icon: "fas fa-cross",
           requiredPlan: "purchase",
         },
+        {
+          name: "Comentario Exegético",
+          description: "Análisis profundo y académico de textos bíblicos con rigor teológico",
+          icon: "fas fa-book",
+          requiredPlan: "purchase",
+        },
       ];
 
       for (const model of defaultModels) {
