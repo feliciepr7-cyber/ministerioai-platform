@@ -259,7 +259,7 @@ export default function HomePage() {
         {/* Features Section */}
         <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-muted/30" id="features">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center text-foreground mb-8 sm:mb-12">Why Choose Our Platform?</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-foreground mb-8 sm:mb-12">¿Por Qué Elegir Nuestra Plataforma?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
