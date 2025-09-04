@@ -8,7 +8,7 @@ import aiLogo from "@assets/AI_1756923008802.png";
 export default function StatusPage() {
   // Force a fresh timestamp on every render
   const now = new Date();
-  const currentDate = now.toLocaleDateString('es-ES');
+  const currentDate = now.toLocaleDateString('en-US'); // MM/DD/YYYY format
   const currentTime = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
   // Current status - you can update these as needed
