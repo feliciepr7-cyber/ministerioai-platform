@@ -426,7 +426,7 @@ export default function HomePage() {
           </div>
           
           <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-muted-foreground text-sm">© 2024 GPT Access. All rights reserved.</p>
+            <p className="text-muted-foreground text-sm">© 2025 GPT Access. All rights reserved.</p>
             <div className="flex items-center space-x-4 mt-4 md:mt-0">
               <span className="text-xs text-muted-foreground">Powered by</span>
               <div className="flex items-center space-x-2">
