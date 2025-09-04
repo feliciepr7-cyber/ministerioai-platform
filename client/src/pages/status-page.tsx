@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,13 @@ import { ArrowLeft, CheckCircle, AlertCircle, Clock, Megaphone, Zap, Plus } from
 import aiLogo from "@assets/AI_1756923008802.png";
 
 export default function StatusPage() {
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update the current time when the component mounts
+  useEffect(() => {
+    setCurrentTime(new Date());
+  }, []);
+
   // Current status - you can update these as needed
   const systemStatus = [
     { name: "GPT Access", status: "operational", description: "All Custom GPTs are accessible" },
@@ -107,7 +115,7 @@ export default function StatusPage() {
               Todos nuestros servicios están funcionando correctamente
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              Última actualización: {new Date().toLocaleDateString('es-ES')} a las {new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+              Última actualización: {currentTime.toLocaleDateString('es-ES')} a las {currentTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </CardContent>
         </Card>
