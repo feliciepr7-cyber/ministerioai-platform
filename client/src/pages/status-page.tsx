@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,20 +6,8 @@ import { ArrowLeft, CheckCircle, AlertCircle, Clock, Megaphone, Zap, Plus } from
 import aiLogo from "@assets/AI_1756923008802.png";
 
 export default function StatusPage() {
-  const [currentTime, setCurrentTime] = useState(() => new Date());
-
-  // Update the current time every time the page is accessed
-  useEffect(() => {
-    // Set the time immediately when component mounts
-    setCurrentTime(new Date());
-    
-    // Optional: Update every minute to keep it fresh
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000); // Update every minute
-
-    return () => clearInterval(interval);
-  }, []);
+  // Get current time each time the component renders
+  const getCurrentTime = () => new Date();
 
   // Current status - you can update these as needed
   const systemStatus = [
@@ -123,7 +110,7 @@ export default function StatusPage() {
               Todos nuestros servicios están funcionando correctamente
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              Última actualización: {currentTime.toLocaleDateString('es-ES')} a las {currentTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+              Última actualización: {getCurrentTime().toLocaleDateString('es-ES')} a las {getCurrentTime().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </CardContent>
         </Card>
