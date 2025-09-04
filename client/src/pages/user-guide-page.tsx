@@ -282,6 +282,67 @@ export default function UserGuidePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Comentario Exegético */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-chart-4" />
+                Comentario Exegético
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Herramienta especializada en análisis exegético profundo y académico de textos bíblicos.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Áreas de análisis:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Exégesis detallada de cualquier pasaje bíblico</li>
+                    <li>• Contexto histórico y cultural del texto</li>
+                    <li>• Análisis lingüístico en idiomas originales</li>
+                    <li>• Comparación con diferentes traducciones</li>
+                    <li>• Referencias teológicas y académicas</li>
+                    <li>• Aplicación hermenéutica rigurosa</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Cómo obtener mejores resultados:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Paso 1:</strong> Especifica el pasaje exacto que deseas analizar</p>
+                    <p className="mb-2"><strong>Paso 2:</strong> Indica el tipo de análisis (exegético, teológico, cultural)</p>
+                    <p className="mb-2"><strong>Paso 3:</strong> Menciona si necesitas referencias académicas específicas</p>
+                    <p><strong>Paso 4:</strong> Solicita aclaraciones sobre puntos complejos</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Ejemplos de consultas efectivas:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Análisis completo:</strong></p>
+                    <p className="italic mb-3">"Necesito un análisis exegético completo de Romanos 3:23-24. Incluye contexto histórico, significado original en griego y implicaciones teológicas."</p>
+                    
+                    <p className="mb-2"><strong>Comparación textual:</strong></p>
+                    <p className="italic">"Compara las diferentes interpretaciones de 1 Corintios 7:14 y explica las variantes textuales principales."</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Lo que recibirás:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Análisis verso por verso del pasaje seleccionado</li>
+                    <li>• Explicación del contexto bíblico e histórico</li>
+                    <li>• Interpretación académica y teológica</li>
+                    <li>• Referencias a comentarios bíblicos reconocidos</li>
+                    <li>• Aplicaciones prácticas fundamentadas</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Tips and Best Practices */}

@@ -37,6 +37,13 @@ const GPT_PRODUCTS = {
     gptUrl: "https://chatgpt.com/g/g-68b3bd5d57088191940ce1e37623c6d5-mensajes-expositivos",
     icon: "fas fa-cross",
   },
+  "comentario-exegetico": {
+    name: "Comentario Exegético",
+    description: "Análisis profundo y académico de textos bíblicos con rigor teológico",
+    price: 20,
+    gptUrl: "https://chatgpt.com/g/g-TU-ID-UNICO-AQUI-comentario-exegetico",
+    icon: "fas fa-book",
+  },
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {

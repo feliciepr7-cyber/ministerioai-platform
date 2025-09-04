@@ -243,6 +243,48 @@ export default function FeaturesPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Comentario Exegético */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div className="order-2 md:order-1">
+                    <div className="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-6 text-center">
+                      <BookOpen className="w-16 h-16 text-chart-4 mx-auto mb-4" />
+                      <p className="text-sm text-muted-foreground">
+                        Análisis académico profundo para una interpretación bíblica precisa
+                      </p>
+                    </div>
+                  </div>
+                  <div className="order-1 md:order-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      Comentario Exegético
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Análisis profundo y académico de textos bíblicos con rigor teológico.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Análisis exegético detallado de cualquier pasaje
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Contexto histórico, cultural y lingüístico
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Interpretación teológica rigurosa y académica
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Referencias a comentarios bíblicos reconocidos
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 

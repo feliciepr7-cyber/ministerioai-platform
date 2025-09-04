@@ -16,6 +16,7 @@ import aiLogo from "@assets/AI_1756923008802.png";
 import sermonGeneratorImage from "@assets/generated_images/Sermon_generator_illustration_6bc72bc1.png";
 import ceremoniasManualImage from "@assets/generated_images/Church_ceremony_manual_3852f443.png";
 import mensajesExpositivosImage from "@assets/generated_images/Expository_messages_illustration_24a14fb8.png";
+import comentarioExegeticoImage from "@assets/generated_images/Biblical_commentary_AI_logo_a3d6b754.png";
 
 interface DashboardData {
   user: {
@@ -285,6 +286,9 @@ export default function DashboardPage() {
                           )}
                           {product.id === 'mensajes-expositivos' && (
                             <img src={mensajesExpositivosImage} alt="Mensajes Expositivos" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'comentario-exegetico' && (
+                            <img src={comentarioExegeticoImage} alt="Comentario Exegético" className="w-full h-full object-cover" />
                           )}
                         </div>
                         <div className="flex-1">

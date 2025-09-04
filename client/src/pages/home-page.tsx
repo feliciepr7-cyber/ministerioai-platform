@@ -11,6 +11,7 @@ import aiLogo from "@assets/AI_1756923008802.png";
 import sermonImage from "@assets/generated_images/Sermon_generator_illustration_6bc72bc1.png";
 import ceremonyImage from "@assets/generated_images/Church_ceremony_manual_3852f443.png";
 import expositoryImage from "@assets/generated_images/Expository_messages_illustration_24a14fb8.png";
+import comentarioImage from "@assets/generated_images/Biblical_commentary_AI_logo_a3d6b754.png";
 import securePaymentIcon from "@assets/generated_images/Secure_payment_shield_icon_ba166b10.png";
 import instantAccessIcon from "@assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png";
 import supportIcon from "@assets/generated_images/24/7_support_headset_icon_efb44ef5.png";
@@ -55,6 +56,19 @@ const GPT_PRODUCTS = [
       "Predicación expositiva"
     ],
     image: expositoryImage
+  },
+  {
+    id: "comentario-exegetico",
+    name: "Comentario Exegético",
+    price: 20,
+    description: "Análisis profundo y académico de textos bíblicos con rigor teológico",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Análisis exegético detallado",
+      "Contexto histórico y cultural",
+      "Interpretación teológica precisa"
+    ],
+    image: comentarioImage
   }
 ];
 
