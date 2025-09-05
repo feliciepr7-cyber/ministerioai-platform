@@ -22,6 +22,9 @@ async function hashPassword(password: string) {
 }
 
 async function comparePasswords(supplied: string, stored: string) {
+  console.log("Comparing - supplied password:", supplied);
+  console.log("Comparing - stored hash starts with:", stored.substring(0, 20) + "...");
+  
   // Handle different password hash formats
   if (!stored.includes('.')) {
     // If it's not our custom format, it might be bcrypt or invalid
@@ -29,18 +32,22 @@ async function comparePasswords(supplied: string, stored: string) {
     if (stored === '$2b$10$n9CM0OXKdJNQoQn7uWxGF.ScYBm5L6y7SbhOoIlY8TLJPzF6R/X.W' && supplied === 'admin123') {
       return true;
     }
+    console.log("Stored password doesn't contain dot separator");
     return false;
   }
   
   const parts = stored.split(".");
   if (parts.length !== 2) {
+    console.log("Stored password doesn't have exactly 2 parts");
     return false;
   }
   
   const [hashed, salt] = parts;
+  console.log("Salt:", salt);
   
   // Validate hex format
   if (!/^[a-f0-9]+$/i.test(hashed) || !/^[a-f0-9]+$/i.test(salt)) {
+    console.log("Invalid hex format in hash or salt");
     return false;
   }
   
@@ -48,12 +55,17 @@ async function comparePasswords(supplied: string, stored: string) {
     const hashedBuf = Buffer.from(hashed, "hex");
     const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
     
+    console.log("Hash lengths - stored:", hashedBuf.length, "supplied:", suppliedBuf.length);
+    
     // Ensure buffers are same length before comparing
     if (hashedBuf.length !== suppliedBuf.length) {
+      console.log("Buffer lengths don't match");
       return false;
     }
     
-    return timingSafeEqual(hashedBuf, suppliedBuf);
+    const result = timingSafeEqual(hashedBuf, suppliedBuf);
+    console.log("Password comparison result:", result);
+    return result;
   } catch (error) {
     console.error("Password comparison error:", error);
     return false;
@@ -91,6 +103,7 @@ export function setupAuth(app: Express) {
       
       const passwordMatch = await comparePasswords(password, user.password);
       console.log("Password match:", passwordMatch);
+      console.log("Stored password format:", user.password.substring(0, 20) + "...");
       
       if (!passwordMatch) {
         return done(null, false);
