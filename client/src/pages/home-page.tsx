@@ -124,7 +124,7 @@ export default function HomePage() {
                 Pricing
               </button>
               <Link href="/features" className="text-muted-foreground hover:text-foreground transition-colors">Features</Link>
-              <a href="https://frankiefelicie.net/support-client/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">Support</a>
+              <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">Support</Link>
             </nav>
 
             {/* Desktop Auth Buttons */}
@@ -181,15 +181,13 @@ export default function HomePage() {
                 >
                   Features
                 </Link>
-                <a 
-                  href="https://frankiefelicie.net/support-client/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+                <Link 
+                  href="/support"
                   className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Support
-                </a>
+                </Link>
                 <div className="border-t border-border my-2"></div>
                 {user ? (
                   <>

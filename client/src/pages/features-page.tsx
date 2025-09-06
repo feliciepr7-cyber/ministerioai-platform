@@ -330,7 +330,7 @@ export default function FeaturesPage() {
                 Ver Precios
               </Button>
             </Link>
-            <Link href="https://frankiefelicie.net/support-client/">
+            <Link href="/support">
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 Contactar Soporte
               </Button>

@@ -243,11 +243,11 @@ export default function StatusPage() {
               Si encuentras algún problema no listado aquí, nuestro equipo de soporte está aquí para ayudarte.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://frankiefelicie.net/support-client/" target="_blank" rel="noopener noreferrer">
+              <Link href="/support">
                 <Button size="lg" className="w-full sm:w-auto">
                   Centro de Soporte
                 </Button>
-              </a>
+              </Link>
               <a href="mailto:support@frankiefelicie.net">
                 <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   Contactar por Email
