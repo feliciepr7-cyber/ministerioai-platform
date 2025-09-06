@@ -24,6 +24,7 @@ function Router() {
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/login" component={AuthPage} />
       <Route path="/verify" component={VerifyPage} />
       <Route path="/checkout/:plan?" component={CheckoutPage} />
       <Route path="/features" component={FeaturesPage} />
