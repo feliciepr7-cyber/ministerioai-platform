@@ -71,11 +71,102 @@ export const gptAccess = pgTable("gpt_access", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Support Ticket System Tables
+export const ticketCategories = pgTable("ticket_categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const tickets = pgTable("tickets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  ticketNumber: text("ticket_number").notNull().unique(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  status: text("status").notNull().default("open"), // open, in_progress, on_hold, resolved, closed
+  priority: text("priority").notNull().default("medium"), // low, medium, high, critical
+  submitterId: varchar("submitter_id").references(() => users.id).notNull(),
+  assigneeId: varchar("assignee_id").references(() => users.id),
+  categoryId: varchar("category_id").references(() => ticketCategories.id).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const ticketComments = pgTable("ticket_comments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  ticketId: varchar("ticket_id").references(() => tickets.id).notNull(),
+  authorId: varchar("author_id").references(() => users.id).notNull(),
+  content: text("content").notNull(),
+  isInternal: boolean("is_internal").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const ticketAttachments = pgTable("ticket_attachments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  ticketId: varchar("ticket_id").references(() => tickets.id).notNull(),
+  commentId: varchar("comment_id").references(() => ticketComments.id),
+  fileName: text("file_name").notNull(),
+  filePath: text("file_path").notNull(),
+  fileSize: integer("file_size"),
+  uploadedAt: timestamp("uploaded_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   subscriptions: many(subscriptions),
   payments: many(payments),
   gptAccess: many(gptAccess),
+  submittedTickets: many(tickets, { relationName: "submitter" }),
+  assignedTickets: many(tickets, { relationName: "assignee" }),
+  ticketComments: many(ticketComments),
+}));
+
+export const ticketCategoriesRelations = relations(ticketCategories, ({ many }) => ({
+  tickets: many(tickets),
+}));
+
+export const ticketsRelations = relations(tickets, ({ one, many }) => ({
+  submitter: one(users, {
+    fields: [tickets.submitterId],
+    references: [users.id],
+    relationName: "submitter",
+  }),
+  assignee: one(users, {
+    fields: [tickets.assigneeId],
+    references: [users.id],
+    relationName: "assignee",
+  }),
+  category: one(ticketCategories, {
+    fields: [tickets.categoryId],
+    references: [ticketCategories.id],
+  }),
+  comments: many(ticketComments),
+  attachments: many(ticketAttachments),
+}));
+
+export const ticketCommentsRelations = relations(ticketComments, ({ one, many }) => ({
+  ticket: one(tickets, {
+    fields: [ticketComments.ticketId],
+    references: [tickets.id],
+  }),
+  author: one(users, {
+    fields: [ticketComments.authorId],
+    references: [users.id],
+  }),
+  attachments: many(ticketAttachments),
+}));
+
+export const ticketAttachmentsRelations = relations(ticketAttachments, ({ one }) => ({
+  ticket: one(tickets, {
+    fields: [ticketAttachments.ticketId],
+    references: [tickets.id],
+  }),
+  comment: one(ticketComments, {
+    fields: [ticketAttachments.commentId],
+    references: [ticketComments.id],
+  }),
 }));
 
 export const subscriptionsRelations = relations(subscriptions, ({ one, many }) => ({
@@ -151,6 +242,29 @@ export const insertGptAccessSchema = createInsertSchema(gptAccess).omit({
   createdAt: true,
 });
 
+// Support Ticket Schemas
+export const insertTicketCategorySchema = createInsertSchema(ticketCategories).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertTicketSchema = createInsertSchema(tickets).omit({
+  id: true,
+  ticketNumber: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTicketCommentSchema = createInsertSchema(ticketComments).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertTicketAttachmentSchema = createInsertSchema(ticketAttachments).omit({
+  id: true,
+  uploadedAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -163,3 +277,13 @@ export type GptModel = typeof gptModels.$inferSelect;
 export type InsertGptModel = z.infer<typeof insertGptModelSchema>;
 export type GptAccess = typeof gptAccess.$inferSelect;
 export type InsertGptAccess = z.infer<typeof insertGptAccessSchema>;
+
+// Support Ticket Types
+export type TicketCategory = typeof ticketCategories.$inferSelect;
+export type InsertTicketCategory = z.infer<typeof insertTicketCategorySchema>;
+export type Ticket = typeof tickets.$inferSelect;
+export type InsertTicket = z.infer<typeof insertTicketSchema>;
+export type TicketComment = typeof ticketComments.$inferSelect;
+export type InsertTicketComment = z.infer<typeof insertTicketCommentSchema>;
+export type TicketAttachment = typeof ticketAttachments.$inferSelect;
+export type InsertTicketAttachment = z.infer<typeof insertTicketAttachmentSchema>;
