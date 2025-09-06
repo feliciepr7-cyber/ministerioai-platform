@@ -4,6 +4,10 @@ import {
   payments,
   gptModels,
   gptAccess,
+  ticketCategories,
+  tickets,
+  ticketComments,
+  ticketAttachments,
   type User,
   type InsertUser,
   type Subscription,
@@ -14,6 +18,14 @@ import {
   type InsertGptModel,
   type GptAccess,
   type InsertGptAccess,
+  type TicketCategory,
+  type InsertTicketCategory,
+  type Ticket,
+  type InsertTicket,
+  type TicketComment,
+  type InsertTicketComment,
+  type TicketAttachment,
+  type InsertTicketAttachment,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc } from "drizzle-orm";
@@ -55,6 +67,28 @@ export interface IStorage {
   getGptAccess(userId: string, modelId: string): Promise<GptAccess | undefined>;
   createGptAccess(access: InsertGptAccess): Promise<GptAccess>;
   updateGptAccess(id: string, updates: Partial<GptAccess>): Promise<GptAccess>;
+
+  // Support Ticket Category operations
+  getTicketCategories(): Promise<TicketCategory[]>;
+  getTicketCategory(id: string): Promise<TicketCategory | undefined>;
+  createTicketCategory(category: InsertTicketCategory): Promise<TicketCategory>;
+
+  // Support Ticket operations
+  getTickets(userId?: string, status?: string): Promise<Ticket[]>;
+  getTicket(id: string): Promise<Ticket | undefined>;
+  getTicketByNumber(ticketNumber: string): Promise<Ticket | undefined>;
+  createTicket(ticket: InsertTicket): Promise<Ticket>;
+  updateTicket(id: string, updates: Partial<Ticket>): Promise<Ticket>;
+  getTicketsByUserId(userId: string): Promise<Ticket[]>;
+  assignTicket(ticketId: string, assigneeId: string): Promise<Ticket>;
+
+  // Support Ticket Comment operations
+  getTicketComments(ticketId: string): Promise<TicketComment[]>;
+  createTicketComment(comment: InsertTicketComment): Promise<TicketComment>;
+
+  // Support Ticket Attachment operations
+  getTicketAttachments(ticketId: string): Promise<TicketAttachment[]>;
+  createTicketAttachment(attachment: InsertTicketAttachment): Promise<TicketAttachment>;
 
   sessionStore: session.Store;
 }
@@ -197,6 +231,104 @@ export class DatabaseStorage implements IStorage {
   async updateGptAccess(id: string, updates: Partial<GptAccess>): Promise<GptAccess> {
     const [access] = await db.update(gptAccess).set(updates).where(eq(gptAccess.id, id)).returning();
     return access;
+  }
+
+  // Support Ticket Category operations
+  async getTicketCategories(): Promise<TicketCategory[]> {
+    return await db.select().from(ticketCategories).where(eq(ticketCategories.isActive, true));
+  }
+
+  async getTicketCategory(id: string): Promise<TicketCategory | undefined> {
+    const [category] = await db.select().from(ticketCategories).where(eq(ticketCategories.id, id));
+    return category;
+  }
+
+  async createTicketCategory(category: InsertTicketCategory): Promise<TicketCategory> {
+    const [newCategory] = await db.insert(ticketCategories).values(category).returning();
+    return newCategory;
+  }
+
+  // Support Ticket operations
+  async getTickets(userId?: string, status?: string): Promise<Ticket[]> {
+    if (userId && status) {
+      return await db.select().from(tickets)
+        .where(and(eq(tickets.submitterId, userId), eq(tickets.status, status)))
+        .orderBy(desc(tickets.createdAt));
+    } else if (userId) {
+      return await db.select().from(tickets)
+        .where(eq(tickets.submitterId, userId))
+        .orderBy(desc(tickets.createdAt));
+    } else if (status) {
+      return await db.select().from(tickets)
+        .where(eq(tickets.status, status))
+        .orderBy(desc(tickets.createdAt));
+    }
+    
+    return await db.select().from(tickets).orderBy(desc(tickets.createdAt));
+  }
+
+  async getTicket(id: string): Promise<Ticket | undefined> {
+    const [ticket] = await db.select().from(tickets).where(eq(tickets.id, id));
+    return ticket;
+  }
+
+  async getTicketByNumber(ticketNumber: string): Promise<Ticket | undefined> {
+    const [ticket] = await db.select().from(tickets).where(eq(tickets.ticketNumber, ticketNumber));
+    return ticket;
+  }
+
+  async createTicket(ticket: InsertTicket): Promise<Ticket> {
+    // Generate ticket number
+    const ticketCount = await db.select().from(tickets);
+    const ticketNumber = `TKT-${(ticketCount.length + 1).toString().padStart(4, '0')}`;
+    
+    const [newTicket] = await db.insert(tickets).values({
+      ...ticket,
+      ticketNumber,
+    }).returning();
+    return newTicket;
+  }
+
+  async updateTicket(id: string, updates: Partial<Ticket>): Promise<Ticket> {
+    const [ticket] = await db.update(tickets).set({ ...updates, updatedAt: new Date() }).where(eq(tickets.id, id)).returning();
+    return ticket;
+  }
+
+  async getTicketsByUserId(userId: string): Promise<Ticket[]> {
+    return await db.select().from(tickets).where(eq(tickets.submitterId, userId)).orderBy(desc(tickets.createdAt));
+  }
+
+  async assignTicket(ticketId: string, assigneeId: string): Promise<Ticket> {
+    const [ticket] = await db.update(tickets).set({ 
+      assigneeId, 
+      status: 'in_progress',
+      updatedAt: new Date() 
+    }).where(eq(tickets.id, ticketId)).returning();
+    return ticket;
+  }
+
+  // Support Ticket Comment operations
+  async getTicketComments(ticketId: string): Promise<TicketComment[]> {
+    return await db.select().from(ticketComments).where(eq(ticketComments.ticketId, ticketId)).orderBy(ticketComments.createdAt);
+  }
+
+  async createTicketComment(comment: InsertTicketComment): Promise<TicketComment> {
+    const [newComment] = await db.insert(ticketComments).values(comment).returning();
+    
+    // Update ticket's updated_at timestamp
+    await db.update(tickets).set({ updatedAt: new Date() }).where(eq(tickets.id, comment.ticketId));
+    
+    return newComment;
+  }
+
+  // Support Ticket Attachment operations
+  async getTicketAttachments(ticketId: string): Promise<TicketAttachment[]> {
+    return await db.select().from(ticketAttachments).where(eq(ticketAttachments.ticketId, ticketId));
+  }
+
+  async createTicketAttachment(attachment: InsertTicketAttachment): Promise<TicketAttachment> {
+    const [newAttachment] = await db.insert(ticketAttachments).values(attachment).returning();
+    return newAttachment;
   }
 }
 

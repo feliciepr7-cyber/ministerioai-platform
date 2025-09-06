@@ -4,7 +4,13 @@ import Stripe from "stripe";
 import rateLimit from "express-rate-limit";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
-import { insertSubscriptionSchema, insertPaymentSchema } from "@shared/schema";
+import { 
+  insertSubscriptionSchema, 
+  insertPaymentSchema,
+  insertTicketSchema,
+  insertTicketCategorySchema,
+  insertTicketCommentSchema 
+} from "@shared/schema";
 import { randomUUID } from "crypto";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -513,6 +519,163 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error("Dashboard data error:", error);
       res.status(500).json({ message: "Error fetching dashboard data: " + error.message });
+    }
+  });
+
+  // Support Ticket Routes
+  
+  // Get ticket categories
+  app.get("/api/tickets/categories", async (req, res) => {
+    try {
+      const categories = await storage.getTicketCategories();
+      res.json(categories);
+    } catch (error) {
+      console.error("Error fetching ticket categories:", error);
+      res.status(500).json({ message: "Failed to fetch ticket categories" });
+    }
+  });
+
+  // Create ticket category (admin only)
+  app.post("/api/tickets/categories", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const categoryData = insertTicketCategorySchema.parse(req.body);
+      const category = await storage.createTicketCategory(categoryData);
+      res.status(201).json(category);
+    } catch (error) {
+      console.error("Error creating ticket category:", error);
+      res.status(400).json({ message: "Invalid category data" });
+    }
+  });
+
+  // Get tickets (users see their own, agents see all)
+  app.get("/api/tickets", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const userId = req.user?.id;
+      const { status } = req.query;
+      
+      // For now, users can only see their own tickets
+      // TODO: Add role-based access for agents/admins
+      const tickets = await storage.getTickets(userId, status as string);
+      res.json(tickets);
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+      res.status(500).json({ message: "Failed to fetch tickets" });
+    }
+  });
+
+  // Get specific ticket with comments
+  app.get("/api/tickets/:id", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { id } = req.params;
+      const userId = req.user?.id;
+      
+      const ticket = await storage.getTicket(id);
+      if (!ticket) {
+        return res.status(404).json({ message: "Ticket not found" });
+      }
+      
+      // Users can only view their own tickets
+      // TODO: Add role-based access for agents/admins
+      if (ticket.submitterId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      const comments = await storage.getTicketComments(id);
+      res.json({ ...ticket, comments });
+    } catch (error) {
+      console.error("Error fetching ticket:", error);
+      res.status(500).json({ message: "Failed to fetch ticket" });
+    }
+  });
+
+  // Create new ticket
+  app.post("/api/tickets", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const userId = req.user?.id;
+      const ticketData = insertTicketSchema.parse({
+        ...req.body,
+        submitterId: userId,
+      });
+      
+      const ticket = await storage.createTicket(ticketData);
+      res.status(201).json(ticket);
+    } catch (error) {
+      console.error("Error creating ticket:", error);
+      res.status(400).json({ message: "Invalid ticket data" });
+    }
+  });
+
+  // Update ticket status
+  app.patch("/api/tickets/:id", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { id } = req.params;
+      const userId = req.user?.id;
+      const { status, priority } = req.body;
+      
+      const ticket = await storage.getTicket(id);
+      if (!ticket) {
+        return res.status(404).json({ message: "Ticket not found" });
+      }
+      
+      // Users can only update their own tickets (status to 'closed')
+      // TODO: Add role-based access for agents/admins
+      if (ticket.submitterId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      const updates: any = {};
+      if (status) updates.status = status;
+      if (priority) updates.priority = priority;
+      
+      const updatedTicket = await storage.updateTicket(id, updates);
+      res.json(updatedTicket);
+    } catch (error) {
+      console.error("Error updating ticket:", error);
+      res.status(500).json({ message: "Failed to update ticket" });
+    }
+  });
+
+  // Add comment to ticket
+  app.post("/api/tickets/:id/comments", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { id: ticketId } = req.params;
+      const userId = req.user?.id;
+      
+      const ticket = await storage.getTicket(ticketId);
+      if (!ticket) {
+        return res.status(404).json({ message: "Ticket not found" });
+      }
+      
+      // Users can only comment on their own tickets
+      // TODO: Add role-based access for agents/admins
+      if (ticket.submitterId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      const commentData = insertTicketCommentSchema.parse({
+        ...req.body,
+        ticketId,
+        authorId: userId,
+        isInternal: false, // Users can't create internal comments
+      });
+      
+      const comment = await storage.createTicketComment(commentData);
+      res.status(201).json(comment);
+    } catch (error) {
+      console.error("Error creating comment:", error);
+      res.status(400).json({ message: "Invalid comment data" });
     }
   });
 
