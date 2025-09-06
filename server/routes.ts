@@ -11,6 +11,12 @@ import {
   insertTicketCategorySchema,
   insertTicketCommentSchema 
 } from "@shared/schema";
+import { 
+  sendEmail, 
+  generateTicketCreatedEmail, 
+  generateTicketStatusUpdatedEmail,
+  generateTicketCommentEmail 
+} from "./emailService";
 import { randomUUID } from "crypto";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -605,8 +611,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         submitterId: userId,
       });
       
-      const ticket = await storage.createTicket(ticketData);
-      res.status(201).json(ticket);
+      const result = await storage.createTicket(ticketData);
+      
+      // Send email notification if user email exists
+      if (result.user?.email) {
+        const emailParams = generateTicketCreatedEmail(
+          result.user.email,
+          result.user.name,
+          result.ticket.ticketNumber,
+          result.ticket.title
+        );
+        
+        // Send email asynchronously (don't wait for it to complete)
+        sendEmail(emailParams).catch(error => {
+          console.error("Failed to send ticket creation email:", error);
+        });
+      }
+      
+      res.status(201).json(result.ticket);
     } catch (error) {
       console.error("Error creating ticket:", error);
       res.status(400).json({ message: "Invalid ticket data" });
@@ -637,8 +659,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (status) updates.status = status;
       if (priority) updates.priority = priority;
       
-      const updatedTicket = await storage.updateTicket(id, updates);
-      res.json(updatedTicket);
+      const result = await storage.updateTicket(id, updates);
+      
+      // Send email notification if status changed and user email exists
+      if (result.user?.email && result.oldStatus && updates.status !== result.oldStatus) {
+        const emailParams = generateTicketStatusUpdatedEmail(
+          result.user.email,
+          result.user.name,
+          result.ticket.ticketNumber,
+          result.ticket.title,
+          result.oldStatus,
+          updates.status
+        );
+        
+        // Send email asynchronously
+        sendEmail(emailParams).catch(error => {
+          console.error("Failed to send ticket status update email:", error);
+        });
+      }
+      
+      res.json(result.ticket);
     } catch (error) {
       console.error("Error updating ticket:", error);
       res.status(500).json({ message: "Failed to update ticket" });
@@ -671,8 +711,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isInternal: false, // Users can't create internal comments
       });
       
-      const comment = await storage.createTicketComment(commentData);
-      res.status(201).json(comment);
+      const result = await storage.createTicketComment(commentData);
+      
+      // Send email notification if user email exists and comment is from support agent
+      if (result.user?.email && result.ticket && result.author) {
+        const emailParams = generateTicketCommentEmail(
+          result.user.email,
+          result.user.name,
+          result.ticket.ticketNumber,
+          result.ticket.title,
+          result.author.name || 'Support Agent',
+          result.comment.content
+        );
+        
+        // Send email asynchronously
+        sendEmail(emailParams).catch(error => {
+          console.error("Failed to send ticket comment email:", error);
+        });
+      }
+      
+      res.status(201).json(result.comment);
     } catch (error) {
       console.error("Error creating comment:", error);
       res.status(400).json({ message: "Invalid comment data" });

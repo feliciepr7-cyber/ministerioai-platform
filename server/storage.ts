@@ -77,14 +77,14 @@ export interface IStorage {
   getTickets(userId?: string, status?: string): Promise<Ticket[]>;
   getTicket(id: string): Promise<Ticket | undefined>;
   getTicketByNumber(ticketNumber: string): Promise<Ticket | undefined>;
-  createTicket(ticket: InsertTicket): Promise<Ticket>;
-  updateTicket(id: string, updates: Partial<Ticket>): Promise<Ticket>;
+  createTicket(ticket: InsertTicket): Promise<{ ticket: Ticket; user?: any }>;
+  updateTicket(id: string, updates: Partial<Ticket>): Promise<{ ticket: Ticket; user?: any; oldStatus?: string }>;
   getTicketsByUserId(userId: string): Promise<Ticket[]>;
   assignTicket(ticketId: string, assigneeId: string): Promise<Ticket>;
 
   // Support Ticket Comment operations
   getTicketComments(ticketId: string): Promise<TicketComment[]>;
-  createTicketComment(comment: InsertTicketComment): Promise<TicketComment>;
+  createTicketComment(comment: InsertTicketComment): Promise<{ comment: TicketComment; ticket?: any; user?: any; author?: any }>;
 
   // Support Ticket Attachment operations
   getTicketAttachments(ticketId: string): Promise<TicketAttachment[]>;
@@ -277,7 +277,7 @@ export class DatabaseStorage implements IStorage {
     return ticket;
   }
 
-  async createTicket(ticket: InsertTicket): Promise<Ticket> {
+  async createTicket(ticket: InsertTicket): Promise<{ ticket: Ticket; user?: any }> {
     // Generate ticket number
     const ticketCount = await db.select().from(tickets);
     const ticketNumber = `TKT-${(ticketCount.length + 1).toString().padStart(4, '0')}`;
@@ -286,12 +286,48 @@ export class DatabaseStorage implements IStorage {
       ...ticket,
       ticketNumber,
     }).returning();
-    return newTicket;
+
+    // Get user information for email notification
+    const [user] = await db.select({
+      email: users.email,
+      name: users.name,
+    }).from(users).where(eq(users.id, ticket.submitterId));
+
+    return { ticket: newTicket, user };
   }
 
-  async updateTicket(id: string, updates: Partial<Ticket>): Promise<Ticket> {
+  async updateTicket(id: string, updates: Partial<Ticket>): Promise<{ ticket: Ticket; user?: any; oldStatus?: string }> {
+    // Get the current ticket data before update
+    const [currentTicket] = await db
+      .select({
+        status: tickets.status,
+        submitterId: tickets.submitterId,
+      })
+      .from(tickets)
+      .where(eq(tickets.id, id));
+
+    if (!currentTicket) {
+      throw new Error('Ticket not found');
+    }
+
+    // Update the ticket
     const [ticket] = await db.update(tickets).set({ ...updates, updatedAt: new Date() }).where(eq(tickets.id, id)).returning();
-    return ticket;
+
+    // Get user information for email notification if status changed
+    let user = undefined;
+    if (updates.status && updates.status !== currentTicket.status) {
+      const [userInfo] = await db.select({
+        email: users.email,
+        name: users.name,
+      }).from(users).where(eq(users.id, currentTicket.submitterId));
+      user = userInfo;
+    }
+
+    return { 
+      ticket, 
+      user,
+      oldStatus: currentTicket.status 
+    };
   }
 
   async getTicketsByUserId(userId: string): Promise<Ticket[]> {
@@ -312,13 +348,48 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(ticketComments).where(eq(ticketComments.ticketId, ticketId)).orderBy(ticketComments.createdAt);
   }
 
-  async createTicketComment(comment: InsertTicketComment): Promise<TicketComment> {
+  async createTicketComment(comment: InsertTicketComment): Promise<{ comment: TicketComment; ticket?: any; user?: any; author?: any }> {
     const [newComment] = await db.insert(ticketComments).values(comment).returning();
     
     // Update ticket's updated_at timestamp
     await db.update(tickets).set({ updatedAt: new Date() }).where(eq(tickets.id, comment.ticketId));
     
-    return newComment;
+    // Get ticket and user information for email notification
+    const [ticketInfo] = await db
+      .select({
+        id: tickets.id,
+        ticketNumber: tickets.ticketNumber,
+        title: tickets.title,
+        submitterId: tickets.submitterId,
+      })
+      .from(tickets)
+      .where(eq(tickets.id, comment.ticketId));
+
+    let user = undefined;
+    let author = undefined;
+    
+    if (ticketInfo) {
+      // Get the ticket submitter (user who will receive the email)
+      const [userInfo] = await db.select({
+        email: users.email,
+        name: users.name,
+      }).from(users).where(eq(users.id, ticketInfo.submitterId));
+      
+      // Get the comment author
+      const [authorInfo] = await db.select({
+        name: users.name,
+      }).from(users).where(eq(users.id, comment.authorId));
+      
+      user = userInfo;
+      author = authorInfo;
+    }
+
+    return { 
+      comment: newComment, 
+      ticket: ticketInfo, 
+      user,
+      author 
+    };
   }
 
   // Support Ticket Attachment operations
