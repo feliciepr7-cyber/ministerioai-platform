@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { MessageCircle, Plus, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { useLocation } from "wouter";
+import { MessageCircle, Plus, Clock, CheckCircle, XCircle, AlertCircle, ArrowLeft } from "lucide-react";
 
 // Form schema for creating tickets
 const createTicketSchema = z.object({
@@ -50,6 +51,7 @@ export default function SupportPage() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
 
   // Fetch ticket categories
   const { data: categories = [] } = useQuery({
@@ -121,6 +123,17 @@ export default function SupportPage() {
     <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto p-6">
         <div className="mb-8">
+          <div className="flex items-center gap-4 mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setLocation("/dashboard")}
+              className="flex items-center gap-2"
+              data-testid="button-back-dashboard"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Button>
+          </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">Support Center</h1>
           <p className="text-muted-foreground">
             Need help? Create a support ticket and our team will assist you.
