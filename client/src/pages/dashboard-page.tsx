@@ -169,6 +169,14 @@ export default function DashboardPage() {
               </span>
               <Button 
                 variant="outline" 
+                onClick={() => setLocation("/support")}
+                size="sm"
+                data-testid="button-support"
+              >
+                Support
+              </Button>
+              <Button 
+                variant="outline" 
                 onClick={handleLogout}
                 disabled={logoutMutation.isPending}
                 data-testid="button-logout"

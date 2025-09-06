@@ -54,11 +54,21 @@ export default function SupportPage() {
   // Fetch ticket categories
   const { data: categories = [] } = useQuery({
     queryKey: ["/api/tickets/categories"],
+    queryFn: async () => {
+      const response = await fetch("/api/tickets/categories");
+      if (!response.ok) throw new Error("Failed to fetch categories");
+      return response.json();
+    },
   });
 
   // Fetch user's tickets
   const { data: tickets = [], isLoading: ticketsLoading } = useQuery({
     queryKey: ["/api/tickets"],
+    queryFn: async () => {
+      const response = await fetch("/api/tickets");
+      if (!response.ok) throw new Error("Failed to fetch tickets");
+      return response.json();
+    },
   });
 
   // Create ticket form
@@ -75,10 +85,15 @@ export default function SupportPage() {
   // Create ticket mutation
   const createTicketMutation = useMutation({
     mutationFn: async (data: CreateTicketForm) => {
-      return await apiRequest("/api/tickets", {
+      const response = await fetch("/api/tickets", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
       });
+      if (!response.ok) throw new Error("Failed to create ticket");
+      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -155,7 +170,7 @@ export default function SupportPage() {
                           <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                         <SelectContent>
-                          {categories.map((category: any) => (
+                          {(categories as any[]).map((category: any) => (
                             <SelectItem key={category.id} value={category.id}>
                               {category.name}
                             </SelectItem>
@@ -236,7 +251,7 @@ export default function SupportPage() {
                   <div className="text-center py-8">
                     <div className="animate-pulse">Loading tickets...</div>
                   </div>
-                ) : tickets.length === 0 ? (
+                ) : (tickets as any[]).length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <MessageCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p>No support tickets yet.</p>
@@ -244,7 +259,7 @@ export default function SupportPage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {tickets.map((ticket: any) => {
+                    {(tickets as any[]).map((ticket: any) => {
                       const StatusIcon = STATUS_ICONS[ticket.status as keyof typeof STATUS_ICONS];
                       return (
                         <div 
