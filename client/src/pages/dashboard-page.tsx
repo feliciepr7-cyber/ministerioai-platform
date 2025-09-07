@@ -78,35 +78,28 @@ export default function DashboardPage() {
       return await res.json();
     },
     onSuccess: (data) => {
-      // Force opening in new browser window, breaking out of any iframe
+      // Open Custom GPT in new tab only - never redirect current page
       try {
-        // Try to open in parent window if we're in an iframe
-        if (window.parent && window.parent !== window) {
-          window.parent.open(data.gptUrl, '_blank', 'noopener,noreferrer');
-        } else {
-          // Try normal window.open
-          const newWindow = window.open(data.gptUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
-          if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-            // If popup was blocked, try top window
-            if (window.top && window.top !== window) {
-              window.top.location.href = data.gptUrl;
-            } else {
-              window.location.href = data.gptUrl;
-            }
-          }
+        // Try to open in new tab/window
+        const newWindow = window.open(data.gptUrl, '_blank', 'noopener,noreferrer');
+        
+        // If popup blocked, show message instead of redirecting
+        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+          toast({
+            title: "Popup Bloqueado",
+            description: `Por favor permite popups y vuelve a intentar, o abre manualmente: ${data.gptUrl}`,
+            variant: "destructive",
+          });
+          return;
         }
       } catch (error) {
-        // Final fallback - try to break out of iframe
-        try {
-          if (window.top && window.top !== window) {
-            window.top.location.href = data.gptUrl;
-          } else {
-            window.location.href = data.gptUrl;
-          }
-        } catch (e) {
-          // Last resort
-          window.location.href = data.gptUrl;
-        }
+        // If error, show manual link instead of redirecting
+        toast({
+          title: "Error al abrir GPT",
+          description: `Por favor abre manualmente: ${data.gptUrl}`,
+          variant: "destructive",
+        });
+        return;
       }
       
       toast({
