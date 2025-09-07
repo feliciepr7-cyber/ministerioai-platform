@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
+import { useSEO } from "@/hooks/useSEO";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -76,6 +77,16 @@ export default function HomePage() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // SEO Configuration for Home Page
+  useSEO({
+    title: "Ministerio AI - Herramientas de IA para Pastores y Líderes Cristianos",
+    description: "Herramientas especializadas de Inteligencia Artificial para pastores, ministros y líderes de iglesia. Generador de sermones, manual de ceremonias, mensajes expositivos y comentarios exegéticos. Compra una vez, úsalo para siempre.",
+    keywords: "ministerio cristiano, herramientas pastores, AI religioso, generador sermones, comentarios biblicos, ceremonias iglesia, mensajes expositivos, comentario exegetico, pastor AI, sermones AI",
+    canonical: "/",
+    ogTitle: "Ministerio AI - Herramientas de IA para el Ministerio Cristiano",
+    ogDescription: "Potencia tu ministerio con herramientas especializadas de IA. Generador de sermones, manual de ceremonias, mensajes expositivos y comentarios exegéticos para pastores y líderes cristianos."
+  });
 
   const scrollToPricing = () => {
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
@@ -99,6 +110,39 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Ministerio AI",
+            "url": "https://ministerioai.com",
+            "logo": "https://ministerioai.com/assets/AI_1756923008802.png",
+            "description": "Herramientas especializadas de Inteligencia Artificial para pastores, ministros y líderes de iglesia",
+            "offers": GPT_PRODUCTS.map(product => ({
+              "@type": "Offer",
+              "name": product.name,
+              "description": product.description,
+              "price": product.price,
+              "priceCurrency": "USD",
+              "availability": "https://schema.org/InStock",
+              "category": "Digital Service"
+            })),
+            "serviceType": "AI Tools for Christian Ministry",
+            "areaServed": {
+              "@type": "Place",
+              "name": "Global"
+            },
+            "audience": {
+              "@type": "Audience",
+              "audienceType": "Pastores, Ministros, Líderes de Iglesia"
+            }
+          })
+        }}
+      />
+      
       {/* Header */}
       <header className="bg-card border-b border-border sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
