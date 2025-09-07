@@ -777,6 +777,12 @@ async function initializeGptModels() {
           icon: "fas fa-book",
           requiredPlan: "purchase",
         },
+        {
+          name: "Las Epistolas del Apostol Pablo",
+          description: "Estudio profundo de las 13 cartas paulinas: Romanos, 1-2 Corintios, Gálatas, Efesios, Filipenses, Colosenses, 1-2 Tesalonicenses, 1-2 Timoteo, Tito, Filemón. Análisis teológico y aplicación práctica para el ministerio moderno.",
+          icon: "fas fa-scroll",
+          requiredPlan: "purchase",
+        },
       ];
 
       for (const model of defaultModels) {

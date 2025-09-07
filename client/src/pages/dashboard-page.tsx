@@ -18,6 +18,7 @@ import sermonGeneratorImage from "@assets/generated_images/Sermon_generator_illu
 import ceremoniasManualImage from "@assets/generated_images/Church_ceremony_manual_3852f443.png";
 import mensajesExpositivosImage from "@assets/generated_images/Expository_messages_illustration_24a14fb8.png";
 import comentarioExegeticoImage from "@assets/generated_images/Biblical_commentary_AI_logo_a3d6b754.png";
+import epistolasImage from "@assets/generated_images/Pauline_epistles_AI_illustration_cadd8ce7.png";
 
 interface DashboardData {
   user: {
@@ -307,6 +308,9 @@ export default function DashboardPage() {
                           )}
                           {product.id === 'comentario-exegetico' && (
                             <img src={comentarioExegeticoImage} alt="Comentario Exegético" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'epistolas-pablo' && (
+                            <img src={epistolasImage} alt="Las Epistolas del Apostol Pablo" className="w-full h-full object-cover" />
                           )}
                         </div>
                         <div className="flex-1">
