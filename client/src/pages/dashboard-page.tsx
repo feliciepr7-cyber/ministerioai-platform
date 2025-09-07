@@ -290,7 +290,9 @@ export default function DashboardPage() {
             <CardContent>
               <div className="space-y-3">
                 {dashboardData.availableProducts.map((product) => {
-                  const productAccess = dashboardData.purchasedGpts.find(access => access.modelId === product.id);
+                  // Backend already calculates 'purchased' correctly - just use it directly
+                  // For usage stats when purchased, use first available GPT access data
+                  const productAccess = product.purchased ? dashboardData.purchasedGpts[0] : null;
                   return (
                     <div 
                       key={product.id} 
