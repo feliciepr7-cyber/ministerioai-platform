@@ -79,26 +79,7 @@ export default function DashboardPage() {
     },
     onSuccess: (data) => {
       // Open Custom GPT in new tab
-      try {
-        const newWindow = window.open(data.gptUrl, '_blank', 'noopener,noreferrer');
-        
-        // Only show error if popup definitely failed to open
-        if (!newWindow) {
-          toast({
-            title: "Popup Bloqueado",
-            description: `Por favor permite popups y vuelve a intentar, o abre manualmente: ${data.gptUrl}`,
-            variant: "destructive",
-          });
-          return;
-        }
-      } catch (error) {
-        toast({
-          title: "Error al abrir GPT",
-          description: `Por favor abre manualmente: ${data.gptUrl}`,
-          variant: "destructive",
-        });
-        return;
-      }
+      window.open(data.gptUrl, '_blank', 'noopener,noreferrer');
       
       toast({
         title: "Acceso Concedido",
