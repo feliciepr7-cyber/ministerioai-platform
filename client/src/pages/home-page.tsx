@@ -43,8 +43,7 @@ const GPT_PRODUCTS = [
       "Servicios especiales",
       "Excelencia ministerial"
     ],
-    image: ceremonyImage,
-    popular: true
+    image: ceremonyImage
   },
   {
     id: "mensajes-expositivos",
@@ -83,7 +82,8 @@ const GPT_PRODUCTS = [
       "Contexto histórico y teológico",
       "Aplicaciones pastorales modernas"
     ],
-    image: epistolasImage
+    image: epistolasImage,
+    popular: true
   }
 ];
 
