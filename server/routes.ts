@@ -57,6 +57,13 @@ const GPT_PRODUCTS = {
     gptUrl: "https://chatgpt.com/g/g-68b99cbbad508191954ffe0d3cbf3cc9-comentario-exegetico",
     icon: "fas fa-book",
   },
+  "epistolas-pablo": {
+    name: "Las Epistolas del Apostol Pablo",
+    description: "Estudio profundo de las 13 cartas paulinas: Romanos, 1-2 Corintios, Gálatas, Efesios, Filipenses, Colosenses, 1-2 Tesalonicenses, 1-2 Timoteo, Tito, Filemón. Análisis teológico y aplicación práctica para el ministerio moderno.",
+    price: 20,
+    gptUrl: "https://chatgpt.com/g/g-epistolas-pablo-placeholder", // This will need to be updated with the actual GPT URL
+    icon: "fas fa-scroll",
+  },
 };
 
 // Rate limiting configurations
