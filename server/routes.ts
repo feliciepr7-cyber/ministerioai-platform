@@ -61,7 +61,7 @@ const GPT_PRODUCTS = {
     name: "Las Epistolas del Apostol Pablo",
     description: "Estudio profundo de las 13 cartas paulinas: Romanos, 1-2 Corintios, Gálatas, Efesios, Filipenses, Colosenses, 1-2 Tesalonicenses, 1-2 Timoteo, Tito, Filemón. Análisis teológico y aplicación práctica para el ministerio moderno.",
     price: 20,
-    gptUrl: "https://chatgpt.com/g/g-epistolas-pablo-placeholder", // This will need to be updated with the actual GPT URL
+    gptUrl: "https://chatgpt.com/g/g-68bcdcb9cd5081918d2577d165863496-las-epistolas-del-apostol-pablo",
     icon: "fas fa-scroll",
   },
 };
