@@ -78,16 +78,35 @@ export default function DashboardPage() {
       return await res.json();
     },
     onSuccess: (data) => {
-      // Open Custom GPT in new tab - try multiple methods to avoid popup blockers
+      // Force opening in new browser window, breaking out of any iframe
       try {
-        const newWindow = window.open(data.gptUrl, '_blank', 'noopener,noreferrer');
-        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-          // If popup was blocked, fallback to direct navigation
-          window.location.href = data.gptUrl;
+        // Try to open in parent window if we're in an iframe
+        if (window.parent && window.parent !== window) {
+          window.parent.open(data.gptUrl, '_blank', 'noopener,noreferrer');
+        } else {
+          // Try normal window.open
+          const newWindow = window.open(data.gptUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
+          if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+            // If popup was blocked, try top window
+            if (window.top && window.top !== window) {
+              window.top.location.href = data.gptUrl;
+            } else {
+              window.location.href = data.gptUrl;
+            }
+          }
         }
       } catch (error) {
-        // Fallback to direct navigation
-        window.location.href = data.gptUrl;
+        // Final fallback - try to break out of iframe
+        try {
+          if (window.top && window.top !== window) {
+            window.top.location.href = data.gptUrl;
+          } else {
+            window.location.href = data.gptUrl;
+          }
+        } catch (e) {
+          // Last resort
+          window.location.href = data.gptUrl;
+        }
       }
       
       toast({
