@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Allow: /features
+Allow: /user-guide
+Allow: /auth
+Allow: /privacy-policy
+Allow: /terms-of-service
+Allow: /security
+Allow: /status
+
+Disallow: /dashboard
+Disallow: /support
+Disallow: /checkout
+Disallow: /verify
+Disallow: /api/
+
+Sitemap: https://ministerioai.com/sitemap.xml
+
+# SEO Optimized for Christian Ministry AI Tools
+# Contact: support@ministerioai.com

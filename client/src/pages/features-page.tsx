@@ -1,10 +1,21 @@
 import { Link } from "wouter";
+import { useSEO } from "@/hooks/useSEO";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Check, Shield, Zap, Globe, Heart, BookOpen, Users } from "lucide-react";
 import aiLogo from "@assets/AI_1756923008802.png";
 
 export default function FeaturesPage() {
+  // SEO Configuration for Features Page
+  useSEO({
+    title: "Características y Funcionalidades - Ministerio AI",
+    description: "Descubre las poderosas características de nuestras herramientas de IA para ministerio cristiano. Acceso seguro, de por vida, especializado en español y respaldado teológicamente.",
+    keywords: "características ministerio AI, funcionalidades pastor, herramientas AI cristianas, acceso seguro ministerio, GPT cristiano español",
+    canonical: "/features",
+    ogTitle: "Características Poderosas para el Ministerio - Ministerio AI",
+    ogDescription: "Explora todas las características que hacen de nuestros Custom GPTs las herramientas perfectas para tu ministerio cristiano."
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900">
       {/* Header */}

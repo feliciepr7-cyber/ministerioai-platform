@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/hooks/use-auth";
+import { useSEO } from "@/hooks/useSEO";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
@@ -58,6 +59,19 @@ export default function AuthPage() {
   const [resetToken, setResetToken] = useState("");
   const { user, loginMutation, registerMutation } = useAuth();
   const { toast } = useToast();
+  
+  // SEO Configuration for Auth Page
+  useSEO({
+    title: isLogin ? "Iniciar Sesión - Ministerio AI" : "Crear Cuenta - Ministerio AI",
+    description: isLogin 
+      ? "Accede a tu cuenta de Ministerio AI y utiliza tus herramientas de IA para el ministerio cristiano. Inicia sesión de forma segura."
+      : "Únete a Ministerio AI y accede a herramientas especializadas de IA para pastores y líderes de iglesia. Crea tu cuenta gratuita.",
+    keywords: isLogin 
+      ? "login ministerio AI, iniciar sesión pastor, acceso herramientas AI cristiano" 
+      : "registro ministerio AI, crear cuenta pastor, unirse ministerio AI",
+    canonical: "/auth",
+    ogTitle: isLogin ? "Iniciar Sesión en Ministerio AI" : "Crear Cuenta en Ministerio AI"
+  });
 
   // Password reset mutations
   const forgotPasswordMutation = useMutation({

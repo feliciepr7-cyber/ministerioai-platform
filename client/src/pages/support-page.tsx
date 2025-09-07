@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useSEO } from "@/hooks/useSEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -52,6 +53,15 @@ export default function SupportPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
+  
+  // SEO Configuration for Support Page
+  useSEO({
+    title: "Centro de Soporte - Ministerio AI",
+    description: "Obtén ayuda técnica especializada para tus herramientas de IA ministerial. Crea tickets de soporte, realiza consultas y recibe asistencia profesional las 24 horas.",
+    keywords: "soporte ministerio AI, ayuda técnica pastor, soporte GPT cristiano, asistencia ministerio, tickets soporte",
+    canonical: "/support",
+    noIndex: true // Support should not be indexed by search engines
+  });
 
   // Fetch ticket categories
   const { data: categories = [] } = useQuery({

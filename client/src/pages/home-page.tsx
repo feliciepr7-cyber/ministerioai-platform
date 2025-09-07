@@ -273,7 +273,7 @@ export default function HomePage() {
 
       <main>
         {/* Hero Section */}
-        <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8" role="banner">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6 leading-tight">
               Herramientas Ministeriales{" "}
@@ -282,7 +282,7 @@ export default function HomePage() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
-              Accede a herramientas especializadas de AI diseñadas específicamente para pastores, ministros y líderes de iglesia. 
+              Accede a herramientas especializadas de Inteligencia Artificial diseñadas específicamente para pastores, ministros y líderes de iglesia. 
               Potencia tu ministerio con tecnología avanzada.
             </p>
             <div className="flex justify-center px-4">
@@ -299,9 +299,9 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-muted/30" id="features">
+        <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-muted/30" id="features" role="main" aria-labelledby="features-title">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center text-foreground mb-8 sm:mb-12">¿Por Qué Elegir Nuestra Plataforma?</h2>
+            <h2 id="features-title" className="text-2xl sm:text-3xl font-bold text-center text-foreground mb-8 sm:mb-12">¿Por Qué Elegir Nuestra Plataforma?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
@@ -355,10 +355,10 @@ export default function HomePage() {
         </section>
 
         {/* Products Section */}
-        <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8" id="pricing">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8" id="pricing" role="region" aria-labelledby="products-title">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Herramientas Ministeriales AI</h2>
+              <h2 id="products-title" className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Herramientas Ministeriales AI</h2>
               <p className="text-base sm:text-lg text-muted-foreground px-2">Compra una vez, úsala para siempre. Solo $20 USD cada herramienta</p>
             </div>
             

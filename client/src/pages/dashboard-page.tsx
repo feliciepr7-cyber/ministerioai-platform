@@ -1,6 +1,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { useSEO } from "@/hooks/useSEO";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -51,6 +52,15 @@ export default function DashboardPage() {
   const [, setLocation] = useLocation();
   const [adminEmail, setAdminEmail] = useState("");
   const [adminProductId, setAdminProductId] = useState("");
+  
+  // SEO Configuration for Dashboard Page
+  useSEO({
+    title: "Dashboard - Ministerio AI",
+    description: "Accede a tus herramientas de IA ministerial, gestiona tus compras y utiliza los Custom GPTs para potenciar tu ministerio cristiano.",
+    keywords: "dashboard ministerio AI, panel pastor, herramientas AI cristiano, gestión ministerio, acceso GPT",
+    canonical: "/dashboard",
+    noIndex: true // Dashboard should not be indexed by search engines
+  });
   
   // Check if current user is admin
   const isAdmin = user?.email === "feliciepr7@gmail.com";

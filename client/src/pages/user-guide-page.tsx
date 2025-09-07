@@ -1,10 +1,21 @@
 import { Link } from "wouter";
+import { useSEO } from "@/hooks/useSEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, PlayCircle, BookOpen, Heart, Shield, MessageSquare, ChevronRight } from "lucide-react";
 import aiLogo from "@assets/AI_1756923008802.png";
 
 export default function UserGuidePage() {
+  // SEO Configuration for User Guide Page
+  useSEO({
+    title: "Guía del Usuario - Ministerio AI",
+    description: "Aprende a aprovechar al máximo tus herramientas de IA ministerial. Guía completa desde la compra hasta el uso avanzado de cada Custom GPT para pastores y líderes cristianos.",
+    keywords: "guía usuario ministerio AI, tutorial pastor AI, como usar GPT cristiano, manual herramientas ministerio, instrucciones AI iglesia",
+    canonical: "/user-guide",
+    ogTitle: "Guía Completa del Usuario - Ministerio AI",
+    ogDescription: "Domina tus herramientas ministeriales con nuestra guía paso a paso para pastores y líderes cristianos."
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900">
       {/* Header */}
