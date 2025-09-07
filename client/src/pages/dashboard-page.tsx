@@ -78,8 +78,18 @@ export default function DashboardPage() {
       return await res.json();
     },
     onSuccess: (data) => {
-      // Open Custom GPT in new tab
-      window.open(data.gptUrl, '_blank');
+      // Open Custom GPT in new tab - try multiple methods to avoid popup blockers
+      try {
+        const newWindow = window.open(data.gptUrl, '_blank', 'noopener,noreferrer');
+        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+          // If popup was blocked, fallback to direct navigation
+          window.location.href = data.gptUrl;
+        }
+      } catch (error) {
+        // Fallback to direct navigation
+        window.location.href = data.gptUrl;
+      }
+      
       toast({
         title: "Acceso Concedido",
         description: `Abriendo ${data.productName}. Uso total: ${data.totalUsage}`,
