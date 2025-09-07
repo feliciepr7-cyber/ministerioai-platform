@@ -587,6 +587,8 @@ export default function DashboardPage() {
                     <option value="generador-sermones">Generador de Sermones</option>
                     <option value="manual-ceremonias">Manual de Ceremonias del Ministro</option>
                     <option value="mensajes-expositivos">Mensajes Expositivos</option>
+                    <option value="comentario-exegetico">Comentario Exegético</option>
+                    <option value="epistolas-pablo">Las Epistolas del Apostol Pablo</option>
                   </select>
                 </div>
 
