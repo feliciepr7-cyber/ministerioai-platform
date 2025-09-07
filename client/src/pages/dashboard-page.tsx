@@ -78,13 +78,12 @@ export default function DashboardPage() {
       return await res.json();
     },
     onSuccess: (data) => {
-      // Open Custom GPT in new tab only - never redirect current page
+      // Open Custom GPT in new tab
       try {
-        // Try to open in new tab/window
         const newWindow = window.open(data.gptUrl, '_blank', 'noopener,noreferrer');
         
-        // If popup blocked, show message instead of redirecting
-        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+        // Only show error if popup definitely failed to open
+        if (!newWindow) {
           toast({
             title: "Popup Bloqueado",
             description: `Por favor permite popups y vuelve a intentar, o abre manualmente: ${data.gptUrl}`,
@@ -93,7 +92,6 @@ export default function DashboardPage() {
           return;
         }
       } catch (error) {
-        // If error, show manual link instead of redirecting
         toast({
           title: "Error al abrir GPT",
           description: `Por favor abre manualmente: ${data.gptUrl}`,
