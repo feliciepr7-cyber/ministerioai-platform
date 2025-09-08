@@ -415,7 +415,7 @@ export default function AuthPage() {
                   
                   <Button
                     type="button"
-                    className="w-full mt-4 bg-[#4285f4] hover:bg-[#3367d6] text-white border-0 h-12 rounded-lg font-medium"
+                    className="w-full mt-4 bg-[#3c4043] hover:bg-[#2d2e30] text-white border-0 h-12 rounded-lg font-medium"
                     onClick={() => window.location.href = '/auth/google'}
                     data-testid="button-google-signin"
                   >
@@ -533,7 +533,7 @@ export default function AuthPage() {
                   
                   <Button
                     type="button"
-                    className="w-full mt-4 bg-[#4285f4] hover:bg-[#3367d6] text-white border-0 h-12 rounded-lg font-medium"
+                    className="w-full mt-4 bg-[#3c4043] hover:bg-[#2d2e30] text-white border-0 h-12 rounded-lg font-medium"
                     onClick={() => window.location.href = '/auth/google'}
                     data-testid="button-google-signup"
                   >
