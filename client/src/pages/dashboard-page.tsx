@@ -19,6 +19,8 @@ import ceremoniasManualImage from "@assets/generated_images/Church_ceremony_manu
 import mensajesExpositivosImage from "@assets/generated_images/Expository_messages_illustration_24a14fb8.png";
 import comentarioExegeticoImage from "@assets/generated_images/Biblical_commentary_AI_logo_a3d6b754.png";
 import epistolasImage from "@assets/generated_images/Pauline_epistles_AI_illustration_cadd8ce7.png";
+import apocalipsisImage from "@assets/generated_images/Apocalypse_Bible_study_illustration_14931542.png";
+import cantaresImage from "@assets/generated_images/Song_of_Solomon_study_illustration_6f23a9c5.png";
 
 interface DashboardData {
   user: {
@@ -315,6 +317,12 @@ export default function DashboardPage() {
                           {product.id === 'epistolas-pablo' && (
                             <img src={epistolasImage} alt="Las Epistolas del Apostol Pablo" className="w-full h-full object-cover" />
                           )}
+                          {product.id === 'apocalipsis' && (
+                            <img src={apocalipsisImage} alt="Estudio El Libro de Apocalipsis" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'cantar-cantares' && (
+                            <img src={cantaresImage} alt="Estudio de Cantar de los Cantares" className="w-full h-full object-cover" />
+                          )}
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-foreground">{product.name}</p>
@@ -592,6 +600,8 @@ export default function DashboardPage() {
                     <option value="mensajes-expositivos">Mensajes Expositivos</option>
                     <option value="comentario-exegetico">Comentario Exegético</option>
                     <option value="epistolas-pablo">Las Epistolas del Apostol Pablo</option>
+                    <option value="apocalipsis">Estudio El Libro de Apocalipsis</option>
+                    <option value="cantar-cantares">Estudio de Cantar de los Cantares</option>
                   </select>
                 </div>
 
