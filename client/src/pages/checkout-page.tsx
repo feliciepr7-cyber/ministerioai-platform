@@ -34,6 +34,26 @@ const GPT_PRODUCTS = {
     price: 20,
     features: ["Acceso de por vida al Custom GPT", "Explicación clara de la Escritura", "Aplicación práctica", "Predicación expositiva"]
   },
+  "comentario-exegetico": {
+    name: "Comentario Exegético",
+    price: 20,
+    features: ["Acceso de por vida al Custom GPT", "Análisis exegético detallado", "Contexto histórico y cultural", "Interpretación teológica precisa"]
+  },
+  "epistolas-pablo": {
+    name: "Las Epistolas del Apostol Pablo",
+    price: 20,
+    features: ["Acceso de por vida al Custom GPT", "Análisis de las 13 epistolas paulinas", "Contexto histórico y teológico", "Aplicaciones pastorales modernas"]
+  },
+  "apocalipsis": {
+    name: "Estudio El Libro de Apocalipsis",
+    price: 25,
+    features: ["Acceso de por vida al Custom GPT", "Análisis de las siete iglesias", "Simbolismo apocalíptico explicado", "Promesas de esperanza para la iglesia"]
+  },
+  "cantar-cantares": {
+    name: "Estudio de Cantar de los Cantares", 
+    price: 22,
+    features: ["Acceso de por vida al Custom GPT", "Múltiples interpretaciones explicadas", "Simbolismo y contexto cultural", "Aplicación para matrimonio e intimidad con Dios"]
+  },
 };
 
 interface CheckoutFormProps {
