@@ -14,6 +14,8 @@ import ceremonyImage from "@assets/generated_images/Church_ceremony_manual_3852f
 import expositoryImage from "@assets/generated_images/Expository_messages_illustration_24a14fb8.png";
 import comentarioImage from "@assets/generated_images/Biblical_commentary_AI_logo_a3d6b754.png";
 import epistolasImage from "@assets/generated_images/Pauline_epistles_AI_illustration_cadd8ce7.png";
+import apocalipsisImage from "@assets/generated_images/Apocalypse_Bible_study_illustration_14931542.png";
+import cantaresImage from "@assets/generated_images/Song_of_Solomon_study_illustration_6f23a9c5.png";
 import securePaymentIcon from "@assets/generated_images/Secure_payment_shield_icon_ba166b10.png";
 import instantAccessIcon from "@assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png";
 import supportIcon from "@assets/generated_images/24/7_support_headset_icon_efb44ef5.png";
@@ -84,6 +86,32 @@ const GPT_PRODUCTS = [
     ],
     image: epistolasImage,
     popular: true
+  },
+  {
+    id: "apocalipsis",
+    name: "Estudio El Libro de Apocalipsis",
+    price: 25,
+    description: "Desentraña los misterios del libro más profético y simbólico de la Biblia",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Análisis de las siete iglesias",
+      "Simbolismo apocalíptico explicado",
+      "Promesas de esperanza para la iglesia"
+    ],
+    image: apocalipsisImage
+  },
+  {
+    id: "cantar-cantares",
+    name: "Estudio de Cantar de los Cantares", 
+    price: 22,
+    description: "Explora la belleza del amor divino a través del libro más poético de la Biblia",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Múltiples interpretaciones explicadas",
+      "Simbolismo y contexto cultural",
+      "Aplicación para matrimonio e intimidad con Dios"
+    ],
+    image: cantaresImage
   }
 ];
 
