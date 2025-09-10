@@ -354,6 +354,149 @@ export default function UserGuidePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Las Epistolas del Apostol Pablo */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-chart-3" />
+                Las Epistolas del Apostol Pablo
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Sumérgete en el corazón de la teología cristiana con un estudio exhaustivo de las 13 cartas paulinas.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Epístolas cubiertas:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground grid grid-cols-2 gap-1">
+                    <li>• Romanos</li>
+                    <li>• 1 Corintios</li>
+                    <li>• 2 Corintios</li>
+                    <li>• Gálatas</li>
+                    <li>• Efesios</li>
+                    <li>• Filipenses</li>
+                    <li>• Colosenses</li>
+                    <li>• 1 Tesalonicenses</li>
+                    <li>• 2 Tesalonicenses</li>
+                    <li>• 1 Timoteo</li>
+                    <li>• 2 Timoteo</li>
+                    <li>• Tito</li>
+                    <li>• Filemón</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Ejemplos de consulta:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Estudio temático:</strong></p>
+                    <p className="italic mb-3">"Explícame la doctrina de la justificación por fe en Romanos y Gálatas"</p>
+                    
+                    <p className="mb-2"><strong>Análisis de pasaje:</strong></p>
+                    <p className="italic">"Ayúdame a entender Efesios 2:8-10 y su contexto en toda la carta"</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Estudio El Libro de Apocalipsis */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-orange-500" />
+                Estudio El Libro de Apocalipsis
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Desentraña los misterios del libro más profético y simbólico de la Biblia con claridad y esperanza.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Áreas de estudio:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Las siete iglesias de Asia (Apocalipsis 2-3)</li>
+                    <li>• Los siete sellos, trompetas y copas</li>
+                    <li>• Simbolismo apocalíptico y su interpretación</li>
+                    <li>• La gran tribulación y eventos finales</li>
+                    <li>• La Nueva Jerusalén y el reino eterno</li>
+                    <li>• Aplicaciones de esperanza para hoy</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Enfoques de interpretación:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Simbolismo:</strong> "¿Qué representa la bestia de Apocalipsis 13?"</p>
+                    <p className="mb-2"><strong>Cronología:</strong> "Explica la secuencia de eventos en los últimos tiempos"</p>
+                    <p><strong>Aplicación:</strong> "¿Cómo consolará Apocalipsis 21 a alguien que sufre?"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Lo que recibirás:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Explicación clara de símbolos complejos</li>
+                    <li>• Contexto histórico del primer siglo</li>
+                    <li>• Múltiples perspectivas interpretativas</li>
+                    <li>• Aplicaciones prácticas para la predicación</li>
+                    <li>• Mensajes de esperanza y victoria final</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Estudio de Cantar de los Cantares */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Heart className="w-5 h-5 mr-2 text-pink-500" />
+                Estudio de Cantar de los Cantares
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Explora la belleza del amor divino a través del libro más poético de la Biblia.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Niveles de interpretación:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• <strong>Literal:</strong> Celebración del amor conyugal</li>
+                    <li>• <strong>Alegórica:</strong> Relación Cristo-Iglesia</li>
+                    <li>• <strong>Espiritual:</strong> Intimidad del alma con Dios</li>
+                    <li>• <strong>Pastoral:</strong> Enseñanza sobre matrimonio cristiano</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Temas para explorar:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Matrimonio:</strong> "¿Cómo usar Cantares en consejos prematrimoniales?"</p>
+                    <p className="mb-2"><strong>Espiritualidad:</strong> "Explica la búsqueda del amado en el capítulo 3"</p>
+                    <p><strong>Simbolismo:</strong> "¿Qué representa el jardín cerrado?"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Aplicaciones ministeriales:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Sermones sobre el matrimonio cristiano</li>
+                    <li>• Enseñanza sobre la intimidad con Dios</li>
+                    <li>• Cursos prematrimoniales y matrimoniales</li>
+                    <li>• Estudios sobre el amor divino</li>
+                    <li>• Reflexiones sobre poesía bíblica</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Tips and Best Practices */}
