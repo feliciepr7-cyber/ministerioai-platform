@@ -24,7 +24,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-06-20",
+  apiVersion: "2023-10-16",
 });
 
 // Pricing configuration for one-time purchases
@@ -214,6 +214,127 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error("Admin grant access error:", error);
       res.status(500).json({ message: "Error granting access: " + error.message });
+    }
+  });
+
+  // TEMPORARY: Grant all access to admin user (development only)
+  app.post("/api/dev/grant-all-access", async (req, res) => {
+    if (process.env.NODE_ENV !== "development") {
+      return res.status(403).json({ message: "Development only" });
+    }
+
+    const email = "feliciepr7@gmail.com";
+    const grantedProducts = [];
+
+    try {
+      // Check if user exists, if not create them
+      let user = await storage.getUserByEmail(email);
+      if (!user) {
+        // Create user with minimal info
+        user = await storage.createUser({
+          email: email,
+          username: email.split('@')[0],
+          name: email.split('@')[0],
+          password: randomUUID(),
+        });
+      }
+
+      const gptModels = await storage.getGptModels();
+
+      // Grant access to all products
+      for (const [productId, product] of Object.entries(GPT_PRODUCTS)) {
+        const gptModel = gptModels.find(model => model.name === product.name);
+        
+        if (!gptModel) {
+          console.log(`GPT model not found for ${product.name}`);
+          continue;
+        }
+
+        // Check if access already exists
+        const existingAccess = await storage.getGptAccess(user.id, gptModel.id);
+        if (existingAccess) {
+          console.log(`User already has access to ${product.name}`);
+          continue;
+        }
+
+        // Grant access
+        const accessToken = randomUUID();
+        await storage.createGptAccess({
+          userId: user.id,
+          modelId: gptModel.id,
+          accessToken: accessToken,
+          queriesUsed: 0,
+        });
+
+        // Create a record of this admin grant
+        await storage.createPayment({
+          userId: user.id,
+          subscriptionId: null,
+          stripePaymentId: `dev-grant-${randomUUID()}`,
+          amount: "0.00",
+          currency: "usd",
+          status: "succeeded",
+          description: `Development grant: ${product.name} for ${email}`,
+        });
+
+        grantedProducts.push(product.name);
+      }
+
+      res.json({ 
+        success: true, 
+        message: `Access granted to all GPTs for ${email}`,
+        grantedProducts,
+        totalGranted: grantedProducts.length
+      });
+    } catch (error: any) {
+      console.error("Development grant access error:", error);
+      res.status(500).json({ message: "Error granting access: " + error.message });
+    }
+  });
+
+  // TEMPORARY: Add missing GPT models to database (development only)
+  app.post("/api/dev/add-missing-models", async (req, res) => {
+    if (process.env.NODE_ENV !== "development") {
+      return res.status(403).json({ message: "Development only" });
+    }
+
+    try {
+      const missingModels = [
+        {
+          name: "Estudio El Libro de Apocalipsis",
+          description: "Desentraña los misterios del libro más profético y simbólico de la Biblia. Explora las visiones de Juan, comprende el simbolismo apocalíptico y descubre las promesas de esperanza para la iglesia. Incluye análisis de las siete iglesias, los sellos, las trompetas y la Nueva Jerusalén con aplicación práctica para el cristiano moderno.",
+          icon: "fas fa-eye",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "Estudio de Cantar de los Cantares",
+          description: "Explora la belleza del amor divino a través del libro más poético de la Biblia. Descubre las múltiples interpretaciones: amor conyugal, relación Cristo-Iglesia y búsqueda espiritual del alma. Perfecto para enseñanza sobre matrimonio, espiritualidad y la intimidad con Dios. Incluye simbolismo, contexto cultural y aplicación ministerial.",
+          icon: "fas fa-heart",
+          requiredPlan: "purchase",
+        },
+      ];
+
+      const createdModels = [];
+      const existingModels = await storage.getGptModels();
+
+      for (const model of missingModels) {
+        // Check if model already exists
+        const exists = existingModels.find(existing => existing.name === model.name);
+        if (!exists) {
+          const created = await storage.createGptModel(model);
+          createdModels.push(created);
+        }
+      }
+
+      res.json({ 
+        success: true, 
+        message: "Missing models added successfully",
+        createdModels: createdModels.length,
+        totalModels: existingModels.length + createdModels.length
+      });
+    } catch (error: any) {
+      console.error("Error adding missing models:", error);
+      res.status(500).json({ message: "Error adding models: " + error.message });
     }
   });
 
@@ -795,6 +916,18 @@ async function initializeGptModels() {
           name: "Las Epistolas del Apostol Pablo",
           description: "Estudio profundo de las 13 cartas paulinas: Romanos, 1-2 Corintios, Gálatas, Efesios, Filipenses, Colosenses, 1-2 Tesalonicenses, 1-2 Timoteo, Tito, Filemón. Análisis teológico y aplicación práctica para el ministerio moderno.",
           icon: "fas fa-scroll",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "Estudio El Libro de Apocalipsis",
+          description: "Desentraña los misterios del libro más profético y simbólico de la Biblia. Explora las visiones de Juan, comprende el simbolismo apocalíptico y descubre las promesas de esperanza para la iglesia. Incluye análisis de las siete iglesias, los sellos, las trompetas y la Nueva Jerusalén con aplicación práctica para el cristiano moderno.",
+          icon: "fas fa-eye",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "Estudio de Cantar de los Cantares",
+          description: "Explora la belleza del amor divino a través del libro más poético de la Biblia. Descubre las múltiples interpretaciones: amor conyugal, relación Cristo-Iglesia y búsqueda espiritual del alma. Perfecto para enseñanza sobre matrimonio, espiritualidad y la intimidad con Dios. Incluye simbolismo, contexto cultural y aplicación ministerial.",
+          icon: "fas fa-heart",
           requiredPlan: "purchase",
         },
       ];
