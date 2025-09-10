@@ -59,10 +59,24 @@ const GPT_PRODUCTS = {
   },
   "epistolas-pablo": {
     name: "Las Epistolas del Apostol Pablo",
-    description: "Estudio profundo de las 13 cartas paulinas: Romanos, 1-2 Corintios, Gálatas, Efesios, Filipenses, Colosenses, 1-2 Tesalonicenses, 1-2 Timoteo, Tito, Filemón. Análisis teológico y aplicación práctica para el ministerio moderno.",
+    description: "Sumérgete en el corazón de la teología cristiana con un estudio exhaustivo de las 13 cartas paulinas. Desde Romanos hasta Filemón, descubre las profundas verdades doctrinales, contextos históricos y aplicaciones pastorales que transformarán tu ministerio. Perfecto para sermones, estudios bíblicos y crecimiento espiritual personal.",
     price: 20,
     gptUrl: "https://chatgpt.com/g/g-68bcdcb9cd5081918d2577d165863496-las-epistolas-del-apostol-pablo",
     icon: "fas fa-scroll",
+  },
+  "apocalipsis": {
+    name: "Estudio El Libro de Apocalipsis",
+    description: "Desentraña los misterios del libro más profético y simbólico de la Biblia. Explora las visiones de Juan, comprende el simbolismo apocalíptico y descubre las promesas de esperanza para la iglesia. Incluye análisis de las siete iglesias, los sellos, las trompetas y la Nueva Jerusalén con aplicación práctica para el cristiano moderno.",
+    price: 25,
+    gptUrl: "https://chatgpt.com/g/g-68bf7f2ab4748191849d6f2402986de2-estudio-el-libro-de-apocalipsis",
+    icon: "fas fa-eye",
+  },
+  "cantar-cantares": {
+    name: "Estudio de Cantar de los Cantares",
+    description: "Explora la belleza del amor divino a través del libro más poético de la Biblia. Descubre las múltiples interpretaciones: amor conyugal, relación Cristo-Iglesia y búsqueda espiritual del alma. Perfecto para enseñanza sobre matrimonio, espiritualidad y la intimidad con Dios. Incluye simbolismo, contexto cultural y aplicación ministerial.",
+    price: 22,
+    gptUrl: "https://chatgpt.com/g/g-68bf83e2555481919630825ea98365e8-estudio-de-cantar-de-los-cantares",
+    icon: "fas fa-heart",
   },
 };
 
