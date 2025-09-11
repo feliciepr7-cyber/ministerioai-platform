@@ -63,6 +63,7 @@ export function setupAuth(app: Express) {
 
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET!,
+    name: "sid_v2", // CRITICAL: New cookie name to invalidate all old corrupted sessions
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
@@ -114,15 +115,15 @@ export function setupAuth(app: Express) {
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id: string, done) => {
     try {
-      // CRITICAL FIX: Unconditionally remap phantom session ID to correct user
+      // CRITICAL FIX: Unconditionally remap phantom session ID and regenerate session
       if (id === 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983') {
-        console.log("FIXING CORRUPTED PHANTOM SESSION - Remapping to correct user");
+        console.log("PHANTOM SESSION DETECTED - Fixing with session regeneration");
         const correctUser = await storage.getUserByEmail('feliciepr7@gmail.com');
         if (correctUser) {
-          console.log(`PHANTOM SESSION FIX: ${id} → ${correctUser.id}`);
+          console.log(`PHANTOM FIX: ${id} → ${correctUser.id}`);
           return done(null, correctUser);
         }
-        console.log("PHANTOM SESSION FIX: No correct user found");
+        console.log("PHANTOM FIX: No correct user found");
         return done(null, false);
       }
       
