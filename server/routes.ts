@@ -127,6 +127,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize GPT models if they don't exist
   await initializeGptModels();
 
+  // VERSION: Check deployment version  
+  app.get("/api/_version", (req, res) => {
+    res.json({
+      buildId: "BUILD_20250911_2145",
+      version: "1.0.0",
+      timestamp: new Date().toISOString(),
+      nodeEnv: process.env.NODE_ENV,
+    });
+  });
+
   // DEBUG: Temporary session debugging endpoint
   app.get("/api/_debug/session", (req, res) => {
     res.json({
