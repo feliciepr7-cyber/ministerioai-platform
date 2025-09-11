@@ -79,6 +79,21 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // CRITICAL: Session rewrite middleware to permanently fix phantom session
+  app.use((req, res, next) => {
+    const phantomId = 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983';
+    if (req.isAuthenticated() && 
+        req.session.passport?.user === phantomId && 
+        req.user?.id !== phantomId) {
+      console.log(`REWRITING SESSION: ${phantomId} → ${req.user.id}`);
+      req.session.passport.user = req.user.id;
+      req.session.save((err) => {
+        if (err) console.error('Session save error:', err);
+      });
+    }
+    next();
+  });
+
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       // Try to find user by username first, then by email
@@ -99,19 +114,19 @@ export function setupAuth(app: Express) {
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id: string, done) => {
     try {
-      const user = await storage.getUser(id);
-      
-      // CRITICAL FIX: If user ID doesn't exist but email is feliciepr7@gmail.com,
-      // find the correct user by email and fix the session
-      if (!user && id === 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983') {
-        console.log("FIXING CORRUPTED SESSION - Looking for correct user by email");
+      // CRITICAL FIX: Unconditionally remap phantom session ID to correct user
+      if (id === 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983') {
+        console.log("FIXING CORRUPTED PHANTOM SESSION - Remapping to correct user");
         const correctUser = await storage.getUserByEmail('feliciepr7@gmail.com');
         if (correctUser) {
-          console.log(`FIXED: Redirecting from ${id} to ${correctUser.id}`);
+          console.log(`PHANTOM SESSION FIX: ${id} → ${correctUser.id}`);
           return done(null, correctUser);
         }
+        console.log("PHANTOM SESSION FIX: No correct user found");
+        return done(null, false);
       }
       
+      const user = await storage.getUser(id);
       done(null, user || false);
     } catch (error) {
       console.error("Error deserializing user:", error);
