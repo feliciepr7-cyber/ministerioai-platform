@@ -416,7 +416,14 @@ export default function AuthPage() {
                   <Button
                     type="button"
                     className="w-full mt-4 bg-[#3c4043] hover:bg-[#2d2e30] text-white border-0 h-12 rounded-lg font-medium"
-                    onClick={() => window.location.href = '/auth/google'}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      console.log('Google button clicked');
+                      console.log('About to redirect to:', '/auth/google');
+                      setTimeout(() => {
+                        window.open('/auth/google', '_self');
+                      }, 100);
+                    }}
                     data-testid="button-google-signin"
                   >
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
