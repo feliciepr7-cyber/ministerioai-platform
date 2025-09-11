@@ -292,8 +292,6 @@ export default function DashboardPage() {
             <CardContent>
               <div className="space-y-3">
                 {dashboardData.availableProducts.map((product) => {
-                  // DEBUG: Log what we're receiving
-                  console.log(`FRONTEND DEBUG - ${product.name}: purchased=${product.purchased}`);
                   
                   // Backend already calculates 'purchased' correctly - just use it directly
                   // For usage stats when purchased, use first available GPT access data

@@ -720,19 +720,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get available products - use Set for faster lookup and ignore isActive filter
       const userModelIds = new Set(gptAccess.map(access => access.modelId));
       
-      // DEBUG: Log authentication status
-      console.log("=== DASHBOARD DEBUG ===");
-      console.log("User:", user.email);
-      console.log("Authenticated:", !!user);
-      console.log("User modelIds:", Array.from(userModelIds));
-      console.log("gptModels count:", gptModels.length);
-      console.log("gptModels names:", gptModels.map(m => m.name));
-      
       const availableProducts = Object.entries(GPT_PRODUCTS).map(([id, product]) => {
         const dbModel = gptModels.find(model => model.name === product.name);
         const purchased = dbModel ? userModelIds.has(dbModel.id) : false;
-        
-        console.log(`${product.name}: dbModel=${!!dbModel}, purchased=${purchased}`);
         
         return {
           id,
@@ -744,7 +734,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         };
       });
       
-      console.log("=== END DEBUG ===");
 
       res.json({
         user: {
