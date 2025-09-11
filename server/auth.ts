@@ -95,9 +95,11 @@ export function setupAuth(app: Express) {
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     // Determine the correct callback URL based on environment
     const getCallbackURL = () => {
+      // Always use the custom domain for Replit deployments
       if (process.env.REPLIT_DEV_DOMAIN) {
-        return `https://${process.env.REPLIT_DEV_DOMAIN}/auth/google/callback`;
+        return "https://ministerioai.com/auth/google/callback";
       }
+      
       return "http://localhost:5000/auth/google/callback";
     };
 
