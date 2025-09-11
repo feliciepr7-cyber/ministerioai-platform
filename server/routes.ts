@@ -676,11 +676,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const gptAccess = await storage.getGptAccessByUserId(user.id);
       const gptModels = await storage.getGptModels();
 
-      // Get available products
+      // Get available products - use Set for faster lookup and ignore isActive filter
+      const userModelIds = new Set(gptAccess.map(access => access.modelId));
+      
       const availableProducts = Object.entries(GPT_PRODUCTS).map(([id, product]) => {
-        // Find the corresponding database model
+        // Find the corresponding database model from ALL models (not just active ones)
         const dbModel = gptModels.find(model => model.name === product.name);
-        const purchased = dbModel ? gptAccess.some(access => access.modelId === dbModel.id) : false;
+        const purchased = dbModel ? userModelIds.has(dbModel.id) : false;
         
         return {
           id,
