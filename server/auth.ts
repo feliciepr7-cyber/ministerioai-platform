@@ -1,6 +1,5 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Express } from "express";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
@@ -91,70 +90,6 @@ export function setupAuth(app: Express) {
     }),
   );
 
-  // Google OAuth Strategy
-  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    // Determine the correct callback URL based on environment
-    const getCallbackURL = () => {
-      // Always use the custom domain for Replit deployments
-      if (process.env.REPLIT_DEV_DOMAIN) {
-        return "https://ministerioai.com/auth/google/callback";
-      }
-      
-      return "http://localhost:5000/auth/google/callback";
-    };
-
-    passport.use(
-      new GoogleStrategy(
-        {
-          clientID: process.env.GOOGLE_CLIENT_ID,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: getCallbackURL(),
-        },
-        async (accessToken, refreshToken, profile, done) => {
-          try {
-            // Check if user already exists with this Google ID
-            let user = await storage.getUserByGoogleId(profile.id);
-            
-            if (user) {
-              // User exists, log them in
-              return done(null, user);
-            }
-            
-            // Check if user exists with same email
-            const email = profile.emails?.[0]?.value;
-            if (email) {
-              user = await storage.getUserByEmail(email);
-              
-              if (user) {
-                // Link Google account to existing user
-                await storage.updateUser(user.id, {
-                  googleId: profile.id,
-                  profileImageUrl: profile.photos?.[0]?.value,
-                });
-                return done(null, user);
-              }
-            }
-            
-            // Create new user
-            if (email) {
-              const newUser = await storage.createUser({
-                email: email,
-                username: email.split('@')[0] + '_' + profile.id.slice(-4),
-                name: profile.displayName || 'Google User',
-                googleId: profile.id,
-                profileImageUrl: profile.photos?.[0]?.value,
-              });
-              return done(null, newUser);
-            }
-            
-            return done(new Error("No email provided by Google"), false);
-          } catch (error) {
-            return done(error, false);
-          }
-        }
-      )
-    );
-  }
 
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id: string, done) => {
@@ -199,20 +134,6 @@ export function setupAuth(app: Express) {
     });
   });
 
-  // Google OAuth Routes
-  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    app.get("/auth/google",
-      passport.authenticate("google", { scope: ["profile", "email"] })
-    );
-
-    app.get("/auth/google/callback",
-      passport.authenticate("google", { failureRedirect: "/auth" }),
-      (req, res) => {
-        // Successful authentication, redirect to dashboard
-        res.redirect("/dashboard");
-      }
-    );
-  }
 
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
