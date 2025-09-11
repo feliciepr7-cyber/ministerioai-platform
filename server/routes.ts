@@ -552,17 +552,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // GPT Authentication verification endpoint for Custom GPTs
   // GPT Access verification with special rate limiting
   app.post("/api/verify-gpt-access", gptVerificationLimiter, async (req, res) => {
-    const { email, productId } = req.body;
+    const { email, accessCode, productId } = req.body;
     
-    if (!email || !productId) {
+    // Check that we have either email or accessCode, and productId
+    if ((!email && !accessCode) || !productId) {
       return res.status(400).json({ 
-        message: "Email and productId are required" 
+        message: "Either email or accessCode is required, along with productId" 
       });
     }
 
     try {
-      // Find user by email
-      const user = await storage.getUserByEmail(email);
+      let user;
+      
+      // Find user by email or access code
+      if (email) {
+        user = await storage.getUserByEmail(email);
+      } else if (accessCode) {
+        user = await storage.getUserByAccessCode(accessCode);
+      }
+      
       if (!user) {
         return res.status(403).json({ 
           message: "User not found or access not granted" 
