@@ -25,11 +25,7 @@ async function comparePasswords(supplied: string, stored: string | null) {
   if (!stored) return false;
   // Handle different password hash formats
   if (!stored.includes('.')) {
-    // If it's not our custom format, it might be bcrypt or invalid
-    // For admin bypass, allow a specific dummy password
-    if (stored === '$2b$10$n9CM0OXKdJNQoQn7uWxGF.ScYBm5L6y7SbhOoIlY8TLJPzF6R/X.W' && supplied === 'admin123') {
-      return true;
-    }
+    // Invalid format - no hardcoded bypasses for security
     return false;
   }
   
@@ -62,8 +58,8 @@ async function comparePasswords(supplied: string, stored: string | null) {
 }
 
 export function setupAuth(app: Express) {
-  // CRITICAL: Trust proxy BEFORE session middleware
-  app.set("trust proxy", 1);
+  // CRITICAL: Trust ALL proxies for Replit deployment
+  app.set("trust proxy", true);
 
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET!,

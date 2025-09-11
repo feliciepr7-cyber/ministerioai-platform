@@ -127,6 +127,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize GPT models if they don't exist
   await initializeGptModels();
 
+  // DEBUG: Temporary session debugging endpoint
+  app.get("/api/_debug/session", (req, res) => {
+    res.json({
+      isAuth: req.isAuthenticated(),
+      user: req.user?.email,
+      sessionID: req.sessionID,
+      secure: req.secure,
+      xForwardedProto: req.get('x-forwarded-proto'),
+      hasCookies: !!req.headers.cookie,
+      cookieHeader: req.headers.cookie?.substring(0, 100) + '...',
+      nodeEnv: process.env.NODE_ENV,
+    });
+  });
+
   // Get available GPT models
   app.get("/api/gpt-models", async (req, res) => {
     try {
