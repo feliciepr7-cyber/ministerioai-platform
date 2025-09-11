@@ -11,6 +11,11 @@ if (process.env.TESTING_VITE_STRIPE_PUBLIC_KEY) {
 }
 
 const app = express();
+
+// CRITICAL: Trust proxy for production deployment (cookies/sessions) 
+// NOTE: Also configured in auth.ts but this ensures it's set early
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
