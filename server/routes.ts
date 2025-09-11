@@ -163,9 +163,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(500).json({ error: err.message });
         }
         res.clearCookie('connect.sid');
+        res.clearCookie('sid_v2');
         res.json({ message: "Session cleared successfully" });
       });
     });
+  });
+
+  // CRITICAL FIX: Clear ALL active sessions from database
+  app.post("/api/_debug/clear-all-sessions", async (req, res) => {
+    try {
+      // Clear all sessions from the PostgreSQL session store
+      await storage.clearAllSessions();
+      
+      res.json({ 
+        success: true,
+        message: "All active sessions have been cleared. All users must login again." 
+      });
+    } catch (error: any) {
+      console.error("Error clearing all sessions:", error);
+      res.status(500).json({ 
+        error: "Failed to clear sessions",
+        message: error.message 
+      });
+    }
   });
 
   // Get available GPT models

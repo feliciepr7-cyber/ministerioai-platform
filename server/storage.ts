@@ -92,6 +92,9 @@ export interface IStorage {
   getTicketAttachments(ticketId: string): Promise<TicketAttachment[]>;
   createTicketAttachment(attachment: InsertTicketAttachment): Promise<TicketAttachment>;
 
+  // Session management
+  clearAllSessions(): Promise<void>;
+
   sessionStore: session.Store;
 }
 
@@ -421,6 +424,19 @@ export class DatabaseStorage implements IStorage {
   async createTicketAttachment(attachment: InsertTicketAttachment): Promise<TicketAttachment> {
     const [newAttachment] = await db.insert(ticketAttachments).values(attachment).returning();
     return newAttachment;
+  }
+
+  // Session management - Clear ALL active sessions
+  async clearAllSessions(): Promise<void> {
+    try {
+      // Clear all sessions from the PostgreSQL session table
+      // This will force all users to login again
+      await pool.query('DELETE FROM session');
+      console.log("✅ All sessions cleared from database");
+    } catch (error: any) {
+      console.error("❌ Error clearing sessions:", error);
+      throw error;
+    }
   }
 }
 
