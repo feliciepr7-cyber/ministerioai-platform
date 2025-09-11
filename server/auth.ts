@@ -100,6 +100,18 @@ export function setupAuth(app: Express) {
   passport.deserializeUser(async (id: string, done) => {
     try {
       const user = await storage.getUser(id);
+      
+      // CRITICAL FIX: If user ID doesn't exist but email is feliciepr7@gmail.com,
+      // find the correct user by email and fix the session
+      if (!user && id === 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983') {
+        console.log("FIXING CORRUPTED SESSION - Looking for correct user by email");
+        const correctUser = await storage.getUserByEmail('feliciepr7@gmail.com');
+        if (correctUser) {
+          console.log(`FIXED: Redirecting from ${id} to ${correctUser.id}`);
+          return done(null, correctUser);
+        }
+      }
+      
       done(null, user || false);
     } catch (error) {
       console.error("Error deserializing user:", error);
