@@ -132,12 +132,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({
       isAuth: req.isAuthenticated(),
       user: req.user?.email,
+      userId: req.user?.id,
       sessionID: req.sessionID,
       secure: req.secure,
       xForwardedProto: req.get('x-forwarded-proto'),
       hasCookies: !!req.headers.cookie,
       cookieHeader: req.headers.cookie?.substring(0, 100) + '...',
       nodeEnv: process.env.NODE_ENV,
+    });
+  });
+
+  // TEMPORARY FIX: Force logout to clear corrupted session
+  app.post("/api/_debug/force-logout", (req, res) => {
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+        res.clearCookie('connect.sid');
+        res.json({ message: "Session cleared successfully" });
+      });
     });
   });
 
