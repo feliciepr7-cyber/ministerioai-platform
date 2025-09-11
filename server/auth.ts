@@ -62,11 +62,15 @@ async function comparePasswords(supplied: string, stored: string | null) {
 }
 
 export function setupAuth(app: Express) {
+  // CRITICAL: Trust proxy BEFORE session middleware
+  app.set("trust proxy", 1);
+
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
+    proxy: true, // CRITICAL: Required for production behind proxy
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       secure: process.env.NODE_ENV === 'production',
@@ -75,7 +79,6 @@ export function setupAuth(app: Express) {
     },
   };
 
-  app.set("trust proxy", 1);
   app.use(session(sessionSettings));
   app.use(passport.initialize());
   app.use(passport.session());
