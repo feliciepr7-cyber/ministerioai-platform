@@ -67,7 +67,7 @@ export const gptAccess = pgTable("gpt_access", {
   modelId: varchar("model_id").references(() => gptModels.id).notNull(),
   productId: text("product_id"),
   accessToken: text("access_token").notNull(),
-  accessCode: text("access_code"),
+  accessCode: text("access_code").unique(),
   expiresAt: timestamp("expires_at"),
   queriesUsed: integer("queries_used").default(0),
   lastAccessed: timestamp("last_accessed").defaultNow(),
@@ -267,6 +267,19 @@ export const insertTicketAttachmentSchema = createInsertSchema(ticketAttachments
   id: true,
   uploadedAt: true,
 });
+
+// GPT Access Verification Schema
+export const verifyGptAccessSchema = z.object({
+  email: z.string().email().optional(),
+  accessCode: z.string().regex(/^MIA-\d{4}-\d{4}$/, "Access code must be in format MIA-XXXX-XXXX").optional(),
+  productId: z.string().min(1, "Product ID is required"),
+}).refine(
+  (data) => data.email || data.accessCode,
+  {
+    message: "Either email or accessCode is required",
+    path: ["email"], // Point the error to email field
+  }
+);
 
 // Types
 export type User = typeof users.$inferSelect;

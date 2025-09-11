@@ -9,7 +9,8 @@ import {
   insertPaymentSchema,
   insertTicketSchema,
   insertTicketCategorySchema,
-  insertTicketCommentSchema 
+  insertTicketCommentSchema,
+  verifyGptAccessSchema 
 } from "@shared/schema";
 import { 
   sendEmail, 
@@ -100,8 +101,12 @@ const gptVerificationLimiter = rateLimit({
     retryAfter: "15 minutes"
   },
   skip: (req) => {
-    // Skip rate limiting for admin users during development
-    return req.body?.email === "feliciepr7@gmail.com";
+    // Skip rate limiting only for properly authenticated admin users
+    // This prevents unauthorized rate limit bypass
+    return process.env.NODE_ENV === "development" && 
+           req.isAuthenticated && 
+           req.isAuthenticated() && 
+           req.user?.email === "feliciepr7@gmail.com";
   }
 });
 
@@ -552,30 +557,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // GPT Authentication verification endpoint for Custom GPTs
   // GPT Access verification with special rate limiting
   app.post("/api/verify-gpt-access", gptVerificationLimiter, async (req, res) => {
-    const { email, accessCode, productId } = req.body;
-    
-    // Check that we have either email or accessCode, and productId
-    if ((!email && !accessCode) || !productId) {
-      return res.status(400).json({ 
-        message: "Either email or accessCode is required, along with productId" 
-      });
-    }
-
     try {
-      let user;
-      
-      // Find user by email or access code
-      if (email) {
-        user = await storage.getUserByEmail(email);
-      } else if (accessCode) {
-        user = await storage.getUserByAccessCode(accessCode);
-      }
-      
-      if (!user) {
-        return res.status(403).json({ 
-          message: "User not found or access not granted" 
+      // Validate request body using Zod schema
+      const validationResult = verifyGptAccessSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "Invalid request data",
+          errors: validationResult.error.errors
         });
       }
+
+      const { email, accessCode, productId } = validationResult.data;
+      let user;
+      let gptModel;
+      let existingAccess;
 
       // Validate product exists
       const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
@@ -584,22 +579,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
           message: "Invalid product ID" 
         });
       }
-
-      // Find the corresponding GPT model in the database
-      const gptModels = await storage.getGptModels();
-      const gptModel = gptModels.find(model => model.name === product.name);
       
-      if (!gptModel) {
-        return res.status(404).json({ 
-          message: "GPT model not found" 
-        });
+      if (email) {
+        // Find user by email and check their access
+        user = await storage.getUserByEmail(email);
+        if (!user) {
+          return res.status(403).json({ 
+            message: "User not found or access not granted" 
+          });
+        }
+
+        // Find the corresponding GPT model in the database
+        const gptModels = await storage.getGptModels();
+        gptModel = gptModels.find(model => model.name === product.name);
+        
+        if (!gptModel) {
+          return res.status(404).json({ 
+            message: "GPT model not found" 
+          });
+        }
+
+        // Check if user has purchased this GPT
+        existingAccess = await storage.getGptAccess(user.id, gptModel.id);
+        if (!existingAccess) {
+          return res.status(403).json({ 
+            message: "Purchase required to access this GPT. Please visit your dashboard to purchase access." 
+          });
+        }
+      } else if (accessCode) {
+        // Find access directly by access code (unified model)
+        const accessResult = await storage.getGptAccessByAccessCode(accessCode);
+        if (!accessResult) {
+          return res.status(403).json({ 
+            message: "Invalid access code or access not found" 
+          });
+        }
+
+        user = accessResult.user;
+        gptModel = accessResult.model;
+        existingAccess = accessResult.access;
+
+        // Verify the access code corresponds to the requested product
+        if (gptModel.name !== product.name) {
+          return res.status(403).json({ 
+            message: "Access code does not match the requested product" 
+          });
+        }
       }
 
-      // Check if user has purchased this GPT
-      const existingAccess = await storage.getGptAccess(user.id, gptModel.id);
-      if (!existingAccess) {
+      // CRITICAL: Check expiration if defined
+      if (existingAccess.expiresAt && new Date() > new Date(existingAccess.expiresAt)) {
         return res.status(403).json({ 
-          message: "Purchase required to access this GPT. Please visit your dashboard to purchase access." 
+          message: "Access has expired. Please renew your subscription." 
         });
       }
 

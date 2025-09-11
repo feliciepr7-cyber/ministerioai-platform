@@ -66,6 +66,7 @@ export interface IStorage {
   // GPT Access operations
   getGptAccessByUserId(userId: string): Promise<GptAccess[]>;
   getGptAccess(userId: string, modelId: string): Promise<GptAccess | undefined>;
+  getGptAccessByAccessCode(accessCode: string): Promise<{ access: GptAccess; user: User; model: GptModel } | undefined>;
   createGptAccess(access: InsertGptAccess): Promise<GptAccess>;
   updateGptAccess(id: string, updates: Partial<GptAccess>): Promise<GptAccess>;
 
@@ -227,6 +228,20 @@ export class DatabaseStorage implements IStorage {
       .from(gptAccess)
       .where(and(eq(gptAccess.userId, userId), eq(gptAccess.modelId, modelId)));
     return access;
+  }
+
+  async getGptAccessByAccessCode(accessCode: string): Promise<{ access: GptAccess; user: User; model: GptModel } | undefined> {
+    const [result] = await db
+      .select({
+        access: gptAccess,
+        user: users,
+        model: gptModels,
+      })
+      .from(gptAccess)
+      .innerJoin(users, eq(gptAccess.userId, users.id))
+      .innerJoin(gptModels, eq(gptAccess.modelId, gptModels.id))
+      .where(eq(gptAccess.accessCode, accessCode));
+    return result;
   }
 
   async createGptAccess(insertAccess: InsertGptAccess): Promise<GptAccess> {

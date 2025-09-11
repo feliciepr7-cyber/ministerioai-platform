@@ -1,0 +1,260 @@
+openapi: 3.0.3
+info:
+  title: Ministerio AI - Hybrid Authentication API
+  description: |
+    API para autenticación híbrida en los GPTs de Ministerio AI.
+    Soporta verificación tanto por email como por códigos de acceso únicos.
+  version: 2.0.0
+  contact:
+    name: Ministerio AI Support
+    email: support@ministerioai.com
+
+servers:
+  - url: https://ministerio-ai.replit.app/api
+    description: Production server
+  - url: http://localhost:5000/api
+    description: Development server
+
+paths:
+  /verify-gpt-access:
+    post:
+      summary: Verificar acceso a GPT con autenticación híbrida
+      description: |
+        Verifica si un usuario tiene acceso a un GPT específico usando email o código de acceso.
+        Este endpoint soporta dos métodos de autenticación:
+        1. **Email**: Verifica usando la dirección de email del usuario
+        2. **Código de acceso**: Verifica usando un código único formato MIA-XXXX-XXXX
+        
+        Solo se requiere uno de los dos métodos de identificación.
+      operationId: verifyGptAccess
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Email del usuario registrado
+                  example: "usuario@example.com"
+                accessCode:
+                  type: string
+                  pattern: '^MIA-\d{4}-\d{4}$'
+                  description: Código de acceso único del usuario
+                  example: "MIA-1234-5678"
+                productId:
+                  type: string
+                  enum:
+                    - "generador-sermones"
+                    - "manual-ceremonias"
+                    - "mensajes-expositivos"
+                    - "comentario-exegetico"
+                    - "epistolas-pablo"
+                    - "apocalipsis"
+                    - "cantar-cantares"
+                  description: ID del producto GPT al que se quiere acceder
+                  example: "comentario-exegetico"
+              required:
+                - productId
+              anyOf:
+                - required: ["email"]
+                - required: ["accessCode"]
+            examples:
+              email_verification:
+                summary: Verificación por email
+                value:
+                  email: "pastor@iglesia.com"
+                  productId: "generador-sermones"
+              access_code_verification:
+                summary: Verificación por código de acceso
+                value:
+                  accessCode: "MIA-1234-5678"
+                  productId: "comentario-exegetico"
+      responses:
+        '200':
+          description: Acceso verificado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Access granted"
+                  user:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        format: email
+                      name:
+                        type: string
+                    example:
+                      email: "pastor@iglesia.com"
+                      name: "Pastor Juan"
+                  product:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      id:
+                        type: string
+                    example:
+                      name: "Comentario Exegético"
+                      id: "comentario-exegetico"
+                  usage:
+                    type: object
+                    properties:
+                      totalQueries:
+                        type: integer
+                        description: Número total de consultas realizadas
+                    example:
+                      totalQueries: 42
+        '400':
+          description: Error en los parámetros de entrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                missing_auth:
+                  summary: Falta método de autenticación
+                  value:
+                    message: "Either email or accessCode is required, along with productId"
+                invalid_product:
+                  summary: Product ID inválido
+                  value:
+                    message: "Invalid product ID"
+        '403':
+          description: Acceso denegado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                user_not_found:
+                  summary: Usuario no encontrado
+                  value:
+                    message: "User not found or access not granted"
+                no_purchase:
+                  summary: Compra requerida
+                  value:
+                    message: "Purchase required to access this GPT. Please visit your dashboard to purchase access."
+        '429':
+          description: Demasiadas solicitudes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  retryAfter:
+                    type: integer
+                    description: Segundos hasta poder intentar nuevamente
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error during verification"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        accessCode:
+          type: string
+          pattern: '^MIA-\d{4}-\d{4}$'
+          description: Código de acceso único del usuario
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    GptProduct:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        gptUrl:
+          type: string
+          format: uri
+        icon:
+          type: string
+
+    GptAccess:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        modelId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+        accessToken:
+          type: string
+        accessCode:
+          type: string
+          pattern: '^MIA-\d{4}-\d{4}$'
+          description: Código de acceso único para este GPT específico
+        queriesUsed:
+          type: integer
+          minimum: 0
+        lastAccessed:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+  securitySchemes:
+    RateLimit:
+      type: apiKey
+      in: header
+      name: X-RateLimit-Limit
+      description: Rate limiting for GPT verification endpoint
+
+security:
+  - RateLimit: []
+
+tags:
+  - name: Authentication
+    description: Endpoints para autenticación y verificación de acceso
