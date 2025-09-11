@@ -1,0 +1,100 @@
+2025-09-11 16:10:10.27
+ef5da62c
+User
+Estudio de Cantar de los Cantares: dbModel=false, purchased=false
+2025-09-11 16:10:30.87
+ef5da62c
+User
+9:10:30 PM [express] GET /api/_debug/session 200 in 144ms :: {"isAuth":true,"user":"feliciepr7@gmail…
+2025-09-11 16:12:50.14
+3a0018ea
+System
+system: received signal terminated
+2025-09-11 16:12:54.74
+ef5da62c
+User
+9:12:54 PM [express] GET /api/user 200 in 77ms :: {"id":"c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983","emai…
+2025-09-11 16:12:58.10
+ef5da62c
+User
+=== DASHBOARD DEBUG ===
+2025-09-11 16:12:58.10
+ef5da62c
+User
+User: feliciepr7@gmail.com
+2025-09-11 16:12:58.10
+ef5da62c
+User
+Authenticated: true
+2025-09-11 16:12:58.10
+ef5da62c
+User
+User modelIds: [
+2025-09-11 16:12:58.10
+ef5da62c
+User
+'1dfde8fd-62c5-4ab1-961a-40de79982384',
+2025-09-11 16:12:58.10
+ef5da62c
+User
+'cae96181-6f5c-405b-8866-d0251bed0b2e',
+2025-09-11 16:12:58.10
+ef5da62c
+User
+'7642aa0a-f9a1-4e99-ae11-c22633e4fab3',
+2025-09-11 16:12:58.10
+ef5da62c
+User
+'c008e079-4163-4431-ba67-61fd180539d6',
+2025-09-11 16:12:58.10
+ef5da62c
+User
+'4387a60f-27a8-4562-a1c8-d8ebf8dc903d',
+2025-09-11 16:12:58.10
+ef5da62c
+User
+'f6e51cbd-8198-4347-bf66-cbf0a37b0135'
+2025-09-11 16:12:58.10
+ef5da62c
+User
+]
+2025-09-11 16:12:58.10
+ef5da62c
+User
+gptModels count: 6
+2025-09-11 16:12:58.10
+ef5da62c
+User
+Generador de Sermones: dbModel=true, purchased=true
+2025-09-11 16:12:58.10
+ef5da62c
+User
+Manual de Ceremonias del Ministro: dbModel=true, purchased=true
+2025-09-11 16:12:58.10
+ef5da62c
+User
+Mensajes Expositivos: dbModel=true, purchased=true
+2025-09-11 16:12:58.10
+ef5da62c
+User
+Comentario Exegético: dbModel=true, purchased=true
+2025-09-11 16:12:58.10
+ef5da62c
+User
+Las Epistolas del Apostol Pablo: dbModel=false, purchased=false
+2025-09-11 16:12:58.10
+ef5da62c
+User
+Estudio El Libro de Apocalipsis: dbModel=false, purchased=false
+2025-09-11 16:12:58.10
+ef5da62c
+User
+Estudio de Cantar de los Cantares: dbModel=false, purchased=false
+2025-09-11 16:12:58.10
+ef5da62c
+User
+=== END DEBUG ===
+2025-09-11 16:12:58.12
+ef5da62c
+User
+9:12:58 PM [express] GET /api/dashboard 304 in 148ms :: {"user":{"name":"frank felicie","email":"fel…

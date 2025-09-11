@@ -699,6 +699,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Authenticated:", !!user);
       console.log("User modelIds:", Array.from(userModelIds));
       console.log("gptModels count:", gptModels.length);
+      console.log("gptModels names:", gptModels.map(m => m.name));
       
       const availableProducts = Object.entries(GPT_PRODUCTS).map(([id, product]) => {
         const dbModel = gptModels.find(model => model.name === product.name);
