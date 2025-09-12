@@ -94,7 +94,7 @@ function CheckoutForm({ planId }: CheckoutFormProps) {
         // Confirm payment on the server side
         try {
           console.log("Confirming payment with server...");
-          await apiRequest("POST", "/api/confirm-payment", { 
+          await apiRequest("/api/confirm-payment", "POST", { 
             paymentIntentId: paymentIntent.id 
           });
           console.log("Payment confirmed successfully");
@@ -281,7 +281,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     // Create payment intent
     const createPaymentIntent = async () => {
       try {
-        const res = await apiRequest("POST", "/api/create-payment-intent", {
+        const res = await apiRequest("/api/create-payment-intent", "POST", {
           productId: productId,
         });
         const data = await res.json();

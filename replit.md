@@ -2,6 +2,8 @@
 
 This is a GPT subscription service platform built with a modern full-stack architecture. The application provides tiered subscription plans (Basic, Pro, Enterprise) that give users access to different GPT models with varying query limits. Users can register, authenticate, subscribe to plans via Stripe payments, and access GPT models through a dashboard interface.
 
+**Latest Update**: Implemented an AI-powered support chatbot system that replaces traditional ticket-based support. The chatbot uses OpenAI's GPT-4o model to provide instant, intelligent responses to user queries about GPT access issues, with automatic severity and category analysis for better support triage.
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -24,6 +26,7 @@ Preferred communication style: Simple, everyday language.
 - **Session Storage**: PostgreSQL-backed sessions using connect-pg-simple
 - **Password Security**: Node.js crypto module with scrypt for hashing
 - **API Design**: RESTful endpoints with structured error handling
+- **AI Support**: OpenAI GPT-4o integration for intelligent chatbot support system
 
 ## Database Architecture
 - **Database**: PostgreSQL via Neon serverless
@@ -51,6 +54,7 @@ Preferred communication style: Simple, everyday language.
 - **express**: Web application framework
 - **passport**: Authentication middleware
 - **stripe**: Payment processing SDK
+- **openai**: AI integration for intelligent support chatbot
 
 ## Frontend Dependencies
 - **@radix-ui/***: Headless UI component primitives

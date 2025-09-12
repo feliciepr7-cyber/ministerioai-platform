@@ -128,8 +128,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize GPT models if they don't exist
   await initializeGptModels();
 
-  // AI Support Chat endpoint
-  app.post("/api/support/chat", async (req, res) => {
+  // AI Support Chat endpoint (with rate limiting)
+  const supportChatLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 20, // 20 requests per window per IP
+    message: { message: 'Too many support requests. Please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req) => process.env.NODE_ENV === 'development', // Skip rate limiting in development
+  });
+
+  app.post("/api/support/chat", supportChatLimiter, async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "Authentication required" });
     }
@@ -139,6 +148,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     if (!message || typeof message !== "string" || message.trim().length === 0) {
       return res.status(400).json({ message: "Message is required" });
+    }
+
+    if (message.length > 1000) {
+      return res.status(400).json({ message: "Message too long. Please keep it under 1000 characters." });
     }
 
     try {
@@ -156,8 +169,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         analyzeUserSentiment(message.trim())
       ]);
 
-      // Log the support interaction for analytics (optional)
-      console.log(`Support chat - User: ${user.email}, Severity: ${aiResponse.severity}, Category: ${aiResponse.category}`);
+      // Log the support interaction for analytics (without PII)
+      console.log(`Support chat - UserID: ${user.id.substring(0, 8)}..., Severity: ${aiResponse.severity}, Category: ${aiResponse.category}`);
 
       res.json({
         response: aiResponse.response,

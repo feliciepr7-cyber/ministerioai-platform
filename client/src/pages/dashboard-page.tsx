@@ -76,7 +76,7 @@ export default function DashboardPage() {
 
   const accessGptMutation = useMutation({
     mutationFn: async (productId: string) => {
-      const res = await apiRequest("POST", "/api/access-gpt", { productId });
+      const res = await apiRequest("/api/access-gpt", "POST", { productId });
       return await res.json();
     },
     onSuccess: (data) => {
@@ -101,7 +101,7 @@ export default function DashboardPage() {
 
   const grantAccessMutation = useMutation({
     mutationFn: async ({ email, productId }: { email: string; productId: string }) => {
-      const res = await apiRequest("POST", "/api/admin/grant-access", { email, productId });
+      const res = await apiRequest("/api/admin/grant-access", "POST", { email, productId });
       return await res.json();
     },
     onSuccess: (data) => {

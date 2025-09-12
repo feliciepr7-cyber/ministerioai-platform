@@ -78,7 +78,8 @@ export default function AISupportPage() {
   const chatMutation = useMutation({
     mutationFn: async (message: string): Promise<SupportResponse> => {
       const response = await apiRequest('/api/support/chat', 'POST', { message });
-      return response as unknown as SupportResponse;
+      const data = await response.json();
+      return data as SupportResponse;
     },
     onSuccess: (response, userMessage) => {
       const assistantMessage: ChatMessage = {

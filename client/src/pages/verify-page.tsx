@@ -51,7 +51,7 @@ export default function VerifyPage() {
     setVerificationResult(null);
 
     try {
-      const response = await apiRequest("POST", "/api/verify-gpt-access", {
+      const response = await apiRequest("/api/verify-gpt-access", "POST", {
         email,
         productId,
       });

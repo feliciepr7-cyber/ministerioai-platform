@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 
-// the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
+// Using GPT-4o for stable AI support responses with reliable JSON formatting
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 interface SupportResponse {
@@ -103,14 +103,13 @@ Responde en formato JSON con esta estructura:
 }`;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-5", // the newest OpenAI model is "gpt-5" which was released August 7, 2025
+      model: "gpt-4o", // Using GPT-4o for stable compatibility
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userQuery }
       ],
       response_format: { type: "json_object" },
       max_tokens: 800,
-      temperature: 0.7
     });
 
     const result = JSON.parse(response.choices[0].message.content || '{}');
@@ -144,7 +143,7 @@ export async function analyzeUserSentiment(message: string): Promise<{
 }> {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-5", // the newest OpenAI model is "gpt-5" which was released August 7, 2025
+      model: "gpt-4o", // Using GPT-4o for stable compatibility
       messages: [
         {
           role: "system",

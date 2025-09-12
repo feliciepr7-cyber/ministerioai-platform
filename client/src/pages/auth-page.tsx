@@ -76,7 +76,7 @@ export default function AuthPage() {
   // Password reset mutations
   const forgotPasswordMutation = useMutation({
     mutationFn: async (data: ForgotPasswordForm) => {
-      const res = await apiRequest("POST", "/api/forgot-password", data);
+      const res = await apiRequest("/api/forgot-password", "POST", data);
       return await res.json();
     },
     onSuccess: (data) => {
@@ -106,7 +106,7 @@ export default function AuthPage() {
 
   const resetPasswordMutation = useMutation({
     mutationFn: async (data: ResetPasswordForm) => {
-      const res = await apiRequest("POST", "/api/reset-password", data);
+      const res = await apiRequest("/api/reset-password", "POST", data);
       return await res.json();
     },
     onSuccess: () => {
