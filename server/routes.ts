@@ -679,9 +679,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // OPTIONS handler for CORS preflight
+  app.options("/api/verify-gpt-access", (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.status(200).send();
+  });
+
   // GPT Authentication verification endpoint for Custom GPTs
-  // GPT Access verification with special rate limiting
   app.post("/api/verify-gpt-access", async (req, res) => {
+    // Set CORS headers for OpenAI GPT access
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    console.log("GPT verification request from:", req.ip, "Body:", req.body);
+    
     try {
       // Validate request body using Zod schema
       const validationResult = verifyGptAccessSchema.safeParse(req.body);
@@ -765,6 +779,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         queriesUsed: (existingAccess!.queriesUsed || 0) + 1,
       });
 
+      console.log("GPT verification successful for:", user!.email, productId);
+      
       res.status(200).json({
         message: "Access granted",
         user: {
