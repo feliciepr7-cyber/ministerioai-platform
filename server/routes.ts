@@ -19,6 +19,7 @@ import {
   generateTicketCommentEmail 
 } from "./emailService";
 import { randomUUID } from "crypto";
+import { generateSupportResponse, analyzeUserSentiment } from "./aiSupport";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error("Missing required environment variable: STRIPE_SECRET_KEY");
@@ -126,6 +127,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Initialize GPT models if they don't exist
   await initializeGptModels();
+
+  // AI Support Chat endpoint
+  app.post("/api/support/chat", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    const { message } = req.body;
+    const user = req.user!;
+
+    if (!message || typeof message !== "string" || message.trim().length === 0) {
+      return res.status(400).json({ message: "Message is required" });
+    }
+
+    try {
+      // Get user context for better responses
+      const userPurchases = await storage.getGptAccessByUserId(user.id);
+      const userContext = {
+        email: user.email,
+        hasPurchases: userPurchases.length > 0,
+        recentActivity: `${userPurchases.length} GPTs purchased`
+      };
+
+      // Generate AI response
+      const [aiResponse, sentiment] = await Promise.all([
+        generateSupportResponse(message.trim(), userContext),
+        analyzeUserSentiment(message.trim())
+      ]);
+
+      // Log the support interaction for analytics (optional)
+      console.log(`Support chat - User: ${user.email}, Severity: ${aiResponse.severity}, Category: ${aiResponse.category}`);
+
+      res.json({
+        response: aiResponse.response,
+        nextSteps: aiResponse.nextSteps,
+        severity: aiResponse.severity,
+        category: aiResponse.category,
+        sentiment: sentiment.sentiment,
+        urgency: sentiment.urgency
+      });
+
+    } catch (error: any) {
+      console.error("AI Support chat error:", error);
+      res.status(500).json({ 
+        message: "Error processing your request",
+        response: "Disculpa, hay un problema temporal con el asistente. Por favor intenta nuevamente o contacta directamente al equipo de soporte."
+      });
+    }
+  });
 
   // VERSION: Check deployment version  
   app.get("/api/_version", (req, res) => {
