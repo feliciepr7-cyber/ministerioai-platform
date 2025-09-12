@@ -486,7 +486,7 @@ export default function HomePage() {
                   <ul className="space-y-3 mb-8">
                     <li className="flex items-center text-muted-foreground">
                       <i className="fas fa-check text-chart-2 mr-3"></i>
-                      Acceso a todos los 7 GPTs
+                      Acceso a todos los GPTs
                     </li>
                     <li className="flex items-center text-muted-foreground">
                       <i className="fas fa-check text-chart-2 mr-3"></i>
@@ -533,7 +533,7 @@ export default function HomePage() {
                   <ul className="space-y-3 mb-8">
                     <li className="flex items-center text-muted-foreground">
                       <i className="fas fa-check text-chart-2 mr-3"></i>
-                      Acceso a todos los 7 GPTs
+                      Acceso a todos los GPTs
                     </li>
                     <li className="flex items-center text-muted-foreground">
                       <i className="fas fa-check text-chart-2 mr-3"></i>
