@@ -59,7 +59,7 @@ async function comparePasswords(supplied: string, stored: string | null) {
 
 export function setupAuth(app: Express) {
   // CRITICAL: Trust ALL proxies for Replit deployment
-  app.set("trust proxy", true);
+  app.set("trust proxy", 1);
 
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET!,
