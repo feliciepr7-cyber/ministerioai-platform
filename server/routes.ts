@@ -10,7 +10,10 @@ import {
   insertTicketSchema,
   insertTicketCategorySchema,
   insertTicketCommentSchema,
-  verifyGptAccessSchema 
+  verifyGptAccessSchema,
+  startFreeTrialSchema,
+  purchaseIndividualGptSchema,
+  createSubscriptionSchema
 } from "@shared/schema";
 import { 
   sendEmail, 
@@ -32,49 +35,49 @@ const GPT_PRODUCTS = {
   "generador-sermones": {
     name: "Generador de Sermones",
     description: "Prepara un bosquejo de sermón o Estudio Bíblico profundo y detallado a partir de un pasaje bíblico, tema, cita bíblica o palabra clave proporcionado.",
-    price: 20,
+    price: 9.99,
     gptUrl: "https://chatgpt.com/g/g-68b0d8f025d081918f17cdc67fe2241b-generador-de-sermones",
     icon: "fas fa-book-open",
   },
   "manual-ceremonias": {
     name: "Manual de Ceremonias del Ministro",
     description: "El Manual de Ceremonias del Ministro es una guía práctica y completa diseñada para pastores, ministros y líderes de iglesia que desean conducir con excelencia, reverencia y claridad las diversas celebraciones y servicios especiales de la vida cristiana.",
-    price: 20,
+    price: 9.99,
     gptUrl: "https://chatgpt.com/g/g-68b46646ba548191afc0e0d7ca151cfd-manual-de-ceremonias-del-ministro",
     icon: "fas fa-hands-praying",
   },
   "mensajes-expositivos": {
     name: "Mensajes Expositivos",
     description: "Los mensajes expositivos son un estilo de predicación y enseñanza bíblica que se centra en explicar de manera clara y fiel el sentido original de un pasaje de la Escritura, aplicándolo directamente a la vida del oyente.",
-    price: 20,
+    price: 9.99,
     gptUrl: "https://chatgpt.com/g/g-68b3bd5d57088191940ce1e37623c6d5-mensajes-expositivos",
     icon: "fas fa-cross",
   },
   "comentario-exegetico": {
     name: "Comentario Exegético",
     description: "Análisis profundo y académico de textos bíblicos con rigor teológico",
-    price: 20,
+    price: 9.99,
     gptUrl: "https://chatgpt.com/g/g-68b99cbbad508191954ffe0d3cbf3cc9-comentario-exegetico",
     icon: "fas fa-book",
   },
   "epistolas-pablo": {
     name: "Las Epistolas del Apostol Pablo",
     description: "Sumérgete en el corazón de la teología cristiana con un estudio exhaustivo de las 13 cartas paulinas. Desde Romanos hasta Filemón, descubre las profundas verdades doctrinales, contextos históricos y aplicaciones pastorales que transformarán tu ministerio. Perfecto para sermones, estudios bíblicos y crecimiento espiritual personal.",
-    price: 20,
+    price: 9.99,
     gptUrl: "https://chatgpt.com/g/g-68bcdcb9cd5081918d2577d165863496-las-epistolas-del-apostol-pablo",
     icon: "fas fa-scroll",
   },
   "apocalipsis": {
     name: "Estudio El Libro de Apocalipsis",
     description: "Desentraña los misterios del libro más profético y simbólico de la Biblia. Explora las visiones de Juan, comprende el simbolismo apocalíptico y descubre las promesas de esperanza para la iglesia. Incluye análisis de las siete iglesias, los sellos, las trompetas y la Nueva Jerusalén con aplicación práctica para el cristiano moderno.",
-    price: 25,
+    price: 9.99,
     gptUrl: "https://chatgpt.com/g/g-68bf7f2ab4748191849d6f2402986de2-estudio-el-libro-de-apocalipsis",
     icon: "fas fa-eye",
   },
   "cantar-cantares": {
     name: "Estudio de Cantar de los Cantares",
     description: "Explora la belleza del amor divino a través del libro más poético de la Biblia. Descubre las múltiples interpretaciones: amor conyugal, relación Cristo-Iglesia y búsqueda espiritual del alma. Perfecto para enseñanza sobre matrimonio, espiritualidad y la intimidad con Dios. Incluye simbolismo, contexto cultural y aplicación ministerial.",
-    price: 22,
+    price: 9.99,
     gptUrl: "https://chatgpt.com/g/g-68bf83e2555481919630825ea98365e8-estudio-de-cantar-de-los-cantares",
     icon: "fas fa-heart",
   },
@@ -111,13 +114,17 @@ const gptVerificationLimiter = rateLimit({
   }
 });
 
-// General API rate limiter
+// General API rate limiter (skip HEAD requests for health checks)
 const generalApiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // 100 requests per 15 minutes
   message: {
     error: "Rate limit exceeded",
     message: "Demasiadas solicitudes. Por favor espera unos minutos antes de intentar nuevamente."
+  },
+  skip: (req) => {
+    // Skip rate limiting for HEAD requests (health checks)
+    return req.method === 'HEAD';
   }
 });
 
@@ -728,6 +735,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
 
+        // Check for free trial access first
+        if (storage.isTrialActive(user)) {
+          // Allow access during active free trial
+          console.log(`Free trial access granted for user: ${email} (product: ${productId})`);
+          
+          return res.status(200).json({
+            message: "Free trial access granted",
+            user: {
+              email: user.email,
+              name: user.name
+            },
+            product: {
+              name: product.name,
+              id: productId
+            },
+            access: {
+              type: "trial",
+              trialEndDate: user.trialEndDate,
+              daysRemaining: user.trialEndDate ? Math.ceil((user.trialEndDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : 0
+            }
+          });
+        }
+
         // Find the corresponding GPT model in the database
         const gptModels = await storage.getGptModels();
         gptModel = gptModels.find(model => model.name === product.name);
@@ -738,11 +768,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
 
-        // Check if user has purchased this GPT
+        // Check for existing access (subscription or individual purchase)
         existingAccess = await storage.getGptAccess(user.id, gptModel.id);
+        
+        // If no direct access, check for active subscription that includes this GPT
         if (!existingAccess) {
+          // Check if user has active subscription that includes all GPTs
+          if (user.subscriptionStatus === 'active' && ['monthly', 'annual'].includes(user.currentPlan || '')) {
+            console.log(`Subscription access granted for user: ${email} (plan: ${user.currentPlan}, product: ${productId})`);
+            
+            return res.status(200).json({
+              message: "Subscription access granted",
+              user: {
+                email: user.email,
+                name: user.name
+              },
+              product: {
+                name: product.name,
+                id: productId
+              },
+              access: {
+                type: "subscription",
+                plan: user.currentPlan,
+                unlimitedAccess: true
+              }
+            });
+          }
+          
+          // No access found - offer trial or purchase options
+          const trialAvailable = user.trialStatus === 'unused';
+          
           return res.status(403).json({ 
-            message: "Purchase required to access this GPT. Please visit your dashboard to purchase access." 
+            message: trialAvailable 
+              ? "No access found. Start your 3-day free trial or purchase individual access." 
+              : "Purchase required to access this GPT. Choose individual access ($9.99) or unlimited subscription (Monthly $20, Annual $65).",
+            options: {
+              trialAvailable,
+              individualPrice: "$9.99",
+              subscriptionMonthly: "$20.00",
+              subscriptionAnnual: "$65.00"
+            }
           });
         }
       } else if (accessCode) {
