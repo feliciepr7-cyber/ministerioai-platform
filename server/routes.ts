@@ -137,56 +137,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // DEBUG: Temporary session debugging endpoint
-  app.get("/api/_debug/session", (req, res) => {
-    res.json({
-      isAuth: req.isAuthenticated(),
-      user: req.user?.email,
-      userId: req.user?.id,
-      sessionID: req.sessionID,
-      secure: req.secure,
-      xForwardedProto: req.get('x-forwarded-proto'),
-      hasCookies: !!req.headers.cookie,
-      cookieHeader: req.headers.cookie?.substring(0, 100) + '...',
-      nodeEnv: process.env.NODE_ENV,
+  // DEVELOPMENT ONLY: Debug endpoints - SECURITY RISK IN PRODUCTION
+  if (process.env.NODE_ENV === 'development') {
+    app.get("/api/_debug/session", (req, res) => {
+      res.json({
+        isAuth: req.isAuthenticated(),
+        user: req.user?.email,
+        userId: req.user?.id,
+        sessionID: req.sessionID,
+        secure: req.secure,
+        xForwardedProto: req.get('x-forwarded-proto'),
+        hasCookies: !!req.headers.cookie,
+        cookieHeader: req.headers.cookie?.substring(0, 100) + '...',
+        nodeEnv: process.env.NODE_ENV,
+      });
     });
-  });
 
-  // TEMPORARY FIX: Force logout to clear corrupted session
-  app.post("/api/_debug/force-logout", (req, res) => {
-    req.logout((err) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      req.session.destroy((err) => {
+    app.post("/api/_debug/force-logout", (req, res) => {
+      req.logout((err) => {
         if (err) {
           return res.status(500).json({ error: err.message });
         }
-        res.clearCookie('connect.sid');
-        res.clearCookie('sid_v2');
-        res.json({ message: "Session cleared successfully" });
+        req.session.destroy((err) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+          res.clearCookie('connect.sid');
+          res.clearCookie('sid_v2');
+          res.json({ message: "Session cleared successfully" });
+        });
       });
     });
-  });
 
-  // CRITICAL FIX: Clear ALL active sessions from database
-  app.post("/api/_debug/clear-all-sessions", async (req, res) => {
-    try {
-      // Clear all sessions from the PostgreSQL session store
-      await storage.clearAllSessions();
-      
-      res.json({ 
-        success: true,
-        message: "All active sessions have been cleared. All users must login again." 
-      });
-    } catch (error: any) {
-      console.error("Error clearing all sessions:", error);
-      res.status(500).json({ 
-        error: "Failed to clear sessions",
-        message: error.message 
-      });
-    }
-  });
+    app.post("/api/_debug/clear-all-sessions", async (req, res) => {
+      try {
+        // Clear all sessions from the PostgreSQL session store
+        await storage.clearAllSessions();
+        
+        res.json({ 
+          success: true,
+          message: "All active sessions have been cleared. All users must login again." 
+        });
+      } catch (error: any) {
+        console.error("Error clearing all sessions:", error);
+        res.status(500).json({ 
+          error: "Failed to clear sessions",
+          message: error.message 
+        });
+      }
+    });
+  }
 
   // Get available GPT models
   app.get("/api/gpt-models", async (req, res) => {

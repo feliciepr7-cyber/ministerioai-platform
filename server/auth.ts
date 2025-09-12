@@ -80,20 +80,22 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // CRITICAL: Session rewrite middleware to permanently fix phantom session
-  app.use((req, res, next) => {
-    const phantomId = 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983';
-    if (req.isAuthenticated() && 
-        req.session.passport?.user === phantomId && 
-        req.user?.id !== phantomId) {
-      console.log(`REWRITING SESSION: ${phantomId} → ${req.user.id}`);
-      req.session.passport.user = req.user.id;
-      req.session.save((err) => {
-        if (err) console.error('Session save error:', err);
-      });
-    }
-    next();
-  });
+  // DEVELOPMENT ONLY: Session rewrite middleware for phantom session (SECURITY RISK IN PROD)
+  if (process.env.NODE_ENV === 'development') {
+    app.use((req, res, next) => {
+      const phantomId = 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983';
+      if (req.isAuthenticated() && 
+          req.session.passport?.user === phantomId && 
+          req.user?.id !== phantomId) {
+        console.log(`DEV: REWRITING SESSION: ${phantomId} → ${req.user.id}`);
+        req.session.passport.user = req.user.id;
+        req.session.save((err) => {
+          if (err) console.error('Session save error:', err);
+        });
+      }
+      next();
+    });
+  }
 
   passport.use(
     new LocalStrategy(async (username, password, done) => {
@@ -115,15 +117,15 @@ export function setupAuth(app: Express) {
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id: string, done) => {
     try {
-      // CRITICAL FIX: Unconditionally remap phantom session ID and regenerate session
-      if (id === 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983') {
-        console.log("PHANTOM SESSION DETECTED - Fixing with session regeneration");
+      // DEVELOPMENT ONLY: Temporary phantom session fix - REMOVE IN PRODUCTION
+      if (process.env.NODE_ENV === 'development' && id === 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983') {
+        console.log("DEV: PHANTOM SESSION DETECTED - Fixing temporarily");
         const correctUser = await storage.getUserByEmail('feliciepr7@gmail.com');
         if (correctUser) {
-          console.log(`PHANTOM FIX: ${id} → ${correctUser.id}`);
+          console.log(`DEV PHANTOM FIX: ${id} → ${correctUser.id}`);
           return done(null, correctUser);
         }
-        console.log("PHANTOM FIX: No correct user found");
+        console.log("DEV PHANTOM FIX: No correct user found");
         return done(null, false);
       }
       
@@ -161,7 +163,13 @@ export function setupAuth(app: Express) {
       if (err) return next(err);
       req.session.destroy((err) => {
         if (err) return next(err);
+        // Clear both old and new session cookies for complete cleanup
         res.clearCookie('connect.sid');
+        res.clearCookie('sid_v2', { 
+          sameSite: 'lax', 
+          httpOnly: true, 
+          secure: process.env.NODE_ENV === 'production' 
+        });
         res.sendStatus(200);
       });
     });
