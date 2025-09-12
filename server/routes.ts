@@ -690,30 +690,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // CRITICAL: Check expiration if defined
-      if (existingAccess.expiresAt && new Date() > new Date(existingAccess.expiresAt)) {
+      if (existingAccess?.expiresAt && new Date() > new Date(existingAccess.expiresAt)) {
         return res.status(403).json({ 
           message: "Access has expired. Please renew your subscription." 
         });
       }
 
       // Update usage tracking
-      await storage.updateGptAccess(existingAccess.id, {
+      await storage.updateGptAccess(existingAccess!.id, {
         lastAccessed: new Date(),
-        queriesUsed: (existingAccess.queriesUsed || 0) + 1,
+        queriesUsed: (existingAccess!.queriesUsed || 0) + 1,
       });
 
       res.status(200).json({
         message: "Access granted",
         user: {
-          email: user.email,
-          name: user.name
+          email: user!.email,
+          name: user!.name
         },
         product: {
           name: product.name,
           id: productId
         },
         usage: {
-          totalQueries: (existingAccess.queriesUsed || 0) + 1
+          totalQueries: (existingAccess!.queriesUsed || 0) + 1
         }
       });
 
