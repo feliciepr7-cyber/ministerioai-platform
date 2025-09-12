@@ -18,7 +18,6 @@ import SecurityPage from "@/pages/security-page";
 import PrivacyPolicyPage from "@/pages/privacy-policy-page";
 import TermsOfServicePage from "@/pages/terms-of-service-page";
 import SupportPage from "@/pages/support-page";
-import { AdminPage } from "@/pages/admin-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -37,7 +36,6 @@ function Router() {
       <Route path="/terms-of-service" component={TermsOfServicePage} />
       <ProtectedRoute path="/dashboard" component={DashboardPage} />
       <ProtectedRoute path="/support" component={SupportPage} />
-      <ProtectedRoute path="/admin" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>
   );
