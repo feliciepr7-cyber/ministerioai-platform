@@ -31,7 +31,7 @@ export default function TermsOfServicePage() {
                   <li><strong>Manual de Ceremonias del Ministro:</strong> Guía para ceremonias religiosas</li>
                   <li><strong>Mensajes Expositivos:</strong> Ayuda en el desarrollo de mensajes bíblicos</li>
                 </ul>
-                <p>Cada herramienta requiere un pago único de $20 USD para acceso permanente.</p>
+                <p>Cada herramienta requiere un pago único de $9.99 USD para acceso permanente.</p>
               </div>
             </section>
 
@@ -54,7 +54,7 @@ export default function TermsOfServicePage() {
               <div className="space-y-3">
                 <p><strong>Estructura de precios:</strong></p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Cada Custom GPT cuesta $20 USD (pago único)</li>
+                  <li>Cada Custom GPT cuesta $9.99 USD (pago único)</li>
                   <li>Los pagos se procesan de forma segura a través de Stripe</li>
                   <li>No hay tarifas recurrentes o suscripciones</li>
                   <li>El acceso es permanente una vez realizado el pago</li>

@@ -24,7 +24,7 @@ const GPT_PRODUCTS = [
   {
     id: "generador-sermones",
     name: "Generador de Sermones",
-    price: 20,
+    price: 9.99,
     description: "Prepara un bosquejo de sermón o Estudio Bíblico profundo y detallado",
     features: [
       "Acceso de por vida al Custom GPT",
@@ -37,7 +37,7 @@ const GPT_PRODUCTS = [
   {
     id: "manual-ceremonias",
     name: "Manual de Ceremonias del Ministro",
-    price: 20,
+    price: 9.99,
     description: "Guía práctica para pastores y líderes de iglesia",
     features: [
       "Acceso de por vida al Custom GPT",
@@ -50,7 +50,7 @@ const GPT_PRODUCTS = [
   {
     id: "mensajes-expositivos",
     name: "Mensajes Expositivos",
-    price: 20,
+    price: 9.99,
     description: "Predicación bíblica clara y fiel al texto original",
     features: [
       "Acceso de por vida al Custom GPT",
@@ -63,7 +63,7 @@ const GPT_PRODUCTS = [
   {
     id: "comentario-exegetico",
     name: "Comentario Exegético",
-    price: 20,
+    price: 9.99,
     description: "Análisis profundo y académico de textos bíblicos con rigor teológico",
     features: [
       "Acceso de por vida al Custom GPT",
@@ -76,7 +76,7 @@ const GPT_PRODUCTS = [
   {
     id: "epistolas-pablo",
     name: "Las Epistolas del Apostol Pablo",
-    price: 20,
+    price: 9.99,
     description: "Estudio profundo de las 13 cartas paulinas con análisis teológico y aplicación práctica",
     features: [
       "Acceso de por vida al Custom GPT",
@@ -90,7 +90,7 @@ const GPT_PRODUCTS = [
   {
     id: "apocalipsis",
     name: "Estudio El Libro de Apocalipsis",
-    price: 25,
+    price: 9.99,
     description: "Desentraña los misterios del libro más profético y simbólico de la Biblia",
     features: [
       "Acceso de por vida al Custom GPT",
@@ -103,7 +103,7 @@ const GPT_PRODUCTS = [
   {
     id: "cantar-cantares",
     name: "Estudio de Cantar de los Cantares", 
-    price: 22,
+    price: 9.99,
     description: "Explora la belleza del amor divino a través del libro más poético de la Biblia",
     features: [
       "Acceso de por vida al Custom GPT",
@@ -401,7 +401,7 @@ export default function HomePage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-8 sm:mb-12">
               <h2 id="products-title" className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Herramientas Ministeriales AI</h2>
-              <p className="text-base sm:text-lg text-muted-foreground px-2">Compra una vez, úsala para siempre. Solo $20 USD cada herramienta</p>
+              <p className="text-base sm:text-lg text-muted-foreground px-2">Compra una vez, úsala para siempre. Solo $9.99 USD cada herramienta</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
@@ -458,6 +458,113 @@ export default function HomePage() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Subscription Plans Section */}
+        <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-muted/30" id="subscriptions" role="region" aria-labelledby="subscription-title">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 id="subscription-title" className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Planes de Suscripción</h2>
+              <p className="text-base sm:text-lg text-muted-foreground px-2">Accede a todas las herramientas con un plan mensual o anual</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto">
+              {/* Monthly Plan */}
+              <Card className="relative hover:shadow-lg transition-shadow">
+                <CardContent className="pt-6">
+                  <div className="text-center mb-6">
+                    <h3 className="text-xl font-semibold text-foreground mb-2">Plan Mensual</h3>
+                    <div className="mb-4">
+                      <span className="text-3xl font-bold text-foreground">$20</span>
+                      <span className="text-muted-foreground"> USD/mes</span>
+                    </div>
+                    <p className="text-muted-foreground">Acceso completo a todas las herramientas</p>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-8">
+                    <li className="flex items-center text-muted-foreground">
+                      <i className="fas fa-check text-chart-2 mr-3"></i>
+                      Acceso a todos los 7 GPTs
+                    </li>
+                    <li className="flex items-center text-muted-foreground">
+                      <i className="fas fa-check text-chart-2 mr-3"></i>
+                      Soporte prioritario
+                    </li>
+                    <li className="flex items-center text-muted-foreground">
+                      <i className="fas fa-check text-chart-2 mr-3"></i>
+                      Nuevas herramientas incluidas
+                    </li>
+                    <li className="flex items-center text-muted-foreground">
+                      <i className="fas fa-check text-chart-2 mr-3"></i>
+                      Cancela cuando quieras
+                    </li>
+                  </ul>
+                  
+                  <Button 
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                    data-testid="button-select-monthly"
+                  >
+                    Comenzar Plan Mensual
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Annual Plan */}
+              <Card className="relative hover:shadow-lg transition-shadow border-2 border-primary md:transform md:scale-105 pricing-glow">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <Badge className="bg-primary text-primary-foreground">Más Popular</Badge>
+                </div>
+                
+                <CardContent className="pt-6">
+                  <div className="text-center mb-6">
+                    <h3 className="text-xl font-semibold text-foreground mb-2">Plan Anual</h3>
+                    <div className="mb-2">
+                      <span className="text-3xl font-bold text-foreground">$65</span>
+                      <span className="text-muted-foreground"> USD/año</span>
+                    </div>
+                    <div className="mb-4">
+                      <span className="text-sm text-primary font-medium">Ahorra $175 al año</span>
+                    </div>
+                    <p className="text-muted-foreground">Acceso completo a todas las herramientas</p>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-8">
+                    <li className="flex items-center text-muted-foreground">
+                      <i className="fas fa-check text-chart-2 mr-3"></i>
+                      Acceso a todos los 7 GPTs
+                    </li>
+                    <li className="flex items-center text-muted-foreground">
+                      <i className="fas fa-check text-chart-2 mr-3"></i>
+                      Soporte prioritario
+                    </li>
+                    <li className="flex items-center text-muted-foreground">
+                      <i className="fas fa-check text-chart-2 mr-3"></i>
+                      Nuevas herramientas incluidas
+                    </li>
+                    <li className="flex items-center text-muted-foreground">
+                      <i className="fas fa-check text-chart-2 mr-3"></i>
+                      Descuento del 73%
+                    </li>
+                  </ul>
+                  
+                  <Button 
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                    data-testid="button-select-annual"
+                  >
+                    Comenzar Plan Anual
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Free Trial CTA */}
+            <div className="text-center mt-8">
+              <p className="text-muted-foreground mb-4">¿No estás seguro? Prueba gratis por 3 días</p>
+              <Button variant="outline" className="mx-auto" data-testid="button-free-trial">
+                Comenzar Prueba Gratuita
+              </Button>
             </div>
           </div>
         </section>

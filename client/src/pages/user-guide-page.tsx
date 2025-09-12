@@ -115,7 +115,7 @@ export default function UserGuidePage() {
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start">
                   <ChevronRight className="w-4 h-4 mr-2 mt-0.5 text-primary flex-shrink-0" />
-                  Selecciona el GPT que deseas comprar ($20 USD cada uno)
+                  Selecciona el GPT que deseas comprar ($9.99 USD cada uno)
                 </li>
                 <li className="flex items-start">
                   <ChevronRight className="w-4 h-4 mr-2 mt-0.5 text-primary flex-shrink-0" />
