@@ -681,7 +681,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // GPT Authentication verification endpoint for Custom GPTs
   // GPT Access verification with special rate limiting
-  app.post("/api/verify-gpt-access", gptVerificationLimiter, async (req, res) => {
+  app.post("/api/verify-gpt-access", async (req, res) => {
     try {
       // Validate request body using Zod schema
       const validationResult = verifyGptAccessSchema.safeParse(req.body);
