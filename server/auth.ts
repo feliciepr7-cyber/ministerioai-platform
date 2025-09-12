@@ -85,10 +85,12 @@ export function setupAuth(app: Express) {
     app.use((req, res, next) => {
       const phantomId = 'c1b4cdf4-08a5-4cd8-bc98-c53e52f6c983';
       if (req.isAuthenticated() && 
-          req.session.passport?.user === phantomId && 
+          req.session?.passport?.user === phantomId && 
           req.user?.id !== phantomId) {
         console.log(`DEV: REWRITING SESSION: ${phantomId} → ${req.user.id}`);
-        req.session.passport.user = req.user.id;
+        if (req.session.passport) {
+          req.session.passport.user = req.user.id;
+        }
         req.session.save((err) => {
           if (err) console.error('Session save error:', err);
         });

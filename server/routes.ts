@@ -186,6 +186,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
     });
+
   }
 
   // Get available GPT models
