@@ -758,7 +758,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
 
-        // Find the corresponding GPT model in the database
+        // Find the corresponding GPT model in the database (by name - temporary until productId migration)
         const gptModels = await storage.getGptModels();
         gptModel = gptModels.find(model => model.name === product.name);
         
@@ -912,6 +912,209 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error("Dashboard data error:", error);
       res.status(500).json({ message: "Error fetching dashboard data: " + error.message });
+    }
+  });
+
+  // NEW PRICING MODEL ENDPOINTS
+  
+  // Get all available GPT products with pricing
+  app.get("/api/products", async (req, res) => {
+    try {
+      const gptModels = await storage.getGptModels();
+      
+      const products = Object.entries(GPT_PRODUCTS).map(([productId, product]) => {
+        const dbModel = gptModels.find(model => model.name === product.name);
+        
+        return {
+          id: productId,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          icon: product.icon,
+          gptUrl: product.gptUrl,
+          isActive: dbModel?.isActive || false,
+        };
+      });
+      
+      res.json({ products });
+    } catch (error: any) {
+      console.error("Error fetching products:", error);
+      res.status(500).json({ message: "Error fetching products: " + error.message });
+    }
+  });
+
+  // Start free trial (3 days access to all GPTs)
+  app.post("/api/trial/start", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    try {
+      const userData = startFreeTrialSchema.parse(req.body);
+      const user = req.user!;
+      
+      // Check if user already has active subscription or trial
+      if (user.subscriptionStatus === 'active' || user.trialStatus === 'active') {
+        return res.status(400).json({ message: "You already have active access or have used your free trial" });
+      }
+
+      const trialStartDate = new Date();
+      const trialEndDate = new Date();
+      trialEndDate.setDate(trialEndDate.getDate() + 3); // 3 days from now
+
+      // Update user with free trial using correct schema fields
+      await storage.updateUser(user.id, {
+        trialStatus: 'active',
+        trialStartDate: trialStartDate,
+        trialEndDate: trialEndDate
+      });
+
+      res.json({
+        message: "Free trial started successfully",
+        trialEndsAt: trialEndDate,
+        accessType: "trial"
+      });
+    } catch (error: any) {
+      console.error("Error starting free trial:", error);
+      res.status(500).json({ message: "Error starting free trial: " + error.message });
+    }
+  });
+
+  // Purchase individual GPT access
+  app.post("/api/purchase", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    try {
+      const purchaseData = purchaseIndividualGptSchema.parse(req.body);
+      const user = req.user!;
+      const { productId } = purchaseData;
+
+      // Validate product exists
+      const product = GPT_PRODUCTS[productId as keyof typeof GPT_PRODUCTS];
+      if (!product) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+
+      // Check if user already has access
+      const gptModels = await storage.getGptModels();
+      const gptModel = gptModels.find(model => model.productId === productId);
+      
+      if (gptModel) {
+        const existingAccess = await storage.getGptAccess(user.id, gptModel.id);
+        if (existingAccess) {
+          return res.status(400).json({ message: "You already have access to this GPT" });
+        }
+      }
+
+      // Create Stripe customer if needed
+      let customer;
+      if (user.stripeCustomerId) {
+        customer = await stripe.customers.retrieve(user.stripeCustomerId);
+      } else {
+        customer = await stripe.customers.create({
+          email: user.email,
+          name: user.name,
+        });
+
+        await storage.updateUser(user.id, {
+          stripeCustomerId: customer.id,
+        });
+      }
+
+      // Create payment intent for individual purchase
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(product.price * 100), // Convert to cents
+        currency: "usd",
+        customer: customer.id,
+        metadata: {
+          userId: user.id,
+          productId: productId,
+          productName: product.name,
+          purchaseType: 'individual'
+        },
+        automatic_payment_methods: {
+          enabled: true,
+        },
+      });
+
+      res.json({
+        clientSecret: paymentIntent.client_secret,
+        product: {
+          id: productId,
+          name: product.name,
+          price: product.price
+        }
+      });
+    } catch (error: any) {
+      console.error("Error creating individual purchase:", error);
+      res.status(500).json({ message: "Error creating purchase: " + error.message });
+    }
+  });
+
+  // Create subscription (monthly or annual)
+  app.post("/api/subscriptions", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    try {
+      const subscriptionData = createSubscriptionSchema.parse(req.body);
+      const user = req.user!;
+      const { priceId, planType } = subscriptionData;
+
+      // Check if user already has active subscription
+      if (user.subscriptionStatus === 'active') {
+        return res.status(400).json({ message: "You already have an active subscription" });
+      }
+
+      // Create Stripe customer if needed
+      let customer;
+      if (user.stripeCustomerId) {
+        customer = await stripe.customers.retrieve(user.stripeCustomerId);
+      } else {
+        customer = await stripe.customers.create({
+          email: user.email,
+          name: user.name,
+        });
+
+        await storage.updateUser(user.id, {
+          stripeCustomerId: customer.id,
+        });
+      }
+
+      // Create Stripe subscription
+      const subscription = await stripe.subscriptions.create({
+        customer: customer.id,
+        items: [{
+          price: priceId,
+        }],
+        payment_behavior: 'default_incomplete',
+        payment_settings: { save_default_payment_method: 'on_subscription' },
+        expand: ['latest_invoice.payment_intent'],
+        metadata: {
+          userId: user.id,
+          planType: planType
+        }
+      });
+
+      const invoice = subscription.latest_invoice as any;
+      const paymentIntent = invoice?.payment_intent;
+
+      if (!paymentIntent) {
+        throw new Error("Failed to create payment intent for subscription");
+      }
+
+      res.json({
+        subscriptionId: subscription.id,
+        clientSecret: paymentIntent.client_secret,
+        planType: planType,
+        status: subscription.status
+      });
+    } catch (error: any) {
+      console.error("Error creating subscription:", error);
+      res.status(500).json({ message: "Error creating subscription: " + error.message });
     }
   });
 
