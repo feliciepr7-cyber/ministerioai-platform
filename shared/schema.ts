@@ -21,6 +21,10 @@ export const users = pgTable("users", {
   accessCode: text("access_code").unique(),
   resetToken: text("reset_token"),
   resetTokenExpiry: timestamp("reset_token_expiry"),
+  // Free trial fields
+  trialStatus: text("trial_status").default("unused"), // unused, active, expired, used
+  trialStartDate: timestamp("trial_start_date"),
+  trialEndDate: timestamp("trial_end_date"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -71,6 +75,22 @@ export const gptAccess = pgTable("gpt_access", {
   expiresAt: timestamp("expires_at"),
   queriesUsed: integer("queries_used").default(0),
   lastAccessed: timestamp("last_accessed").defaultNow(),
+  // Individual purchase support
+  purchaseType: text("purchase_type").default("subscription"), // subscription, individual, trial
+  stripePaymentIntentId: text("stripe_payment_intent_id"), // For individual purchases
+  individualPurchaseDate: timestamp("individual_purchase_date"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Individual GPT Products for one-time purchases
+export const gptProducts = pgTable("gpt_products", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  productId: text("product_id").notNull().unique(), // generador-sermones, etc.
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull().default("9.99"),
+  stripePriceId: text("stripe_price_id"), // One-time payment price ID
+  isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -195,6 +215,10 @@ export const gptModelsRelations = relations(gptModels, ({ many }) => ({
   gptAccess: many(gptAccess),
 }));
 
+export const gptProductsRelations = relations(gptProducts, ({ many }) => ({
+  gptAccess: many(gptAccess),
+}));
+
 export const gptAccessRelations = relations(gptAccess, ({ one }) => ({
   user: one(users, {
     fields: [gptAccess.userId],
@@ -245,6 +269,11 @@ export const insertGptAccessSchema = createInsertSchema(gptAccess).omit({
   createdAt: true,
 });
 
+export const insertGptProductSchema = createInsertSchema(gptProducts).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Support Ticket Schemas
 export const insertTicketCategorySchema = createInsertSchema(ticketCategories).omit({
   id: true,
@@ -281,6 +310,21 @@ export const verifyGptAccessSchema = z.object({
   }
 );
 
+// New pricing schemas
+export const startFreeTrialSchema = z.object({
+  email: z.string().email(),
+});
+
+export const purchaseIndividualGptSchema = z.object({
+  productId: z.string().min(1, "Product ID is required"),
+  email: z.string().email().optional(),
+});
+
+export const createSubscriptionSchema = z.object({
+  priceId: z.string().min(1, "Price ID is required"),
+  planType: z.enum(["monthly", "annual"]),
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -293,6 +337,8 @@ export type GptModel = typeof gptModels.$inferSelect;
 export type InsertGptModel = z.infer<typeof insertGptModelSchema>;
 export type GptAccess = typeof gptAccess.$inferSelect;
 export type InsertGptAccess = z.infer<typeof insertGptAccessSchema>;
+export type GptProduct = typeof gptProducts.$inferSelect;
+export type InsertGptProduct = z.infer<typeof insertGptProductSchema>;
 
 // Support Ticket Types
 export type TicketCategory = typeof ticketCategories.$inferSelect;
