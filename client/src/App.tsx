@@ -19,6 +19,7 @@ import PrivacyPolicyPage from "@/pages/privacy-policy-page";
 import TermsOfServicePage from "@/pages/terms-of-service-page";
 import SupportPage from "@/pages/support-page";
 import AISupportPage from "@/pages/ai-support-page";
+import StartTrialPage from "@/pages/start-trial-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/login" component={AuthPage} />
       <Route path="/verify" component={VerifyPage} />
       <Route path="/checkout/:plan?" component={CheckoutPage} />
+      <Route path="/start-trial" component={StartTrialPage} />
       <Route path="/features" component={FeaturesPage} />
       <Route path="/user-guide" component={UserGuidePage} />
       <Route path="/status" component={StatusPage} />

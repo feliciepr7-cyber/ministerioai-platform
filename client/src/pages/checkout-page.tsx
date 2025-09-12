@@ -54,6 +54,16 @@ const GPT_PRODUCTS = {
     price: 9.99,
     features: ["Acceso de por vida al Custom GPT", "Múltiples interpretaciones explicadas", "Simbolismo y contexto cultural", "Aplicación para matrimonio e intimidad con Dios"]
   },
+  "monthly-subscription": {
+    name: "Plan Mensual",
+    price: 20,
+    features: ["Acceso a todos los GPTs", "Soporte prioritario", "Nuevas herramientas incluidas", "Cancela cuando quieras"]
+  },
+  "annual-subscription": {
+    name: "Plan Anual", 
+    price: 65,
+    features: ["Acceso a todos los GPTs", "Soporte prioritario", "Nuevas herramientas incluidas", "Descuento del 73%"]
+  },
 };
 
 interface CheckoutFormProps {
@@ -278,14 +288,31 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       return;
     }
 
-    // Create payment intent
+    // Create payment intent or subscription based on product type
     const createPaymentIntent = async () => {
       try {
-        const res = await apiRequest("/api/create-payment-intent", "POST", {
-          productId: productId,
-        });
-        const data = await res.json();
-        setClientSecret(data.clientSecret);
+        const isSubscription = productId === 'monthly-subscription' || productId === 'annual-subscription';
+        
+        if (isSubscription) {
+          // Use subscription endpoint for monthly/annual plans
+          const planType = productId === 'monthly-subscription' ? 'monthly' : 'annual';
+          // Use test Stripe price IDs - these should be replaced with real ones in production
+          const priceId = planType === 'monthly' ? 'price_1234567890_monthly' : 'price_1234567890_annual';
+          
+          const res = await apiRequest("/api/subscriptions", "POST", {
+            priceId: priceId,
+            planType: planType
+          });
+          const data = await res.json();
+          setClientSecret(data.clientSecret);
+        } else {
+          // Use payment intent for individual GPT purchases
+          const res = await apiRequest("/api/create-payment-intent", "POST", {
+            productId: productId,
+          });
+          const data = await res.json();
+          setClientSecret(data.clientSecret);
+        }
       } catch (error: any) {
         toast({
           title: "Error de Configuración",

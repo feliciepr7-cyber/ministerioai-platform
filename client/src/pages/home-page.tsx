@@ -150,6 +150,30 @@ export default function HomePage() {
     }
   };
 
+  const handleSelectMonthlyPlan = () => {
+    if (user) {
+      setLocation("/checkout/monthly-subscription");
+    } else {
+      setLocation("/auth");
+    }
+  };
+
+  const handleSelectAnnualPlan = () => {
+    if (user) {
+      setLocation("/checkout/annual-subscription");
+    } else {
+      setLocation("/auth");
+    }
+  };
+
+  const handleSelectFreeTrial = () => {
+    if (user) {
+      setLocation("/start-trial");
+    } else {
+      setLocation("/auth");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Structured Data for SEO */}
@@ -503,6 +527,7 @@ export default function HomePage() {
                   </ul>
                   
                   <Button 
+                    onClick={handleSelectMonthlyPlan}
                     className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                     data-testid="button-select-monthly"
                   >
@@ -550,6 +575,7 @@ export default function HomePage() {
                   </ul>
                   
                   <Button 
+                    onClick={handleSelectAnnualPlan}
                     className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                     data-testid="button-select-annual"
                   >
@@ -562,7 +588,7 @@ export default function HomePage() {
             {/* Free Trial CTA */}
             <div className="text-center mt-8">
               <p className="text-muted-foreground mb-4">¿No estás seguro? Prueba gratis por 3 días</p>
-              <Button variant="outline" className="mx-auto" data-testid="button-free-trial">
+              <Button onClick={handleSelectFreeTrial} variant="outline" className="mx-auto" data-testid="button-free-trial">
                 Comenzar Prueba Gratuita
               </Button>
             </div>
