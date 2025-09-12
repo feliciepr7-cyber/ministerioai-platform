@@ -4,6 +4,7 @@ import {
   payments,
   gptModels,
   gptAccess,
+  gptProducts,
   ticketCategories,
   tickets,
   ticketComments,
@@ -18,6 +19,8 @@ import {
   type InsertGptModel,
   type GptAccess,
   type InsertGptAccess,
+  type GptProduct,
+  type InsertGptProduct,
   type TicketCategory,
   type InsertTicketCategory,
   type Ticket,
@@ -69,6 +72,16 @@ export interface IStorage {
   getGptAccessByAccessCode(accessCode: string): Promise<{ access: GptAccess; user: User; model: GptModel } | undefined>;
   createGptAccess(access: InsertGptAccess): Promise<GptAccess>;
   updateGptAccess(id: string, updates: Partial<GptAccess>): Promise<GptAccess>;
+
+  // GPT Products operations
+  getGptProducts(): Promise<GptProduct[]>;
+  getGptProductByProductId(productId: string): Promise<GptProduct | undefined>;
+  createGptProduct(product: InsertGptProduct): Promise<GptProduct>;
+
+  // Free trial operations
+  startFreeTrial(userId: string): Promise<User>;
+  isTrialActive(user: User): boolean;
+  isTrialExpired(user: User): boolean;
 
   // Support Ticket Category operations
   getTicketCategories(): Promise<TicketCategory[]>;
@@ -255,6 +268,52 @@ export class DatabaseStorage implements IStorage {
   async updateGptAccess(id: string, updates: Partial<GptAccess>): Promise<GptAccess> {
     const [access] = await db.update(gptAccess).set(updates).where(eq(gptAccess.id, id)).returning();
     return access;
+  }
+
+  // GPT Products operations
+  async getGptProducts(): Promise<GptProduct[]> {
+    return await db.select().from(gptProducts).where(eq(gptProducts.isActive, true));
+  }
+
+  async getGptProductByProductId(productId: string): Promise<GptProduct | undefined> {
+    const [product] = await db.select().from(gptProducts).where(eq(gptProducts.productId, productId));
+    return product;
+  }
+
+  async createGptProduct(insertProduct: InsertGptProduct): Promise<GptProduct> {
+    const [product] = await db.insert(gptProducts).values(insertProduct).returning();
+    return product;
+  }
+
+  // Free trial operations
+  async startFreeTrial(userId: string): Promise<User> {
+    const trialStart = new Date();
+    const trialEnd = new Date(trialStart.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days
+
+    const [updatedUser] = await db.update(users).set({
+      trialStatus: 'active',
+      trialStartDate: trialStart,
+      trialEndDate: trialEnd,
+      updatedAt: new Date(),
+    }).where(eq(users.id, userId)).returning();
+    
+    return updatedUser;
+  }
+
+  isTrialActive(user: User): boolean {
+    if (user.trialStatus !== 'active') return false;
+    if (!user.trialEndDate) return false;
+    
+    const now = new Date();
+    return now <= user.trialEndDate;
+  }
+
+  isTrialExpired(user: User): boolean {
+    if (user.trialStatus === 'unused') return false;
+    if (!user.trialEndDate) return false;
+    
+    const now = new Date();
+    return now > user.trialEndDate;
   }
 
   // Support Ticket Category operations
