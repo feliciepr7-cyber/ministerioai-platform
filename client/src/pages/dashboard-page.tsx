@@ -21,6 +21,8 @@ import comentarioExegeticoImage from "@assets/generated_images/Biblical_commenta
 import epistolasImage from "@assets/generated_images/Pauline_epistles_AI_illustration_cadd8ce7.png";
 import apocalipsisImage from "@assets/generated_images/Apocalypse_Bible_study_illustration_14931542.png";
 import cantaresImage from "@assets/generated_images/Song_of_Solomon_study_illustration_6f23a9c5.png";
+import capacitacionImage from "@assets/generated_images/Biblical_training_ministry_illustration_c316ee86.png";
+import diccionarioImage from "@assets/generated_images/Biblical_dictionary_book_illustration_045260e8.png";
 
 interface DashboardData {
   user: {
@@ -323,6 +325,12 @@ export default function DashboardPage() {
                           )}
                           {product.id === 'cantar-cantares' && (
                             <img src={cantaresImage} alt="Estudio de Cantar de los Cantares" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'capacitacion-biblica' && (
+                            <img src={capacitacionImage} alt="Capacitacion Bíblica para Servidores de Ministerio" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'diccionario-biblico' && (
+                            <img src={diccionarioImage} alt="Diccionario Bíblico" className="w-full h-full object-cover" />
                           )}
                         </div>
                         <div className="flex-1">
