@@ -2,13 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
-// TEMPORARY: Use test Stripe keys to fix customer ID mismatch in production
-if (process.env.TESTING_STRIPE_SECRET_KEY) {
-  process.env.STRIPE_SECRET_KEY = process.env.TESTING_STRIPE_SECRET_KEY;
-}
-if (process.env.TESTING_VITE_STRIPE_PUBLIC_KEY) {
-  process.env.VITE_STRIPE_PUBLIC_KEY = process.env.TESTING_VITE_STRIPE_PUBLIC_KEY;
-}
+// Use production Stripe keys in production environment
 
 const app = express();
 
