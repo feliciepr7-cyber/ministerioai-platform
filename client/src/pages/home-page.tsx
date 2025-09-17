@@ -16,6 +16,8 @@ import comentarioImage from "@assets/generated_images/Biblical_commentary_AI_log
 import epistolasImage from "@assets/generated_images/Pauline_epistles_AI_illustration_cadd8ce7.png";
 import apocalipsisImage from "@assets/generated_images/Apocalypse_Bible_study_illustration_14931542.png";
 import cantaresImage from "@assets/generated_images/Song_of_Solomon_study_illustration_6f23a9c5.png";
+import capacitacionImage from "@assets/generated_images/Biblical_training_ministry_illustration_c316ee86.png";
+import diccionarioImage from "@assets/generated_images/Biblical_dictionary_book_illustration_045260e8.png";
 import securePaymentIcon from "@assets/generated_images/Secure_payment_shield_icon_ba166b10.png";
 import instantAccessIcon from "@assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png";
 import supportIcon from "@assets/generated_images/24/7_support_headset_icon_efb44ef5.png";
@@ -112,6 +114,32 @@ const GPT_PRODUCTS = [
       "Aplicación para matrimonio e intimidad con Dios"
     ],
     image: cantaresImage
+  },
+  {
+    id: "capacitacion-biblica",
+    name: "Capacitacion Bíblica para Servidores de Ministerio",
+    price: 9.99,
+    description: "Formación integral para servidores y líderes de ministerio cristiano",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Capacitación bíblica estructurada",
+      "Formación ministerial práctica",
+      "Herramientas para liderazgo cristiano"
+    ],
+    image: capacitacionImage
+  },
+  {
+    id: "diccionario-biblico",
+    name: "Diccionario Bíblico",
+    price: 9.99,
+    description: "Recurso completo para entender términos, personajes y conceptos bíblicos",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Definiciones bíblicas completas",
+      "Contexto histórico y cultural",
+      "Referencias cruzadas y etimología"
+    ],
+    image: diccionarioImage
   }
 ];
 
