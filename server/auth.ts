@@ -13,6 +13,12 @@ declare global {
   }
 }
 
+// Helper function to sanitize user data for API responses
+function toPublicUser(user: SelectUser) {
+  const { password, resetToken, resetTokenExpiry, ...publicUser } = user;
+  return publicUser;
+}
+
 const scryptAsync = promisify(scrypt);
 
 async function hashPassword(password: string) {
@@ -140,24 +146,45 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/register", async (req, res, next) => {
-    const existingUser = await storage.getUserByUsername(req.body.username);
-    if (existingUser) {
-      return res.status(400).send("Username already exists");
+    try {
+      // Check for existing username and email
+      const existingUserByUsername = await storage.getUserByUsername(req.body.username);
+      if (existingUserByUsername) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+
+      const existingUserByEmail = await storage.getUserByEmail(req.body.email);
+      if (existingUserByEmail) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+
+      const user = await storage.createUser({
+        ...req.body,
+        password: await hashPassword(req.body.password),
+      });
+
+      req.login(user, (err) => {
+        if (err) return next(err);
+        res.status(201).json(toPublicUser(user));
+      });
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      
+      // Handle database constraint violations gracefully
+      if (error.code === '23505') { // PostgreSQL unique constraint violation
+        if (error.constraint === 'users_email_unique') {
+          return res.status(400).json({ message: "Email already exists" });
+        } else if (error.constraint === 'users_username_unique') {
+          return res.status(400).json({ message: "Username already exists" });
+        }
+      }
+      
+      res.status(500).json({ message: "Registration failed. Please try again." });
     }
-
-    const user = await storage.createUser({
-      ...req.body,
-      password: await hashPassword(req.body.password),
-    });
-
-    req.login(user, (err) => {
-      if (err) return next(err);
-      res.status(201).json(user);
-    });
   });
 
   app.post("/api/login", passport.authenticate("local"), (req, res) => {
-    res.status(200).json(req.user);
+    res.status(200).json(toPublicUser(req.user!));
   });
 
   app.post("/api/logout", (req, res, next) => {
@@ -180,7 +207,7 @@ export function setupAuth(app: Express) {
 
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
-    res.json(req.user);
+    res.json(toPublicUser(req.user!));
   });
 
   // Password reset request
