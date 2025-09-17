@@ -24,11 +24,16 @@ import {
 import { randomUUID } from "crypto";
 import { generateSupportResponse, analyzeUserSentiment } from "./aiSupport";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error("Missing required environment variable: STRIPE_SECRET_KEY");
+// Use test keys in development, live keys in production
+const stripeSecretKey = process.env.NODE_ENV === 'development' 
+  ? process.env.TESTING_STRIPE_SECRET_KEY 
+  : process.env.STRIPE_SECRET_KEY;
+
+if (!stripeSecretKey) {
+  throw new Error("Missing required Stripe secret key for environment: " + process.env.NODE_ENV);
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(stripeSecretKey);
 
 // Pricing configuration for one-time purchases
 const GPT_PRODUCTS = {

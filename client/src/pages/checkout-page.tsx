@@ -12,11 +12,16 @@ import { useToast } from "@/hooks/use-toast";
 import aiLogo from "@assets/AI_1756923008802.png";
 import { Loader2 } from "lucide-react";
 
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error("Missing required environment variable: VITE_STRIPE_PUBLIC_KEY");
+// Use test keys in development, live keys in production
+const stripePublicKey = import.meta.env.MODE === 'development' 
+  ? import.meta.env.TESTING_VITE_STRIPE_PUBLIC_KEY 
+  : import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+
+if (!stripePublicKey) {
+  throw new Error("Missing required Stripe public key for environment: " + import.meta.env.MODE);
 }
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(stripePublicKey);
 
 const GPT_PRODUCTS = {
   "generador-sermones": {
