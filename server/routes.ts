@@ -23,6 +23,10 @@ import {
 } from "./emailService";
 import { randomUUID } from "crypto";
 import { generateSupportResponse, analyzeUserSentiment } from "./aiSupport";
+import dotenv from 'dotenv';
+
+// Force use of development database in production if .env exists
+dotenv.config();
 
 // Use test keys in development, live keys in production
 const stripeSecretKey = process.env.NODE_ENV === 'development' 
