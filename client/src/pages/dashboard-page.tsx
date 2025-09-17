@@ -611,6 +611,8 @@ export default function DashboardPage() {
                     <option value="epistolas-pablo">Las Epistolas del Apostol Pablo</option>
                     <option value="apocalipsis">Estudio El Libro de Apocalipsis</option>
                     <option value="cantar-cantares">Estudio de Cantar de los Cantares</option>
+                    <option value="capacitacion-biblica">Capacitacion Bíblica para Servidores de Ministerio</option>
+                    <option value="diccionario-biblico">Diccionario Bíblico</option>
                   </select>
                 </div>
 
