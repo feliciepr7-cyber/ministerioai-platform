@@ -81,6 +81,20 @@ const GPT_PRODUCTS = {
     gptUrl: "https://chatgpt.com/g/g-68bf83e2555481919630825ea98365e8-estudio-de-cantar-de-los-cantares",
     icon: "fas fa-heart",
   },
+  "capacitacion-biblica": {
+    name: "Capacitacion Bíblica para Servidores de Ministerio",
+    description: "Formación integral para servidores y líderes de ministerio cristiano. Proporciona capacitación bíblica estructurada y herramientas prácticas para el liderazgo en la iglesia, desarrollando competencias ministeriales sólidas basadas en principios bíblicos.",
+    price: 9.99,
+    gptUrl: "https://chatgpt.com/g/g-68c446ad942c8191bbfd1ccd18f167b9-capacitacion-biblica-para-servidores-de-ministerio",
+    icon: "fas fa-graduation-cap",
+  },
+  "diccionario-biblico": {
+    name: "Diccionario Bíblico",
+    description: "Recurso completo para entender términos, personajes y conceptos bíblicos. Incluye definiciones detalladas, contexto histórico y cultural, referencias cruzadas y etimología para un estudio profundo de las Escrituras.",
+    price: 9.99,
+    gptUrl: "https://chatgpt.com/g/g-68c47e904d8481919ba34e997dae0f7d-diccionario-biblico",
+    icon: "fas fa-book-open",
+  },
 };
 
 // Rate limiting configurations

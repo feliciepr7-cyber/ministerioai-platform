@@ -54,6 +54,16 @@ const GPT_PRODUCTS = {
     price: 9.99,
     features: ["Acceso de por vida al Custom GPT", "Múltiples interpretaciones explicadas", "Simbolismo y contexto cultural", "Aplicación para matrimonio e intimidad con Dios"]
   },
+  "capacitacion-biblica": {
+    name: "Capacitacion Bíblica para Servidores de Ministerio",
+    price: 9.99,
+    features: ["Acceso de por vida al Custom GPT", "Capacitación bíblica estructurada", "Formación ministerial práctica", "Herramientas para liderazgo cristiano"]
+  },
+  "diccionario-biblico": {
+    name: "Diccionario Bíblico",
+    price: 9.99,
+    features: ["Acceso de por vida al Custom GPT", "Definiciones bíblicas completas", "Contexto histórico y cultural", "Referencias cruzadas y etimología"]
+  },
   "monthly-subscription": {
     name: "Plan Mensual",
     price: 20,
