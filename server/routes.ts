@@ -1013,7 +1013,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Check if user already has access
       const gptModels = await storage.getGptModels();
-      const gptModel = gptModels.find(model => model.productId === productId);
+      const gptModel = gptModels.find(model => model.name === product.name);
       
       if (gptModel) {
         const existingAccess = await storage.getGptAccess(user.id, gptModel.id);
