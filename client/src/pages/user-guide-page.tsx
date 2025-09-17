@@ -497,6 +497,117 @@ export default function UserGuidePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Capacitacion Bíblica para Servidores de Ministerio */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-emerald-600" />
+                Capacitacion Bíblica para Servidores de Ministerio
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Desarrolla líderes competentes con formación bíblica integral y herramientas prácticas para el ministerio.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Áreas de capacitación:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Fundamentos bíblicos para el liderazgo cristiano</li>
+                    <li>• Principios de discipulado y mentoreo</li>
+                    <li>• Desarrollo de competencias ministeriales</li>
+                    <li>• Formación en doctrina cristiana esencial</li>
+                    <li>• Liderazgo de equipos ministeriales</li>
+                    <li>• Planificación y organización ministerial</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Métodos de consulta efectivos:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Desarrollo personal:</strong> "¿Cómo desarrollar las características de un líder bíblico?"</p>
+                    <p className="mb-2"><strong>Capacitación grupal:</strong> "Diseña un plan de capacitación de 6 meses para diáconos"</p>
+                    <p><strong>Casos prácticos:</strong> "¿Cómo manejar conflictos en el equipo ministerial?"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Aplicaciones prácticas:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Planes de capacitación para nuevos líderes</li>
+                    <li>• Cursos de formación ministerial</li>
+                    <li>• Evaluación de competencias espirituales</li>
+                    <li>• Desarrollo de manuales de liderazgo</li>
+                    <li>• Estrategias de mentoreo cristiano</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Diccionario Bíblico */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-amber-600" />
+                Diccionario Bíblico
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Tu biblioteca bíblica digital completa para entender términos, personajes y conceptos de las Escrituras.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Tipos de información disponible:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• <strong>Términos bíblicos:</strong> Definiciones teológicas precisas</li>
+                    <li>• <strong>Personajes:</strong> Biografías y contexto histórico</li>
+                    <li>• <strong>Lugares:</strong> Geografía bíblica y arqueología</li>
+                    <li>• <strong>Conceptos:</strong> Doctrinas y enseñanzas explicadas</li>
+                    <li>• <strong>Etimología:</strong> Origen de palabras en hebreo y griego</li>
+                    <li>• <strong>Referencias cruzadas:</strong> Conexiones entre pasajes</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Formas de consultar:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Término específico:</strong> "Define 'justificación' bíblicamente"</p>
+                    <p className="mb-2"><strong>Personaje:</strong> "Cuéntame sobre el rey Ezequías y su reforma"</p>
+                    <p className="mb-2"><strong>Concepto doctrinal:</strong> "Explica la doctrina de la Trinidad"</p>
+                    <p><strong>Lugar geográfico:</strong> "Describe la importancia de Corinto en tiempos de Pablo"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Lo que recibirás:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Definiciones claras y precisas</li>
+                    <li>• Contexto histórico y cultural</li>
+                    <li>• Referencias bíblicas relevantes</li>
+                    <li>• Análisis etimológico cuando aplique</li>
+                    <li>• Aplicaciones prácticas para la enseñanza</li>
+                    <li>• Perspectivas teológicas balanceadas</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Ideal para:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Preparación de estudios bíblicos</li>
+                    <li>• Investigación sermonal profunda</li>
+                    <li>• Responder preguntas de la congregación</li>
+                    <li>• Educación cristiana y discipulado</li>
+                    <li>• Consulta rápida durante el estudio</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Tips and Best Practices */}
