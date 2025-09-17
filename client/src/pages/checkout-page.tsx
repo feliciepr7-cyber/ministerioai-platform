@@ -12,9 +12,9 @@ import { useToast } from "@/hooks/use-toast";
 import aiLogo from "@assets/AI_1756923008802.png";
 import { Loader2 } from "lucide-react";
 
-// Use test keys in development, live keys in production
+// Use test keys in development, live keys in production  
 const stripePublicKey = import.meta.env.MODE === 'development' 
-  ? import.meta.env.TESTING_VITE_STRIPE_PUBLIC_KEY 
+  ? (import.meta.env.TESTING_VITE_STRIPE_PUBLIC_KEY || import.meta.env.VITE_STRIPE_PUBLIC_KEY)
   : import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
 if (!stripePublicKey) {
