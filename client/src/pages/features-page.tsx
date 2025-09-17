@@ -296,6 +296,210 @@ export default function FeaturesPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Las Epistolas del Apostol Pablo */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      Las Epistolas del Apostol Pablo
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Estudio exhaustivo de las 13 cartas paulinas con análisis teológico y aplicación pastoral.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Análisis completo de todas las epistolas paulinas
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Contexto histórico y teológico detallado
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Aplicaciones pastorales modernas
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Doctrina cristiana fundamental explicada
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-lg p-6 text-center">
+                    <BookOpen className="w-16 h-16 text-chart-1 mx-auto mb-4" />
+                    <p className="text-sm text-muted-foreground">
+                      Profundiza en la teología paulina con análisis experto
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Estudio El Libro de Apocalipsis */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div className="order-2 md:order-1">
+                    <div className="bg-gradient-to-br from-red-100 to-purple-100 dark:from-red-900/20 dark:to-purple-900/20 rounded-lg p-6 text-center">
+                      <Shield className="w-16 h-16 text-chart-5 mx-auto mb-4" />
+                      <p className="text-sm text-muted-foreground">
+                        Desentraña los misterios proféticos con claridad y esperanza
+                      </p>
+                    </div>
+                  </div>
+                  <div className="order-1 md:order-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      Estudio El Libro de Apocalipsis
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Guía completa para entender el libro más profético de la Biblia.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Análisis detallado de las siete iglesias
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Simbolismo apocalíptico explicado
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Promesas de esperanza para la iglesia
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Interpretación responsable de profecías
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Estudio de Cantar de los Cantares */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      Estudio de Cantar de los Cantares
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Explora la belleza del amor divino a través del libro más poético de la Biblia.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Múltiples interpretaciones explicadas claramente
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Simbolismo y contexto cultural oriental
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Aplicación para matrimonio cristiano
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Relación Cristo-Iglesia ilustrada
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="bg-gradient-to-br from-pink-100 to-red-100 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg p-6 text-center">
+                    <Heart className="w-16 h-16 text-chart-5 mx-auto mb-4" />
+                    <p className="text-sm text-muted-foreground">
+                      Descubre la poesía del amor sagrado y humano
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Capacitacion Bíblica para Servidores de Ministerio */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div className="order-2 md:order-1">
+                    <div className="bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-lg p-6 text-center">
+                      <Users className="w-16 h-16 text-chart-3 mx-auto mb-4" />
+                      <p className="text-sm text-muted-foreground">
+                        Forma líderes competentes con fundamento bíblico sólido
+                      </p>
+                    </div>
+                  </div>
+                  <div className="order-1 md:order-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      Capacitacion Bíblica para Servidores de Ministerio
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Formación integral para desarrollar líderes ministeriales competentes y comprometidos.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Capacitación bíblica estructurada y progresiva
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Formación ministerial práctica
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Herramientas para liderazgo cristiano efectivo
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Desarrollo de competencias ministeriales
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Diccionario Bíblico */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      Diccionario Bíblico
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Recurso enciclopédico para entender términos, personajes y conceptos bíblicos.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Definiciones bíblicas completas y precisas
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Contexto histórico y cultural detallado
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Referencias cruzadas extensivas
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Etimología y análisis lingüístico
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-lg p-6 text-center">
+                    <BookOpen className="w-16 h-16 text-chart-4 mx-auto mb-4" />
+                    <p className="text-sm text-muted-foreground">
+                      Tu biblioteca bíblica digital completa y accesible
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
