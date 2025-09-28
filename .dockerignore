@@ -1,0 +1,67 @@
+# Node modules
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+client/dist/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Development files
+*.md
+LICENSE
+
+# Test files
+test/
+*.test.js
+*.test.ts
+
+# Coverage
+coverage/
+
+# Temporary files
+tmp/
+temp/
+
+# Azure and deployment
+.azure/
+.github/
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Replit specific
+.replit
+replit.nix
+
+# Test and debug files
+cookies.txt
+test_cookies.txt
+final_cookies.txt
+login_test.txt
+final_dashboard_screenshot.png
+
+# Attached assets (if not needed in production)
+attached_assets/
