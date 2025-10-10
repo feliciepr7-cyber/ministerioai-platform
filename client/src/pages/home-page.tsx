@@ -18,6 +18,11 @@ import apocalipsisImage from "@assets/generated_images/Apocalypse_Bible_study_il
 import cantaresImage from "@assets/generated_images/Song_of_Solomon_study_illustration_6f23a9c5.png";
 import capacitacionImage from "@assets/generated_images/Biblical_training_ministry_illustration_c316ee86.png";
 import diccionarioImage from "@assets/generated_images/Biblical_dictionary_book_illustration_045260e8.png";
+import estudiosBiblicosImage from "@assets/stock_images/biblical_studies_dee_8f7b9703.jpg";
+import antiguoTestamentoImage from "@assets/stock_images/hebrew_bible_old_tes_b4c224a7.jpg";
+import nuevoTestamentoImage from "@assets/stock_images/greek_new_testament__34157e78.jpg";
+import queDiceLaBibliaImage from "@assets/stock_images/bible_questions_answ_e4e766c2.jpg";
+import capacitacionPracticaImage from "@assets/stock_images/practical_christian__c5bb4b35.jpg";
 import securePaymentIcon from "@assets/generated_images/Secure_payment_shield_icon_ba166b10.png";
 import instantAccessIcon from "@assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png";
 import supportIcon from "@assets/generated_images/24/7_support_headset_icon_efb44ef5.png";
@@ -140,6 +145,71 @@ const GPT_PRODUCTS = [
       "Referencias cruzadas y etimología"
     ],
     image: diccionarioImage
+  },
+  {
+    id: "estudios-biblicos-profundos",
+    name: "Estudios Biblicos Profundos",
+    price: 9.99,
+    description: "Análisis exhaustivo y profundo de pasajes bíblicos con metodología académica",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Análisis profundo de la Escritura",
+      "Metodología académica aplicada",
+      "Aplicación práctica para el ministerio"
+    ],
+    image: estudiosBiblicosImage
+  },
+  {
+    id: "antiguo-testamento-hebreo",
+    name: "El Antiguo Testamento del Hebreo Original",
+    price: 9.99,
+    description: "Estudio del Antiguo Testamento desde el hebreo original",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Análisis lingüístico del hebreo",
+      "Contexto cultural y teológico",
+      "Interpretación desde el idioma original"
+    ],
+    image: antiguoTestamentoImage
+  },
+  {
+    id: "nuevo-testamento-griego",
+    name: "El Nuevo Testamento del Griego Original",
+    price: 9.99,
+    description: "Estudio del Nuevo Testamento desde el griego original",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Análisis lingüístico del griego",
+      "Contexto cultural y teológico",
+      "Interpretación desde el idioma original"
+    ],
+    image: nuevoTestamentoImage
+  },
+  {
+    id: "que-dice-la-biblia",
+    name: "Que Dice la Biblia?",
+    price: 9.99,
+    description: "Respuestas bíblicas directas a preguntas cotidianas",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Respuestas bíblicas claras",
+      "Aplicación a la vida cotidiana",
+      "Guía espiritual práctica"
+    ],
+    image: queDiceLaBibliaImage
+  },
+  {
+    id: "capacitacion-practica-fe",
+    name: "Capacitacion Practica en la Fe",
+    price: 9.99,
+    description: "Formación práctica para vivir la fe cristiana en el día a día",
+    features: [
+      "Acceso de por vida al Custom GPT",
+      "Formación práctica diaria",
+      "Herramientas espirituales",
+      "Guía para el crecimiento en Cristo"
+    ],
+    image: capacitacionPracticaImage
   }
 ];
 
