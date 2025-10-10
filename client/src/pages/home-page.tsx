@@ -22,7 +22,7 @@ import estudiosBiblicosImage from "@assets/stock_images/biblical_studies_dee_8f7
 import antiguoTestamentoImage from "@assets/stock_images/hebrew_bible_old_tes_b4c224a7.jpg";
 import nuevoTestamentoImage from "@assets/stock_images/greek_new_testament__34157e78.jpg";
 import queDiceLaBibliaImage from "@assets/stock_images/bible_questions_answ_e4e766c2.jpg";
-import capacitacionPracticaImage from "@assets/stock_images/hands_praying_faith__dce70fb4.jpg";
+import capacitacionPracticaImage from "@assets/stock_images/christian_training_d_931b6289.jpg";
 import securePaymentIcon from "@assets/generated_images/Secure_payment_shield_icon_ba166b10.png";
 import instantAccessIcon from "@assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png";
 import supportIcon from "@assets/generated_images/24/7_support_headset_icon_efb44ef5.png";

@@ -27,9 +27,9 @@ import estudiosBiblicosImage from "@assets/stock_images/biblical_studies_dee_8f7
 import antiguoTestamentoImage from "@assets/stock_images/hebrew_bible_old_tes_b4c224a7.jpg";
 import nuevoTestamentoImage from "@assets/stock_images/greek_new_testament__34157e78.jpg";
 import queDiceLaBibliaImage from "@assets/stock_images/bible_questions_answ_e4e766c2.jpg";
-import capacitacionPracticaImage from "@assets/stock_images/hands_praying_faith__dce70fb4.jpg";
+import capacitacionPracticaImage from "@assets/stock_images/christian_training_d_931b6289.jpg";
 
-// Force rebuild: New image for Capacitacion Practica - 2025-10-10 03:37
+// DIFFERENT IMAGE: christian_training_d_931b6289.jpg - 2025-10-10 03:38
 interface DashboardData {
   user: {
     name: string;
