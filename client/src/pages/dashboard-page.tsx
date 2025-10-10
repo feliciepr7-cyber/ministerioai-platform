@@ -293,6 +293,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
+                {/* Total de productos disponibles: {dashboardData.availableProducts.length} */}
                 {dashboardData.availableProducts.map((product) => {
                   
                   // Backend already calculates 'purchased' correctly - just use it directly
@@ -331,6 +332,9 @@ export default function DashboardPage() {
                           )}
                           {product.id === 'diccionario-biblico' && (
                             <img src={diccionarioImage} alt="Diccionario Bíblico" className="w-full h-full object-cover" />
+                          )}
+                          {!['generador-sermones', 'manual-ceremonias', 'mensajes-expositivos', 'comentario-exegetico', 'epistolas-pablo', 'apocalipsis', 'cantar-cantares', 'capacitacion-biblica', 'diccionario-biblico'].includes(product.id) && (
+                            <i className={`${product.icon} text-3xl text-primary`}></i>
                           )}
                         </div>
                         <div className="flex-1">
