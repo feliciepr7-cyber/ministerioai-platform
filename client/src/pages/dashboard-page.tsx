@@ -23,6 +23,11 @@ import apocalipsisImage from "@assets/generated_images/Apocalypse_Bible_study_il
 import cantaresImage from "@assets/generated_images/Song_of_Solomon_study_illustration_6f23a9c5.png";
 import capacitacionImage from "@assets/generated_images/Biblical_training_ministry_illustration_c316ee86.png";
 import diccionarioImage from "@assets/generated_images/Biblical_dictionary_book_illustration_045260e8.png";
+import estudiosBiblicosImage from "@assets/stock_images/biblical_studies_dee_8f7b9703.jpg";
+import antiguoTestamentoImage from "@assets/stock_images/hebrew_bible_old_tes_b4c224a7.jpg";
+import nuevoTestamentoImage from "@assets/stock_images/greek_new_testament__34157e78.jpg";
+import queDiceLaBibliaImage from "@assets/stock_images/bible_questions_answ_e4e766c2.jpg";
+import capacitacionPracticaImage from "@assets/stock_images/practical_christian__c5bb4b35.jpg";
 
 interface DashboardData {
   user: {
@@ -332,8 +337,20 @@ export default function DashboardPage() {
                           {product.id === 'diccionario-biblico' && (
                             <img src={diccionarioImage} alt="Diccionario Bíblico" className="w-full h-full object-cover" />
                           )}
-                          {!['generador-sermones', 'manual-ceremonias', 'mensajes-expositivos', 'comentario-exegetico', 'epistolas-pablo', 'apocalipsis', 'cantar-cantares', 'capacitacion-biblica', 'diccionario-biblico'].includes(product.id) && (
-                            <i className={`${product.icon} text-3xl text-primary`}></i>
+                          {product.id === 'estudios-biblicos-profundos' && (
+                            <img src={estudiosBiblicosImage} alt="Estudios Biblicos Profundos" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'antiguo-testamento-hebreo' && (
+                            <img src={antiguoTestamentoImage} alt="El Antiguo Testamento del Hebreo Original" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'nuevo-testamento-griego' && (
+                            <img src={nuevoTestamentoImage} alt="El Nuevo Testamento del Griego Original" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'que-dice-la-biblia' && (
+                            <img src={queDiceLaBibliaImage} alt="Que Dice la Biblia?" className="w-full h-full object-cover" />
+                          )}
+                          {product.id === 'capacitacion-practica-fe' && (
+                            <img src={capacitacionPracticaImage} alt="Capacitacion Practica en la Fe" className="w-full h-full object-cover" />
                           )}
                         </div>
                         <div className="flex-1">
