@@ -574,11 +574,11 @@ export default function HomePage() {
                   <div className="text-center mb-6">
                     <h3 className="text-xl font-semibold text-foreground mb-2">Plan Anual</h3>
                     <div className="mb-2">
-                      <span className="text-3xl font-bold text-foreground">$65</span>
+                      <span className="text-3xl font-bold text-foreground">$75</span>
                       <span className="text-muted-foreground"> USD/año</span>
                     </div>
                     <div className="mb-4">
-                      <span className="text-sm text-primary font-medium">Ahorra $175 al año</span>
+                      <span className="text-sm text-primary font-medium">Ahorra $165 al año</span>
                     </div>
                     <p className="text-muted-foreground">Acceso completo a todas las herramientas</p>
                   </div>
@@ -598,7 +598,7 @@ export default function HomePage() {
                     </li>
                     <li className="flex items-center text-muted-foreground">
                       <i className="fas fa-check text-chart-2 mr-3"></i>
-                      Descuento del 73%
+                      Descuento del 69%
                     </li>
                   </ul>
                   

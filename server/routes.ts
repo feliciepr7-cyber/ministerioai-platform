@@ -104,6 +104,41 @@ const GPT_PRODUCTS = {
     gptUrl: "https://chatgpt.com/g/g-68c47e904d8481919ba34e997dae0f7d-diccionario-biblico",
     icon: "fas fa-book-open",
   },
+  "estudios-biblicos-profundos": {
+    name: "Estudios Biblicos Profundos",
+    description: "Análisis exhaustivo y profundo de pasajes bíblicos con metodología académica y aplicación práctica para el ministerio.",
+    price: 9.99,
+    gptUrl: "https://chatgpt.com/g/g-68d4b687d52c81918c088ee87f158c12-estudios-biblicos-profundos",
+    icon: "fas fa-bible",
+  },
+  "antiguo-testamento-hebreo": {
+    name: "El Antiguo Testamento del Hebreo Original",
+    description: "Estudio del Antiguo Testamento desde el hebreo original. Análisis lingüístico, contextual y teológico de los textos en su idioma original.",
+    price: 9.99,
+    gptUrl: "https://chatgpt.com/g/g-68d49780de7c8191b9287fdce9af4531-el-antiguo-testamento-del-hebreo-original",
+    icon: "fas fa-language",
+  },
+  "nuevo-testamento-griego": {
+    name: "El Nuevo Testamento del Griego Original",
+    description: "Estudio del Nuevo Testamento desde el griego original. Análisis lingüístico, contextual y teológico de los textos en su idioma original.",
+    price: 9.99,
+    gptUrl: "https://chatgpt.com/g/g-68d24aa980548191b334bed1f457c665-el-nuevo-testamento-del-griego-original",
+    icon: "fas fa-language",
+  },
+  "que-dice-la-biblia": {
+    name: "Que Dice la Biblia?",
+    description: "Respuestas bíblicas directas a preguntas cotidianas. Encuentra lo que la Biblia dice sobre cualquier tema de la vida cristiana.",
+    price: 9.99,
+    gptUrl: "https://chatgpt.com/g/g-68d0af186c2481919550e4ac0e00d834-que-dice-la-biblia",
+    icon: "fas fa-question-circle",
+  },
+  "capacitacion-practica-fe": {
+    name: "Capacitacion Practica en la Fe",
+    description: "Formación práctica para vivir la fe cristiana en el día a día. Herramientas, consejos y guía espiritual para el crecimiento en Cristo.",
+    price: 9.99,
+    gptUrl: "https://chatgpt.com/g/g-68cc063ca1d4819196eb26d88c871f80-capacitacion-practica-en-la-fe",
+    icon: "fas fa-praying-hands",
+  },
 };
 
 // Rate limiting configurations
@@ -1399,6 +1434,48 @@ async function initializeGptModels() {
           name: "Estudio de Cantar de los Cantares",
           description: "Explora la belleza del amor divino a través del libro más poético de la Biblia. Descubre las múltiples interpretaciones: amor conyugal, relación Cristo-Iglesia y búsqueda espiritual del alma. Perfecto para enseñanza sobre matrimonio, espiritualidad y la intimidad con Dios. Incluye simbolismo, contexto cultural y aplicación ministerial.",
           icon: "fas fa-heart",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "Capacitacion Bíblica para Servidores de Ministerio",
+          description: "Formación integral para servidores y líderes de ministerio cristiano. Proporciona capacitación bíblica estructurada y herramientas prácticas para el liderazgo en la iglesia, desarrollando competencias ministeriales sólidas basadas en principios bíblicos.",
+          icon: "fas fa-graduation-cap",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "Diccionario Bíblico",
+          description: "Recurso completo para entender términos, personajes y conceptos bíblicos. Incluye definiciones detalladas, contexto histórico y cultural, referencias cruzadas y etimología para un estudio profundo de las Escrituras.",
+          icon: "fas fa-book-open",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "Estudios Biblicos Profundos",
+          description: "Análisis exhaustivo y profundo de pasajes bíblicos con metodología académica y aplicación práctica para el ministerio.",
+          icon: "fas fa-bible",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "El Antiguo Testamento del Hebreo Original",
+          description: "Estudio del Antiguo Testamento desde el hebreo original. Análisis lingüístico, contextual y teológico de los textos en su idioma original.",
+          icon: "fas fa-language",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "El Nuevo Testamento del Griego Original",
+          description: "Estudio del Nuevo Testamento desde el griego original. Análisis lingüístico, contextual y teológico de los textos en su idioma original.",
+          icon: "fas fa-language",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "Que Dice la Biblia?",
+          description: "Respuestas bíblicas directas a preguntas cotidianas. Encuentra lo que la Biblia dice sobre cualquier tema de la vida cristiana.",
+          icon: "fas fa-question-circle",
+          requiredPlan: "purchase",
+        },
+        {
+          name: "Capacitacion Practica en la Fe",
+          description: "Formación práctica para vivir la fe cristiana en el día a día. Herramientas, consejos y guía espiritual para el crecimiento en Cristo.",
+          icon: "fas fa-praying-hands",
           requiredPlan: "purchase",
         },
       ];
