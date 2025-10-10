@@ -293,7 +293,6 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {/* Total de productos disponibles: {dashboardData.availableProducts.length} */}
                 {dashboardData.availableProducts.map((product) => {
                   
                   // Backend already calculates 'purchased' correctly - just use it directly
