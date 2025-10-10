@@ -29,6 +29,7 @@ import nuevoTestamentoImage from "@assets/stock_images/greek_new_testament__3415
 import queDiceLaBibliaImage from "@assets/stock_images/bible_questions_answ_e4e766c2.jpg";
 import capacitacionPracticaImage from "@assets/stock_images/practical_christian__c5bb4b35.jpg";
 
+// Force rebuild timestamp: 2025-10-10 03:24
 interface DashboardData {
   user: {
     name: string;
