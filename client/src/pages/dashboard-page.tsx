@@ -27,9 +27,9 @@ import estudiosBiblicosImage from "@assets/stock_images/biblical_studies_dee_8f7
 import antiguoTestamentoImage from "@assets/stock_images/hebrew_bible_old_tes_b4c224a7.jpg";
 import nuevoTestamentoImage from "@assets/stock_images/greek_new_testament__34157e78.jpg";
 import queDiceLaBibliaImage from "@assets/stock_images/bible_questions_answ_e4e766c2.jpg";
-import capacitacionPracticaImage from "@assets/stock_images/practical_christian__c5bb4b35.jpg";
+import capacitacionPracticaImage from "@assets/stock_images/hands_praying_faith__dce70fb4.jpg";
 
-// Force rebuild timestamp: 2025-10-10 03:24
+// Force rebuild timestamp: 2025-10-10 03:35
 interface DashboardData {
   user: {
     name: string;
