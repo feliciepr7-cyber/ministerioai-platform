@@ -27,6 +27,7 @@ import securePaymentIcon from "@assets/generated_images/Secure_payment_shield_ic
 import instantAccessIcon from "@assets/generated_images/Instant_access_lightning_icon_5f7a80ea.png";
 import supportIcon from "@assets/generated_images/24/7_support_headset_icon_efb44ef5.png";
 
+// Updated: New image for Capacitacion Practica 2025-10-10 03:37
 const GPT_PRODUCTS = [
   {
     id: "generador-sermones",

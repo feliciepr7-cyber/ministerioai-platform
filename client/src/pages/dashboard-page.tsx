@@ -29,7 +29,7 @@ import nuevoTestamentoImage from "@assets/stock_images/greek_new_testament__3415
 import queDiceLaBibliaImage from "@assets/stock_images/bible_questions_answ_e4e766c2.jpg";
 import capacitacionPracticaImage from "@assets/stock_images/hands_praying_faith__dce70fb4.jpg";
 
-// Force rebuild timestamp: 2025-10-10 03:35
+// Force rebuild: New image for Capacitacion Practica - 2025-10-10 03:37
 interface DashboardData {
   user: {
     name: string;
