@@ -500,6 +500,212 @@ export default function FeaturesPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Estudios Biblicos Profundos */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div className="order-2 md:order-1">
+                    <div className="bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-900/20 dark:to-violet-900/20 rounded-lg p-6 text-center">
+                      <BookOpen className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
+                      <p className="text-sm text-muted-foreground">
+                        Análisis profundo con metodología académica y aplicación práctica
+                      </p>
+                    </div>
+                  </div>
+                  <div className="order-1 md:order-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      Estudios Biblicos Profundos
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Análisis exhaustivo de pasajes bíblicos con metodología académica y aplicación ministerial.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Exégesis rigurosa del texto original
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Contexto histórico y cultural profundo
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Metodología de estudio estructurada
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Aplicaciones prácticas contemporáneas
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* El Antiguo Testamento del Hebreo Original */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      El Antiguo Testamento del Hebreo Original
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Sumérgete en el estudio del AT desde el idioma original con análisis lingüístico avanzado.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Análisis lingüístico del hebreo bíblico
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Matices del idioma original explicados
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Comparación entre traducciones
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Contexto cultural del antiguo Israel
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-lg p-6 text-center">
+                    <BookOpen className="w-16 h-16 text-blue-700 mx-auto mb-4" />
+                    <p className="text-sm text-muted-foreground">
+                      Descubre la riqueza del texto en su lengua original
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* El Nuevo Testamento del Griego Original */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div className="order-2 md:order-1">
+                    <div className="bg-gradient-to-br from-teal-100 to-emerald-100 dark:from-teal-900/20 dark:to-emerald-900/20 rounded-lg p-6 text-center">
+                      <BookOpen className="w-16 h-16 text-teal-600 mx-auto mb-4" />
+                      <p className="text-sm text-muted-foreground">
+                        Explora el NT desde el griego koiné con precisión académica
+                      </p>
+                    </div>
+                  </div>
+                  <div className="order-1 md:order-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      El Nuevo Testamento del Griego Original
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Estudio avanzado del NT desde el griego koiné con análisis lingüístico y teológico.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Análisis del griego koiné del primer siglo
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Tiempos verbales y matices semánticos
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Contexto cultural greco-romano
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Crítica textual y variantes manuscritas
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Que Dice la Biblia? */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      ¿Qué Dice la Biblia?
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Respuestas bíblicas claras y directas a las preguntas cotidianas de la vida cristiana.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Respuestas fundamentadas en las Escrituras
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Múltiples referencias bíblicas relevantes
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Aplicación práctica a la vida diaria
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Orientación pastoral equilibrada
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-100 to-lime-100 dark:from-green-900/20 dark:to-lime-900/20 rounded-lg p-6 text-center">
+                    <Shield className="w-16 h-16 text-green-600 mx-auto mb-4" />
+                    <p className="text-sm text-muted-foreground">
+                      Encuentra lo que la Biblia dice sobre cualquier tema
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Capacitacion Practica en la Fe */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
+                  <div className="order-2 md:order-1">
+                    <div className="bg-gradient-to-br from-rose-100 to-pink-100 dark:from-rose-900/20 dark:to-pink-900/20 rounded-lg p-6 text-center">
+                      <Heart className="w-16 h-16 text-rose-600 mx-auto mb-4" />
+                      <p className="text-sm text-muted-foreground">
+                        Herramientas prácticas para vivir la fe día a día
+                      </p>
+                    </div>
+                  </div>
+                  <div className="order-1 md:order-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
+                      Capacitación Práctica en la Fe
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      Formación práctica para vivir la fe cristiana auténticamente en el día a día.
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Disciplinas espirituales diarias
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Vida de santidad y carácter cristiano
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Testimonio y evangelismo personal
+                      </li>
+                      <li className="flex items-center text-sm text-muted-foreground">
+                        <Check className="w-4 h-4 text-chart-2 mr-2 flex-shrink-0" />
+                        Crecimiento en los frutos del Espíritu
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
