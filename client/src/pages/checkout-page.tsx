@@ -27,47 +27,47 @@ const GPT_PRODUCTS = {
   "generador-sermones": {
     name: "Generador de Sermones",
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Bosquejos de sermones detallados", "Estudios bíblicos profundos", "Basado en pasajes bíblicos"]
+    features: ["Acceso directo al Custom GPT", "Bosquejos de sermones detallados", "Estudios bíblicos profundos", "Basado en pasajes bíblicos"]
   },
   "manual-ceremonias": {
     name: "Manual de Ceremonias del Ministro",
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Guías para ceremonias", "Servicios especiales", "Excelencia ministerial"]
+    features: ["Acceso directo al Custom GPT", "Guías para ceremonias", "Servicios especiales", "Excelencia ministerial"]
   },
   "mensajes-expositivos": {
     name: "Mensajes Expositivos",
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Explicación clara de la Escritura", "Aplicación práctica", "Predicación expositiva"]
+    features: ["Acceso directo al Custom GPT", "Explicación clara de la Escritura", "Aplicación práctica", "Predicación expositiva"]
   },
   "comentario-exegetico": {
     name: "Comentario Exegético",
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Análisis exegético detallado", "Contexto histórico y cultural", "Interpretación teológica precisa"]
+    features: ["Acceso directo al Custom GPT", "Análisis exegético detallado", "Contexto histórico y cultural", "Interpretación teológica precisa"]
   },
   "epistolas-pablo": {
     name: "Las Epistolas del Apostol Pablo",
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Análisis de las 13 epistolas paulinas", "Contexto histórico y teológico", "Aplicaciones pastorales modernas"]
+    features: ["Acceso directo al Custom GPT", "Análisis de las 13 epistolas paulinas", "Contexto histórico y teológico", "Aplicaciones pastorales modernas"]
   },
   "apocalipsis": {
     name: "Estudio El Libro de Apocalipsis",
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Análisis de las siete iglesias", "Simbolismo apocalíptico explicado", "Promesas de esperanza para la iglesia"]
+    features: ["Acceso directo al Custom GPT", "Análisis de las siete iglesias", "Simbolismo apocalíptico explicado", "Promesas de esperanza para la iglesia"]
   },
   "cantar-cantares": {
     name: "Estudio de Cantar de los Cantares", 
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Múltiples interpretaciones explicadas", "Simbolismo y contexto cultural", "Aplicación para matrimonio e intimidad con Dios"]
+    features: ["Acceso directo al Custom GPT", "Múltiples interpretaciones explicadas", "Simbolismo y contexto cultural", "Aplicación para matrimonio e intimidad con Dios"]
   },
   "capacitacion-biblica": {
     name: "Capacitacion Bíblica para Servidores de Ministerio",
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Capacitación bíblica estructurada", "Formación ministerial práctica", "Herramientas para liderazgo cristiano"]
+    features: ["Acceso directo al Custom GPT", "Capacitación bíblica estructurada", "Formación ministerial práctica", "Herramientas para liderazgo cristiano"]
   },
   "diccionario-biblico": {
     name: "Diccionario Bíblico",
     price: 9.99,
-    features: ["Acceso de por vida al Custom GPT", "Definiciones bíblicas completas", "Contexto histórico y cultural", "Referencias cruzadas y etimología"]
+    features: ["Acceso directo al Custom GPT", "Definiciones bíblicas completas", "Contexto histórico y cultural", "Referencias cruzadas y etimología"]
   },
   "monthly-subscription": {
     name: "Plan Mensual",

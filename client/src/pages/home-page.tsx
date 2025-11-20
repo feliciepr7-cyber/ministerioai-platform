@@ -35,7 +35,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Prepara un bosquejo de sermón o Estudio Bíblico profundo y detallado",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Bosquejos de sermones detallados",
       "Estudios bíblicos profundos",
       "Basado en pasajes bíblicos"
@@ -48,7 +48,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Guía práctica para pastores y líderes de iglesia",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Guías para ceremonias",
       "Servicios especiales",
       "Excelencia ministerial"
@@ -61,7 +61,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Predicación bíblica clara y fiel al texto original",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Explicación clara de la Escritura",
       "Aplicación práctica",
       "Predicación expositiva"
@@ -74,7 +74,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Análisis profundo y académico de textos bíblicos con rigor teológico",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Análisis exegético detallado",
       "Contexto histórico y cultural",
       "Interpretación teológica precisa"
@@ -87,7 +87,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Estudio profundo de las 13 cartas paulinas con análisis teológico y aplicación práctica",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Análisis de las 13 epistolas paulinas",
       "Contexto histórico y teológico",
       "Aplicaciones pastorales modernas"
@@ -101,7 +101,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Desentraña los misterios del libro más profético y simbólico de la Biblia",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Análisis de las siete iglesias",
       "Simbolismo apocalíptico explicado",
       "Promesas de esperanza para la iglesia"
@@ -114,7 +114,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Explora la belleza del amor divino a través del libro más poético de la Biblia",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Múltiples interpretaciones explicadas",
       "Simbolismo y contexto cultural",
       "Aplicación para matrimonio e intimidad con Dios"
@@ -127,7 +127,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Formación integral para servidores y líderes de ministerio cristiano",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Capacitación bíblica estructurada",
       "Formación ministerial práctica",
       "Herramientas para liderazgo cristiano"
@@ -140,7 +140,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Recurso completo para entender términos, personajes y conceptos bíblicos",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Definiciones bíblicas completas",
       "Contexto histórico y cultural",
       "Referencias cruzadas y etimología"
@@ -153,7 +153,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Análisis exhaustivo y profundo de pasajes bíblicos con metodología académica",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Análisis profundo de la Escritura",
       "Metodología académica aplicada",
       "Aplicación práctica para el ministerio"
@@ -166,7 +166,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Estudio del Antiguo Testamento desde el hebreo original",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Análisis lingüístico del hebreo",
       "Contexto cultural y teológico",
       "Interpretación desde el idioma original"
@@ -179,7 +179,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Estudio del Nuevo Testamento desde el griego original",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Análisis lingüístico del griego",
       "Contexto cultural y teológico",
       "Interpretación desde el idioma original"
@@ -192,7 +192,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Respuestas bíblicas directas a preguntas cotidianas",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Respuestas bíblicas claras",
       "Aplicación a la vida cotidiana",
       "Guía espiritual práctica"
@@ -205,7 +205,7 @@ const GPT_PRODUCTS = [
     price: 9.99,
     description: "Formación práctica para vivir la fe cristiana en el día a día",
     features: [
-      "Acceso de por vida al Custom GPT",
+      "Acceso directo al Custom GPT",
       "Formación práctica diaria",
       "Herramientas espirituales",
       "Guía para el crecimiento en Cristo"
