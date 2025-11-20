@@ -608,6 +608,280 @@ export default function UserGuidePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Estudios Biblicos Profundos */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-indigo-600" />
+                Estudios Biblicos Profundos
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Análisis exhaustivo y profundo de pasajes bíblicos con metodología académica y aplicación práctica para el ministerio.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Metodología de estudio:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Análisis exegético del texto original</li>
+                    <li>• Contexto histórico y cultural profundo</li>
+                    <li>• Estudio temático y teológico</li>
+                    <li>• Aplicaciones prácticas contemporáneas</li>
+                    <li>• Conexiones intertextuales</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Ejemplos de consultas:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Estudio de pasaje:</strong></p>
+                    <p className="italic mb-3">"Realiza un estudio bíblico profundo de Salmo 23 con aplicaciones pastorales"</p>
+                    
+                    <p className="mb-2"><strong>Estudio temático:</strong></p>
+                    <p className="italic">"Desarrolla un estudio sobre 'la oración' en el Antiguo y Nuevo Testamento"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Ideal para:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Serie de estudios bíblicos en la iglesia</li>
+                    <li>• Preparación de clases de escuela dominical</li>
+                    <li>• Investigación para sermones expositivos</li>
+                    <li>• Grupos de discipulado avanzado</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* El Antiguo Testamento del Hebreo Original */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-blue-700" />
+                El Antiguo Testamento del Hebreo Original
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Sumérgete en el estudio del Antiguo Testamento desde el hebreo original con análisis lingüístico, contextual y teológico.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Áreas de especialización:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Análisis lingüístico del hebreo bíblico</li>
+                    <li>• Matices y significados en el idioma original</li>
+                    <li>• Comparación entre traducciones</li>
+                    <li>• Contexto cultural del antiguo Israel</li>
+                    <li>• Interpretación desde la lengua original</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Tipos de consulta:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Palabra específica:</strong></p>
+                    <p className="italic mb-3">"¿Qué significa 'hesed' en hebreo y cómo se usa en Salmo 136?"</p>
+                    
+                    <p className="mb-2"><strong>Análisis de pasaje:</strong></p>
+                    <p className="italic">"Explica Génesis 1:1 desde el hebreo original y su significado teológico"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Lo que recibirás:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Análisis de palabras clave en hebreo</li>
+                    <li>• Explicación de formas verbales y gramática</li>
+                    <li>• Matices perdidos en la traducción</li>
+                    <li>• Riqueza del texto en su idioma original</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* El Nuevo Testamento del Griego Original */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-teal-600" />
+                El Nuevo Testamento del Griego Original
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Explora el Nuevo Testamento desde el griego koiné con análisis lingüístico, contextual y teológico de los textos originales.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Áreas de especialización:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Análisis del griego koiné del primer siglo</li>
+                    <li>• Estudio de tiempos verbales y aspectos</li>
+                    <li>• Matices semánticos del griego</li>
+                    <li>• Contexto cultural greco-romano</li>
+                    <li>• Crítica textual y variantes</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Ejemplos de uso efectivo:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Análisis de palabra:</strong></p>
+                    <p className="italic mb-3">"Explica las diferentes palabras griegas para 'amor' en Juan 21:15-17"</p>
+                    
+                    <p className="mb-2"><strong>Estudio verbal:</strong></p>
+                    <p className="italic">"¿Qué significa el tiempo perfecto en Juan 19:30 'consumado es'?"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Beneficios para la predicación:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Descubre significados más profundos del texto</li>
+                    <li>• Comprende mejor las intenciones del autor</li>
+                    <li>• Encuentra ilustraciones en el idioma original</li>
+                    <li>• Predica con mayor precisión teológica</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Que Dice la Biblia? */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <MessageSquare className="w-5 h-5 mr-2 text-green-600" />
+                ¿Qué Dice la Biblia?
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Respuestas bíblicas directas a preguntas cotidianas de la vida cristiana. Encuentra lo que la Biblia dice sobre cualquier tema.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Temas que puedes explorar:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Decisiones de vida y sabiduría práctica</li>
+                    <li>• Relaciones familiares y matrimonio</li>
+                    <li>• Finanzas y mayordomía</li>
+                    <li>• Ética y moralidad cristiana</li>
+                    <li>• Dudas y preguntas difíciles</li>
+                    <li>• Consejería pastoral</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Ejemplos de preguntas:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Vida práctica:</strong></p>
+                    <p className="italic mb-3">"¿Qué dice la Biblia sobre el perdón?"</p>
+                    
+                    <p className="mb-2"><strong>Temas específicos:</strong></p>
+                    <p className="italic mb-3">"¿Cómo debo manejar el dinero según la Biblia?"</p>
+                    
+                    <p className="mb-2"><strong>Dudas comunes:</strong></p>
+                    <p className="italic">"¿Qué dice la Biblia sobre el sufrimiento?"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Lo que recibirás:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Respuestas basadas directamente en la Escritura</li>
+                    <li>• Múltiples referencias bíblicas relevantes</li>
+                    <li>• Aplicaciones prácticas claras</li>
+                    <li>• Orientación pastoral equilibrada</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Perfecto para:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Consejería pastoral individual</li>
+                    <li>• Preparar respuestas para la congregación</li>
+                    <li>• Estudio personal devocional</li>
+                    <li>• Orientación en decisiones importantes</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Capacitacion Practica en la Fe */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Heart className="w-5 h-5 mr-2 text-rose-600" />
+                Capacitación Práctica en la Fe
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Formación práctica para vivir la fe cristiana en el día a día. Herramientas, consejos y guía espiritual para el crecimiento en Cristo.
+                </p>
+                
+                <div>
+                  <h4 className="font-semibold mb-2">Áreas de formación práctica:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Disciplinas espirituales diarias (oración, lectura bíblica)</li>
+                    <li>• Vida de santidad y carácter cristiano</li>
+                    <li>• Testimonio y evangelismo personal</li>
+                    <li>• Servicio y ministerio en la iglesia</li>
+                    <li>• Manejo de tentaciones y pruebas</li>
+                    <li>• Crecimiento en los frutos del Espíritu</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Herramientas disponibles:</h4>
+                  <div className="bg-muted/50 rounded-lg p-3 text-sm">
+                    <p className="mb-2"><strong>Planes devocionales:</strong></p>
+                    <p className="italic mb-3">"Crea un plan de 30 días para fortalecer mi vida de oración"</p>
+                    
+                    <p className="mb-2"><strong>Desarrollo de hábitos:</strong></p>
+                    <p className="italic mb-3">"¿Cómo puedo desarrollar el hábito de leer la Biblia diariamente?"</p>
+                    
+                    <p className="mb-2"><strong>Superación de desafíos:</strong></p>
+                    <p className="italic">"Ayúdame a vencer la tentación de [área específica]"</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Aplicaciones prácticas:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Planes de lectura bíblica personalizados</li>
+                    <li>• Guías para desarrollar disciplinas espirituales</li>
+                    <li>• Estrategias para compartir la fe</li>
+                    <li>• Consejos para vivir en santidad</li>
+                    <li>• Recursos para el crecimiento espiritual</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Ideal para:</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Nuevos creyentes que buscan fundamento</li>
+                    <li>• Cristianos que quieren crecer espiritualmente</li>
+                    <li>• Grupos de discipulado y mentoreo</li>
+                    <li>• Desarrollo de líderes en formación</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Tips and Best Practices */}
